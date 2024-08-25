@@ -1,2 +1,2 @@
-# TrabalhoPOO---Gest-o-de-Casamento
+# TrabalhoPOO-GestaoDeCasamento
 TrabalhoPOO - Gestão de Casamento
