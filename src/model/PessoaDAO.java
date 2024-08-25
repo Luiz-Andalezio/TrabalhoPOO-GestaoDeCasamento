@@ -1,13 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package model;
 
-/**
- *
- * @author luiza
- */
 public class PessoaDAO {
-    
+    Pessoa[] pessoa = new Pessoa[100];
+
+    public PessoaDAO(){
+
+    Pessoa p1 = new Pessoa();
+    p1.setId(1);
+    p1.setNome("Luiz");
+    p1.setIdade(20);
+    p1.setNascimento("19/04/2004");
+    }
 }
