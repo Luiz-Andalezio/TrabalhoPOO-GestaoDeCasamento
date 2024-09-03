@@ -9,16 +9,21 @@ public class Pessoa {
     private String nome;
     private int idade;
     private LocalDate nascimento;
-    //private String telefone;
+    private String telefone;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
-
-    @Override
-    public String toString() {
-        return "Pessoa [id=" + id + ", nome=" + nome + ", idade=" + idade + ", nascimento=" + nascimento
-                + ", dataCriacao=" + dataCriacao + ", dataModificacao=" + dataModificacao + "]";
+    
+    // METODOS
+    
+    //GETTERS E SETTERS
+    public String getTelefone(){
+        return telefone;
     }
 
+    public void setTelefone(String telefone){
+        this.telefone = telefone;
+    }
+    
     public int getId() {
         return id;
     }
@@ -67,5 +72,18 @@ public class Pessoa {
 
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = LocalDate.now();
+    }
+    
+    @Override
+    public String toString(){
+        String m = "";
+        m += "Id: " + this.id + "\n";
+        m += "Nome: " + this.nome + "\n";
+        m += "Idade: " + this.idade + "\n";
+        m += "Nascimento: " + this.nascimento + "\n";
+        m += "Telefone: " + this.telefone + "\n";
+        m += "Criado no dia: " + this.dataCriacao + "\n";
+        m += "Modificado no dia: " + this.dataModificacao + "\n";
+        return m;
     }
 }
