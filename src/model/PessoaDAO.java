@@ -1,11 +1,22 @@
 package model;
 
+import java.time.LocalDate;
+
 public class PessoaDAO {
     Pessoa[] pessoa = new Pessoa[100];
 
-    public PessoaDAO(){
+    public PessoaDAO(int i, String n, int d, String m){ //, String t){
         
         Pessoa p1 = new Pessoa();
+        p1.setId(i);
+        p1.setNome(n);
+        p1.setIdade(d);
+        p1.setTelefone(m);
+        //p1.setNascimento(t);
+        p1.setDataCriacao(null);
+        p1.setDataModificacao(null);
+        pessoa[0] = p1;
+        /*
         p1.setId(1);
         p1.setNome("Luiz");
         p1.setIdade(20);
@@ -13,7 +24,7 @@ public class PessoaDAO {
         p1.setNascimento("19/04/2004");
         p1.setDataCriacao(null);
         p1.setDataModificacao(null);
-        pessoa[0] = p1;
+        pessoa[0] = p1;*/
     }
     public Pessoa retornaPessoa(){
             return pessoa[0];
