@@ -4,6 +4,7 @@ public class UsuarioDAO {
     Usuario[] usuario = new Usuario[100];
 
     public UsuarioDAO(Pessoa pessoa, String t, String l, String s) {  
+        //Construtor automatizado
         Usuario u = new Usuario();
         u.setPessoa(pessoa);
         u.setTipo(t);

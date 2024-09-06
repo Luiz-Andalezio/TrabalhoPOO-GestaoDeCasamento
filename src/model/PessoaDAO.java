@@ -6,7 +6,7 @@ public class PessoaDAO {
     Pessoa[] pessoa = new Pessoa[100];
 
     public PessoaDAO(int i, String n, int d, String m){ //, String t){
-        
+        //Construtor automatizado
         Pessoa p1 = new Pessoa();
         p1.setId(i);
         p1.setNome(n);
