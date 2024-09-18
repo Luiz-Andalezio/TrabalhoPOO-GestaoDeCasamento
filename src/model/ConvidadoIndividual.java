@@ -5,7 +5,6 @@ import java.time.LocalDate;
 public class ConvidadoIndividual {
     private int id;
     private Pessoa pessoa;
-    private ConvidadoFamilia convidadofamilia;
     private String parentesco;
     private boolean confirmacao;
     private LocalDate dataCriacao;
@@ -26,14 +25,6 @@ public class ConvidadoIndividual {
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
-    }
-
-    public ConvidadoFamilia getConvidadofamilia() {
-        return convidadofamilia;
-    }
-
-    public void setConvidadofamilia(ConvidadoFamilia convidadofamilia) {
-        this.convidadofamilia = convidadofamilia;
     }
 
     public String getParentesco() {

@@ -68,4 +68,28 @@ public class Presentes {
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = LocalDate.now();
     }   
+
+    public String toString(/*Usuario usuario*/){
+        String m = "";
+        m += "\nCodigo: " + this.id;
+        m += "\nNome: " + this.nome;
+        m += "\nTipo: " + this.tipo;
+        m += "\nValor: " + this.valor;
+        /*if(!usuario.getTipo().equals("convidado")){
+            m += "Comprador: " + this.pessoa.getNome();
+        }*/
+        return m;
+    } 
+
+    public String toString(Usuario usuario){
+        String m = "";
+        m += "\nCodigo: " + this.id;
+        m += "\nNome: " + this.nome;
+        m += "\nTipo: " + this.tipo;
+        m += "\nValor: " + this.valor;
+        if(!usuario.getTipo().equals("convidado")){
+            m += "Comprador: " + this.pessoa.getNome();
+        }
+        return m;
+    } 
 }

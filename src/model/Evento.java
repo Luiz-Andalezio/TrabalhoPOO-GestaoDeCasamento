@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class Evento {
     private int id;
@@ -26,8 +27,13 @@ public class Evento {
         return data;
     }
 
-    public void setData(LocalDate data) {
-        this.data = data;
+    public void setData(String data) {        
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if(data == null){
+        this.data = LocalDate.now();
+        }else{
+            this.data = LocalDate.parse(data, dtf);
+        }
     }
 
     public Cerimonial getCerimonial() {
@@ -85,5 +91,17 @@ public class Evento {
 
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = LocalDate.now();
+    }
+    
+    @Override
+    public String toString(){
+        String m = "";
+
+        m += "------ Boas Vindas ao Casamento de " + this.pessoaNoivo.getNome() + " e " + this.pessoaNoiva.getNome() + "------";
+        m += "\n\n1- Entrar como Administrador.";
+        m += "\n2- Entrar como membro de Familia.";
+        m += "\n\n0 - Sair.";
+
+        return m;
     }
 }

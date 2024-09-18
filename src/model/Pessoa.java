@@ -7,7 +7,6 @@ public class Pessoa {
 
     private int id;
     private String nome;
-    private int idade;
     private LocalDate nascimento;
     private String telefone;
     private LocalDate dataCriacao;
@@ -40,21 +39,17 @@ public class Pessoa {
         this.nome = nome;
     }
 
-    public int getIdade() {
-        return idade;
-    }
-
-    public void setIdade(int idade) {
-        this.idade = idade;
-    }
-
     public LocalDate getNascimento() {
         return nascimento;
     }
-
+    
     public void setNascimento(String nascimento) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        this.nascimento = LocalDate.parse(nascimento, dtf);
+        if(nascimento == null){
+        this.nascimento = LocalDate.now();
+        }else{
+            this.nascimento = LocalDate.parse(nascimento, dtf);
+        }
     }
 
     public LocalDate getDataCriacao() {
@@ -79,7 +74,6 @@ public class Pessoa {
         String m = "";
         m += "Id: " + this.id + "\n";
         m += "Nome: " + this.nome + "\n";
-        m += "Idade: " + this.idade + "\n";
         m += "Nascimento: " + this.nascimento + "\n";
         m += "Telefone: " + this.telefone + "\n";
         m += "Criado no dia: " + this.dataCriacao + "\n";

@@ -5,6 +5,7 @@ import java.time.LocalDate;
 public class ConvidadoFamilia {
     private int id;
     private String nomeDaFamilia;
+    private ConvidadoIndividual conviteFamilia;
     private boolean acesso;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
@@ -24,6 +25,14 @@ public class ConvidadoFamilia {
 
     public void setNomeDaFamilia(String nomeDaFamilia) {
         this.nomeDaFamilia = nomeDaFamilia;
+    }
+    
+    public ConvidadoIndividual conviteFamilia(){
+        return conviteFamilia;
+    }   
+    
+    public void setConvidadoIndividualDAO(ConvidadoIndividual conviteFamilia){
+        this.conviteFamilia = conviteFamilia;
     }
 
     public boolean isAcesso() {
