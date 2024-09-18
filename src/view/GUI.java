@@ -138,10 +138,10 @@ public class GUI {
 
         StringBuilder m = new StringBuilder();
 
-        m.append("1- Convidar Pessoas.");
-        m.append("\n2- Editar Pessoas.");
-        m.append("\n3- Exibir Pessoas.");
-        m.append("\n4- Excluir Pessoas.");
+        m.append("1- Convidar pessoas.");
+        m.append("\n2- Editar convidados.");
+        m.append("\n3- Exibir convidados.");
+        m.append("\n4- Desconvidar pessoas.");
         m.append("\n5- Voltar.");
         m.append("\n\n0- Sair.");
 

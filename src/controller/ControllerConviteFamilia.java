@@ -5,11 +5,10 @@ import model.PessoaDAO;
 import view.GUI;
 
 
-public class ControllerFamilia{
+public class ControllerConviteFamilia{
 
     GUI gui = new GUI();
-    ConvidadoFamiliaDAO convidadofamiliadao = new ConvidadoFamiliaDAO();
+    ConvidadoFamiliaDAO convitefamiliadao = new ConvidadoFamiliaDAO();
     PessoaDAO p = new PessoaDAO();
-
     
 }

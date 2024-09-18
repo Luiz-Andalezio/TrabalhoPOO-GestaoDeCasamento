@@ -5,11 +5,9 @@ import model.EventoDAO;
 import model.PessoaDAO;
 import model.Usuario;
 import view.GUI;
-
 public class Main {
 
     public static void main(String[] args) {
-
         //cci = Controller Convidado Individual!
         ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
         PessoaDAO pessoadao = new PessoaDAO();
@@ -31,19 +29,19 @@ public class Main {
                     if (usuarioLogado == null) {
                         break;
                     }*/
-
-                    mainOpc = gui.menuAdmin();
-
-                    while (mainOpc != -1) {
-                        switch (mainOpc) {
+                                        
+                    int adminOpc = 0;
+                    while (adminOpc != -1) {
+                        adminOpc = gui.menuAdmin();
+                        switch (adminOpc) {
                             case 1:
-                                //ccf = Controller Confidado Familia
+                                //ccf = Controller Convite Familia
                                 //ccf.controllerCrudFamilia();
                                 break;
 
                             case 2:
                                 //cci = Controller Convidado Individual
-                                cci.controllerCrudConvidado();
+                                cci.controllerCrudConvidado(pessoadao);
                                 break;
 
                             case 3:
@@ -63,23 +61,19 @@ public class Main {
 
                             case 6:
                                 //Voltar
-                                mainOpc = -1;
+                                adminOpc = -1;
                                 break;
 
                             default:
-                                mainOpc = 0;
+                                adminOpc = 0;
                                 break;
                         }
                     }
                     break;
 
-                /*case 1:
-                    usuarioLogado = gui.login();
-                    gui.menuAdmin();
-                    break;*/
                 case 2:
-                    mainOpc = gui.menuConvidado();
-                    switch (mainOpc) {
+                    int convidadoOpc = gui.menuConvidado();
+                    switch (convidadoOpc) {
                         case 1:
                             //cp = Controller Presentes
                             //cp.controllerDarPresente(); 
@@ -98,11 +92,11 @@ public class Main {
 
                         case 0:
                             //Voltar
-                            mainOpc = -1;
+                            convidadoOpc = -1;
                             break;
 
                         default:
-                            mainOpc = 0;
+                            convidadoOpc = 0;
                             break;
                     }
                     break;
@@ -119,6 +113,17 @@ public class Main {
 
         /*
         //Testes
+
+        PessoaDAO pessoadao1 = new PessoaDAO("João", "991650733", "19/04/2004");
+        Pessoa p1 = pessoadao1.retornaPessoa(3);
+        JOptionPane.showMessageDialog(null, p1);
+
+        PessoaDAO pessoadao2 = new PessoaDAO("Mariaaa", "991241367", "20/02/2001");
+        Pessoa p2 = pessoadao2.retornaPessoa(4);
+        JOptionPane.showMessageDialog(null, p2);
+
+        /////////
+
         PessoaDAO pessoadao1 = new PessoaDAO(1, "João", "19/04/2004", "991650733");
         Pessoa p1 = pessoadao1.retornaPessoa();
 
