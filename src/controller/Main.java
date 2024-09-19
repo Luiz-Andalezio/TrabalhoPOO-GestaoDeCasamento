@@ -3,18 +3,27 @@ package controller;
 import model.Evento;
 import model.EventoDAO;
 import model.PessoaDAO;
+import model.PresentesDAO;
 import model.Usuario;
+import model.UsuarioDAO;
 import view.GUI;
-public class Main {
 
-    public static void main(String[] args) {
-        //cci = Controller Convidado Individual!
-        ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
-        PessoaDAO pessoadao = new PessoaDAO();
-        EventoDAO eventodao = new EventoDAO(pessoadao);
-        Evento evento = eventodao.retornaEvento();
-        GUI gui = new GUI();
-        Usuario usuarioLogado = null;
+public class Main {
+    //controller
+    ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
+
+    //model
+    PessoaDAO pessoadao = new PessoaDAO();
+    UsuarioDAO usuariodao = new UsuarioDAO(pessoadao);    
+    Usuario usuarioLogado = null;
+    EventoDAO eventodao = new EventoDAO(pessoadao);
+    Evento evento = eventodao.retornaEvento();
+    PresentesDAO presentesdao = new PresentesDAO();
+
+    //gui
+    GUI gui = new GUI();
+
+    public void main(String[] args) {
 
         int mainOpc = 0;
 
@@ -24,42 +33,42 @@ public class Main {
 
             switch (mainOpc) {
                 case 1:
-                    /*usuarioLogado = gui.login();
+                    usuarioLogado = gui.login(usuariodao);
 
-                    if (usuarioLogado == null) {
-                        break;
-                    }*/
-                                        
                     int adminOpc = 0;
                     while (adminOpc != -1) {
-                        adminOpc = gui.menuAdmin();
+                        adminOpc = gui.menuAdmin(usuarioLogado);
                         switch (adminOpc) {
                             case 1:
                                 //ccf = Controller Convite Familia
-                                //ccf.controllerCrudFamilia();
+                                //ccf.controllerCrudFamilia(gui, usuarioLogado);
                                 break;
 
                             case 2:
                                 //cci = Controller Convidado Individual
-                                cci.controllerCrudConvidado(pessoadao);
+                                cci.controllerCrudConvidado(gui, usuarioLogado, pessoadao);
                                 break;
 
                             case 3:
                                 //cm = Controller Mensagens
-                                //cm.controllerVerMensagens();
+                                //cm.controllerVerMensagens(gui, usuarioLogado);
                                 break;
 
                             case 4:
                                 //cp = Controller Pagamentos
-                                //cp.controllerVerPagamentos();
+                                //cp.controllerVerPagamentos(gui, usuarioLogado);
                                 break;
 
                             case 5:
                                 //cc = Controller Calendario
-                                //cc.controllerIncrementaData();
+                                //cc.controllerIncrementaData(gui, usuarioLogado);
                                 break;
 
                             case 6:
+                                //cr = Controller Relatorios
+                                //cr.controllerRelatorios(gui, usuarioLogado)
+
+                            case 7:
                                 //Voltar
                                 adminOpc = -1;
                                 break;
@@ -76,18 +85,18 @@ public class Main {
                     switch (convidadoOpc) {
                         case 1:
                             //cp = Controller Presentes
-                            //cp.controllerDarPresente(); 
-                            gui.crudPresentesConvidado();
+                            //cp.controllerDarPresente(gui, usuarioLogado, presentesdao); 
+                            gui.crudPresentesConvidado(presentesdao);
                             break;
 
                         case 2:
                             //cm = Controller Mensagens
-                            //cm.controllerEnviarMensagem();
+                            //cm.controllerEnviarMensagem(gui, usuarioLogado);
                             break;
 
                         case 3:
                             //ccf = Controller Convidado Familia
-                            //ccf.controllerConfirmarFamiliares();
+                            //ccf.controllerConfirmarFamiliares(gui, usuarioLogado);
                             break;
 
                         case 0:
@@ -110,8 +119,8 @@ public class Main {
                     break;
             }
         }
-
-        /*
+    }
+    /*
         //Testes
 
         PessoaDAO pessoadao1 = new PessoaDAO("João", "991650733", "19/04/2004");
@@ -160,6 +169,5 @@ public class Main {
 
         JOptionPane.showConfirmDialog(null, u0 + "\nEstes são os dados finais do " + p0.getNome() + " e seu usuario de id: " + u0.getId());
         JOptionPane.showMessageDialog(null, "Usuario criado com sucesso!\n\nDados:\n" + u0);
-         */
-    }
+     */
 }

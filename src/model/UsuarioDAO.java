@@ -42,14 +42,22 @@ public class UsuarioDAO {
         }
     }
 
-    public Usuario retornaUsuario(String login, String senha) {
-        for (Usuario u : usuarios) {
-            if (u != null && login.equals(u.getLogin()) && senha.equals(u.getSenha())) {
-                return u;
-            }
+    public Usuario retornaUsuario(String login, String senha){
+        for(int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] != null && login.equals(usuarios[i].getLogin()) && senha.equals(usuarios[i].getSenha()))                
+            return usuarios[i];
         }
         return null;
     }
+
+    /*
+    public Usuario retornaUsuario(String login, String senha) {
+        for (Usuario u : usuarios) {
+            if (u != null && login.equals(u.getLogin()) && senha.equals(u.getSenha()))                
+            return u;
+        }
+        return null;
+    }*/
 
     public Usuario retornaUsuario(int i, String login, String senha) {
         return usuarios[i];

@@ -8,10 +8,6 @@ import model.UsuarioDAO;
 
 public class GUI {
 
-    PresentesDAO presentesdao = new PresentesDAO();
-    UsuarioDAO usuarioDAO;
-    Usuario usuarioLogado = new Usuario();
-
     //public int menuBoasVindas(){
     //    int opc = -1;
     //
@@ -39,23 +35,24 @@ public class GUI {
         return opc;
     }    
 
-    public Usuario login() {
+    public Usuario login(UsuarioDAO usuariodao) {
         Usuario usuario = null;
-        String login, senha;
-        StringBuilder m;
+        String loginAtt, senhaAtt;
+        //StringBuilder m;
 
-        while (usuario == null) {
+        while (usuario==null) {
+            /* 
             m = new StringBuilder("Informe seu login: ");
             login = JOptionPane.showInputDialog(m);
 
             m = new StringBuilder("Informe sua senha: ");
             senha = JOptionPane.showInputDialog(m);
+            */
 
-            if (senha == null || login == null) {
-                return null;
-            }
+            loginAtt = JOptionPane.showInputDialog("Informe seu login: ");
+            senhaAtt = JOptionPane.showInputDialog("Informe sua senha: ");
             
-            usuario = usuarioDAO.retornaUsuario(login, senha);
+            usuario = usuariodao.retornaUsuario(loginAtt, senhaAtt);
 
             if (usuario == null) {
                 JOptionPane.showMessageDialog(null, "Login ou senha inválidos. Tente novamente.");
@@ -84,7 +81,6 @@ public class GUI {
         int opc;
 
         StringBuilder m = new StringBuilder();
-
         
         m.append("----- Menu de Convidados -----");
         m.append("\n\n1- Enviar presente.");
@@ -97,10 +93,12 @@ public class GUI {
         return opc;
     }
 
-    public int menuAdmin() {
+    public int menuAdmin(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
 
         m.append("----- Menu de Administrador -----");
         m.append("\n\n1- Crud Famílias.");
@@ -108,7 +106,8 @@ public class GUI {
         m.append("\n3- Visualizar presentes recebidos.");
         m.append("\n4- Pagamentos.");
         m.append("\n5- Incrementar dias.");
-        m.append("\n6- Voltar.");
+        m.append("\n6- Relatórios.");
+        m.append("\n7- Voltar.");
         m.append("\n\n0- Sair.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -116,15 +115,16 @@ public class GUI {
         return opc;
     }
 
-    public int crudConvFamilia() {
+    public int crudConvFamilia(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append("1- Convidar Famílias.");
-        m.append("\n2- Editar Famílias.");
-        m.append("\n3- Exibir Famílias.");
-        m.append("\n4- Excluir Famlílias.");
+        m.append("----- Menu de Famílias -----");
+        m.append("\n\n1- Convidar famílias.");
+        m.append("\n2- Editar famílias.");
+        m.append("\n3- Exibir famílias.");
+        m.append("\n4- Excluir famlílias.");
         m.append("\n5- Voltar");
         m.append("\n\n0- Sair.");
 
@@ -133,12 +133,15 @@ public class GUI {
         return opc;
     }
 
-    public int crudConvIndividual() {
+    public int crudConvIndividual(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
+        
+        m.append(headerAdmin(usuarioLogado));
 
-        m.append("1- Convidar pessoas.");
+        m.append("----- Menu de Pessoas -----");
+        m.append("\n\n1- Convidar pessoas.");
         m.append("\n2- Editar convidados.");
         m.append("\n3- Exibir convidados.");
         m.append("\n4- Desconvidar pessoas.");
@@ -150,7 +153,7 @@ public class GUI {
         return opc;
     }
 
-    public int crudPresentesConvidado() {
+    public int crudPresentesConvidado(PresentesDAO presentesdao) {
         int opc;
 
         StringBuilder m = new StringBuilder();
@@ -164,10 +167,12 @@ public class GUI {
         return opc;
     }
 
-    public int crudPresentesAdmin() {
+    public int crudPresentesAdmin(PresentesDAO presentesdao, Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
 
         m.append("\nDê um presente para os pombinhos!");
         m.append("\n\n\tPRESENTES: ");
@@ -178,10 +183,12 @@ public class GUI {
         return opc;
     }
     
-    public int crudPagamento() {
+    public int crudPagamento(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
 
         m.append("---- Pagamentos ----");
         m.append("\n1- Visualisar pagamentos.");
@@ -191,12 +198,12 @@ public class GUI {
         return opc;
     }
 
-    public StringBuilder headerAdmin(Usuario usuario) {
+    public StringBuilder headerAdmin(Usuario usuarioLogado) {
         //Aqui aparecerá o dia do calendário.
-        StringBuilder m = new StringBuilder("-----------------");
-        m.append("\nUsuario: " + usuario.getPessoa().getNome());
-        m.append("\n " + usuario.getTipo());
-        m.append("\n--------------");
+        StringBuilder m = new StringBuilder("--------------------------------------------------------");
+        m.append("\nUsuário: ").append(usuarioLogado.getPessoa().getNome());
+        m.append("\nTipo: ").append(usuarioLogado.getTipo());
+        m.append("\n--------------------------------------------------------\n\n");
 
         return m;
     }

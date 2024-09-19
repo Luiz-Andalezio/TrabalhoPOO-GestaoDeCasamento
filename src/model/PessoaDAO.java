@@ -51,7 +51,7 @@ public class PessoaDAO {
         }
     }
 
-    public StringBuilder criarPessoa(String nome, String telefone, String nascimento, PessoaDAO pessoadao) {
+    public boolean criarPessoa(String nome, String telefone, String nascimento, PessoaDAO pessoadao) {
         Pessoa p = new Pessoa();
         p.setNome(nome);
         p.setTelefone(telefone);
@@ -61,15 +61,12 @@ public class PessoaDAO {
         for (int v = 0; v < pessoas.length; v++) {
             if (pessoas[v] == null) {
                 pessoas[v] = p;
-            StringBuilder m = new StringBuilder("Convidado criado com sucesso!\n").append(pessoadao.verPessoa());
-            return m;
+            return true;//StringBuilder m = new StringBuilder("Convidado criado com sucesso!\n").append(pessoadao.verPessoa());
             }
-        } StringBuilder m = new StringBuilder("Pessoa não criada.");
-        return m;
+        } return false;//StringBuilder m = new StringBuilder("Pessoa não criada.");
     }
 
-    public StringBuilder atualizaPessoa(String nome, String telefone, String nascimento, int id){
-        StringBuilder m = new StringBuilder("");
+    public boolean atualizaPessoa(String nome, String telefone, String nascimento, int id){
         int i = 0;
         while(pessoas[i] != null && pessoas[i].getId() != id)
         {
@@ -87,13 +84,9 @@ public class PessoaDAO {
                 pessoas[i].setNascimento(nascimento);
             }
             pessoas[i].setDataModificacao();
-
-            m.append("Atualização realizada com sucesso!");
-            m.append(pessoas[i]);
-            return m;
+            return true;
         } 
-        m.append("Atualização não sucedida...");
-        return m;
+        return false;
     }
 
     public void desconvidarPessoa(int id){
@@ -110,9 +103,16 @@ public class PessoaDAO {
 
     public String verConvidados() {
         String m = "";
+        /*
         for (int i = 0; i < pessoas.length; i++) {
-            if (pessoas[i] != null) {
-                m += pessoas[i].toString() + "\n";
+        if (pessoas[i] != null) {
+        m += pessoas[i].toString() + "\n";
+        }
+        }
+         */
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa != null) {
+                m += pessoa.toString() + "\n";
             }
         }
         return m;
@@ -120,9 +120,16 @@ public class PessoaDAO {
 
     public String verPessoa() {
         String m = "";
+        /*
         for (int i = 0; i < pessoas.length; i++) {
-            if (pessoas[i] != null) {
-                m = pessoas[i].toString() + "\n";
+        if (pessoas[i] != null) {
+        m = pessoas[i].toString() + "\n";
+        }
+        }
+        */
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa != null) {
+                m = pessoa.toString() + "\n";
             }
         }
         return m;
