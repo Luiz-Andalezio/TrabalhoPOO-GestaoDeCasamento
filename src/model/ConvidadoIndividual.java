@@ -3,19 +3,21 @@ package model;
 import java.time.LocalDate;
 
 public class ConvidadoIndividual {
-    private int id;
+
+    private long id;
     private Pessoa pessoa;
     private String parentesco;
     private boolean confirmacao;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
+    private static long incrementaId = 0;
 
     //GETTERS E SETTERS
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -47,16 +49,34 @@ public class ConvidadoIndividual {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao() {
         this.dataCriacao = LocalDate.now();
-        this.dataModificacao = LocalDate.now();
+        this.id = ++ConvidadoIndividual.incrementaId;
     }
 
     public LocalDate getDataModificacao() {
         return dataModificacao;
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
+    public void setDataModificacao() {
         this.dataModificacao = LocalDate.now();
     }    
+
+    @Override
+    public String toString(){
+        String m = "";
+        m += "--- Convite Individual de ID " + this.id + " ---\n";   
+        m += "Informações da pessoa: \n";
+        //m += "ID: " + this.pessoa.getId()+ "\n";       
+        m += "Nome: " + this.pessoa.getNome()+ "\n";              
+        m += "Parentesco: " + this.parentesco + "\n"; 
+        m += "Telefone: " + this.pessoa.getTelefone()+ "\n";  
+        m += "Data de nascimento: " + this.pessoa.getNascimento()+ "\n";
+        m += "Convite feito no dia: " + this.getDataCriacao();
+        if (this.getDataModificacao() != null) {
+            m += " e modificado no dia: " + this.getDataModificacao();
+        }
+        m += "\n";              
+    return m;
+    }
 }

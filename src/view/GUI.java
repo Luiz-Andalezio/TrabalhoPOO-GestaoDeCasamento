@@ -25,9 +25,9 @@ public class GUI {
 
         StringBuilder m = new StringBuilder("");
 
-        m.append("---- Boas Vindas ao Casamento de ").append(evento.getPessoaNoivo().getNome()).append(" e ").append(evento.getPessoaNoiva().getNome()).append(" ----");
-        m.append("\n\n1- Entrar como Administrador.");
-        m.append("\n2- Entrar como membro de Familia.");
+        m.append("---- Boas Vindas ao Software de Casamento de ").append(evento.getPessoaNoivo().getNome()).append(" e ").append(evento.getPessoaNoiva().getNome()).append(" ----");
+        m.append("\n\n1- Logar.");
+        m.append("\n2- Entrar como convidado.");
         m.append("\n\n0 - Sair.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -38,17 +38,8 @@ public class GUI {
     public Usuario login(UsuarioDAO usuariodao) {
         Usuario usuario = null;
         String loginAtt, senhaAtt;
-        //StringBuilder m;
 
         while (usuario==null) {
-            /* 
-            m = new StringBuilder("Informe seu login: ");
-            login = JOptionPane.showInputDialog(m);
-
-            m = new StringBuilder("Informe sua senha: ");
-            senha = JOptionPane.showInputDialog(m);
-            */
-
             loginAtt = JOptionPane.showInputDialog("Informe seu login: ");
             senhaAtt = JOptionPane.showInputDialog("Informe sua senha: ");
             
@@ -61,32 +52,22 @@ public class GUI {
         return usuario;
     }
 
-    /*
-        public Usuario login(){
-        Usuario usuario;
-        StringBuilder m = new StringBuilder();
-        String login;
-        String senha;
-        m.append("Informe seu login: ");
-        login = JOptionPane.showInputDialog(m);
-        m = new StringBuilder("Informe sua senha");
-        senha = JOptionPane.showInputDialog(m);
-
-        usuario = usuarioDAO.retornaUsuario(login, senha);
-
-        return usuario;
-    }*/
-
-    public int menuConvidado() {
+    public int menuNoivos(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
-        
-        m.append("----- Menu de Convidados -----");
-        m.append("\n\n1- Enviar presente.");
-        m.append("\n2- Enviar mensagem.");
-        m.append("\n3- Informar presença da Família.");
-        m.append("\n\n0 - Sair.");
+
+        m.append(headerAdmin(usuarioLogado));
+
+        m.append("----- Menu dos Noivos -----");
+        m.append("\n\n1- Crud de famílias.");
+        m.append("\n2- Crud de convites individuais.");
+        m.append("\n3- Visualizar presentes recebidos.");
+        m.append("\n4- Pagamentos.");
+        m.append("\n5- Incrementar dias.");
+        m.append("\n6- Relatórios.");
+        m.append("\n7- Voltar.");
+        m.append("\n\n0- Sair.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -100,15 +81,53 @@ public class GUI {
 
         m.append(headerAdmin(usuarioLogado));
 
-        m.append("----- Menu de Administrador -----");
-        m.append("\n\n1- Crud Famílias.");
-        m.append("\n2- Crud Convidados.");
-        m.append("\n3- Visualizar presentes recebidos.");
-        m.append("\n4- Pagamentos.");
-        m.append("\n5- Incrementar dias.");
-        m.append("\n6- Relatórios.");
-        m.append("\n7- Voltar.");
+        m.append("----- Menu do Administrador -----");
+        m.append("\n\n1- Crud de famílias.");
+        m.append("\n2- Crud de convites individuais.");
+        m.append("\n3- Crud de usuários.");
+        m.append("\n4- Visualizar presentes entregues aos noivos.");
+        m.append("\n5- Visualizar pagamentos.");
+        m.append("\n6- Incrementar dias.");
+        m.append("\n7- Relatórios.");
+        m.append("\n8- Voltar.");
         m.append("\n\n0- Sair.");
+
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
+    public int menuCerimonial(Usuario usuarioLogado) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
+
+        m.append("----- Menu do Cerimonial -----");
+        m.append("\n\n1- Ver convites.");
+        m.append("\n2- Visualizar presentes entregues aos noivos.");
+        m.append("\n3- Visualizar pagamentos.");
+        m.append("\n4- Incrementar dias.");
+        m.append("\n5- Relatórios.");
+        m.append("\n6- Voltar.");
+        m.append("\n\n0- Sair.");
+
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
+    public int menuConvidado() {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+        
+        m.append("----- Menu de Convidados -----");
+        m.append("\n\n1- Enviar presente.");
+        m.append("\n2- Enviar mensagem.");
+        m.append("\n3- Informar presença da família.");
+        m.append("\n\n0 - Sair.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -140,11 +159,11 @@ public class GUI {
         
         m.append(headerAdmin(usuarioLogado));
 
-        m.append("----- Menu de Pessoas -----");
-        m.append("\n\n1- Convidar pessoas.");
-        m.append("\n2- Editar convidados.");
-        m.append("\n3- Exibir convidados.");
-        m.append("\n4- Desconvidar pessoas.");
+        m.append("----- Menu de Convidados Individuais -----");
+        m.append("\n\n1- Gerar convites.");
+        m.append("\n2- Editar convites individuais.");
+        m.append("\n3- Exibir convites individuais.");
+        m.append("\n4- Desfazer convites.");
         m.append("\n5- Voltar.");
         m.append("\n\n0- Sair.");
 

@@ -67,14 +67,18 @@ public class Usuario {
 
     public void setDataModificacao(LocalDate dataModificacao) {
         this.dataModificacao = LocalDate.now();
-    }   
+    }
     
     @Override
     public String toString(){
         String m = "";
-        m += "Pessoa: " + this.pessoa.getId() + "\n";
-        m += "Login: " + this.login + "\n";
-        m += "Senha: " + this.senha;
-        return m;
+        m += "--- Usuário ID " + this.id + " ---\n";
+        m += this.pessoa;
+        m += "\nData de criação: " + this.dataCriacao ;
+        if(this.dataModificacao != null){
+            m += "\nData de modificação: " + this.dataModificacao;
+        }        
+        m += "\n\n";
+    return m;
     }
 }

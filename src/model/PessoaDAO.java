@@ -25,6 +25,20 @@ public class PessoaDAO {
         p3.setNascimento("02/12/1993");
         p3.setDataCriacao();
         pessoas[2] = p3;
+
+        Pessoa p4 = new Pessoa();
+        p4.setNome("Luiz");
+        p4.setTelefone("+55 (34) 99713-6908");
+        p4.setNascimento("19/04/2004");
+        p4.setDataCriacao();
+        pessoas[3] = p4;
+
+        Pessoa p5 = new Pessoa();
+        p5.setNome("Gabriel");
+        p5.setTelefone("+55 (34) ####-####");
+        p5.setNascimento("19/04/2004");
+        p5.setDataCriacao();
+        pessoas[4] = p5;
         /*
         p1.setId(1);
         p1.setNome("Luiz");
@@ -36,8 +50,7 @@ public class PessoaDAO {
         pessoa[0] = p1;*/
     }
 
-    public PessoaDAO(String n, String m, String t) { //, String t){
-        //Construtor automatizado
+    public PessoaDAO(String n, String m, String t) { 
         Pessoa p = new Pessoa();
         p.setNome(n);
         p.setTelefone(m);
@@ -51,7 +64,7 @@ public class PessoaDAO {
         }
     }
 
-    public boolean criarPessoa(String nome, String telefone, String nascimento, PessoaDAO pessoadao) {
+    public Pessoa criarPessoa(String nome, String telefone, String nascimento) {
         Pessoa p = new Pessoa();
         p.setNome(nome);
         p.setTelefone(telefone);
@@ -61,21 +74,21 @@ public class PessoaDAO {
         for (int v = 0; v < pessoas.length; v++) {
             if (pessoas[v] == null) {
                 pessoas[v] = p;
-            return true;//StringBuilder m = new StringBuilder("Convidado criado com sucesso!\n").append(pessoadao.verPessoa());
+            return p;
             }
-        } return false;//StringBuilder m = new StringBuilder("Pessoa não criada.");
+        } return null;
     }
 
-    public boolean atualizaPessoa(String nome, String telefone, String nascimento, int id){
+    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, String nome){
         int i = 0;
-        while(pessoas[i] != null && pessoas[i].getId() != id)
+        while(pessoas[i] != null && pessoas[i].getNome() != nome)
         {
             i++;
         }
-
-        if(pessoas[i] != null && pessoas[i].getId() == id) {
-            if(!nome.equals("")) {
-                pessoas[i].setNome(nome);
+                                                //equals() with null check (temary) - Same shit of: (pessoas[i].getNome() != nome)
+        if(pessoas[i] != null && (pessoas[i].getNome() == null ? nome == null : pessoas[i].getNome().equals(nome))) {
+            if(!nomeAtt.equals("")) {
+                pessoas[i].setNome(nomeAtt);
             } 
             if(!telefone.equals("")){
                 pessoas[i].setTelefone(telefone);
@@ -89,7 +102,7 @@ public class PessoaDAO {
         return false;
     }
 
-    public void desconvidarPessoa(int id){
+    public void excluirPessoa(int id){
         int i = 0;
         while(pessoas[i] != null && pessoas[i].getId() != id)
         {
@@ -101,22 +114,23 @@ public class PessoaDAO {
         } 
     }
 
+    /* 
     public String verConvidados() {
         String m = "";
-        /*
-        for (int i = 0; i < pessoas.length; i++) {
-        if (pessoas[i] != null) {
-        m += pessoas[i].toString() + "\n";
-        }
-        }
-         */
+        
+        //for (int i = 0; i < pessoas.length; i++) {
+        //if (pessoas[i] != null) {
+        //m += pessoas[i].toString() + "\n";
+        //}
+        //} 
+
         for (Pessoa pessoa : pessoas) {
             if (pessoa != null) {
                 m += pessoa.toString() + "\n";
             }
         }
         return m;
-    }
+    }*/
 
     public String verPessoa() {
         String m = "";
