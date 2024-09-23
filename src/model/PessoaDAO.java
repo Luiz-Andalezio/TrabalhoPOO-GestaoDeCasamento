@@ -50,7 +50,7 @@ public class PessoaDAO {
         pessoa[0] = p1;*/
     }
 
-    public PessoaDAO(String n, String m, String t) { 
+    public PessoaDAO(String n, String m, String t) {
         Pessoa p = new Pessoa();
         p.setNome(n);
         p.setTelefone(m);
@@ -74,44 +74,43 @@ public class PessoaDAO {
         for (int v = 0; v < pessoas.length; v++) {
             if (pessoas[v] == null) {
                 pessoas[v] = p;
-            return p;
+                return p;
             }
-        } return null;
+        }
+        return null;
     }
 
-    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, String nome){
+    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, String nome) {
         int i = 0;
-        while(pessoas[i] != null && pessoas[i].getNome() != nome)
-        {
+        while (pessoas[i] != null && pessoas[i].getNome() != nome) {
             i++;
         }
-                                                //equals() with null check (temary) - Same shit of: (pessoas[i].getNome() != nome)
-        if(pessoas[i] != null && (pessoas[i].getNome() == null ? nome == null : pessoas[i].getNome().equals(nome))) {
-            if(!nomeAtt.equals("")) {
+        //equals() with null check (temary) - Same shit of: (pessoas[i].getNome() != nome)
+        if (pessoas[i] != null && (pessoas[i].getNome() == null ? nome == null : pessoas[i].getNome().equals(nome))) {
+            if (!nomeAtt.equals("")) {
                 pessoas[i].setNome(nomeAtt);
-            } 
-            if(!telefone.equals("")){
+            }
+            if (!telefone.equals("")) {
                 pessoas[i].setTelefone(telefone);
             }
-            if(!nascimento.equals("")){
+            if (!nascimento.equals("")) {
                 pessoas[i].setNascimento(nascimento);
             }
             pessoas[i].setDataModificacao();
             return true;
-        } 
+        }
         return false;
     }
 
-    public void excluirPessoa(int id){
+    public void excluirPessoa(int id) {
         int i = 0;
-        while(pessoas[i] != null && pessoas[i].getId() != id)
-        {
+        while (pessoas[i] != null && pessoas[i].getId() != id) {
             i++;
         }
 
-        if(pessoas[i] != null && pessoas[i].getId() == id) {
+        if (pessoas[i] != null && pessoas[i].getId() == id) {
             pessoas[i] = null;
-        } 
+        }
     }
 
     /* 
@@ -131,7 +130,6 @@ public class PessoaDAO {
         }
         return m;
     }*/
-
     public String verPessoa() {
         String m = "";
         /*
@@ -140,7 +138,7 @@ public class PessoaDAO {
         m = pessoas[i].toString() + "\n";
         }
         }
-        */
+         */
         for (Pessoa pessoa : pessoas) {
             if (pessoa != null) {
                 m = pessoa.toString() + "\n";
@@ -150,7 +148,7 @@ public class PessoaDAO {
     }
 
     public Pessoa verPessoa(int id) {
-        return pessoas[id-1];
+        return pessoas[id - 1];
     }
 
     public Pessoa retornaPessoa(int i) {

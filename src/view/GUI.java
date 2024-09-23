@@ -8,18 +8,7 @@ import model.UsuarioDAO;
 
 public class GUI {
 
-    //public int menuBoasVindas(){
-    //    int opc = -1;
-    //
-    //    String m = "";
-    //
-    //    m += "------ Boas Vindas ao Casamento de " + eventoDAO.getPessoaNoivo().getNome() + " e " + eventoDAO.getPessoaNoiva().getNome() + "------";
-    //    m += "\n\n1- Entrar como Administrador.";
-    //    m += "\n2- Entrar como membro de Familia.";
-    //    m += "0- Sair.";
-    //    return opc;
-    //}
-
+    //TELA DE BOAS VINDAS
     public int menuBoasVindas(Evento evento) {
         int opc;
 
@@ -35,6 +24,7 @@ public class GUI {
         return opc;
     }    
 
+    //LOGINS
     public Usuario login(UsuarioDAO usuariodao) {
         Usuario usuario = null;
         String loginAtt, senhaAtt;
@@ -52,6 +42,7 @@ public class GUI {
         return usuario;
     }
 
+    //MENUS
     public int menuNoivos(Usuario usuarioLogado) {
         int opc;
 
@@ -66,8 +57,7 @@ public class GUI {
         m.append("\n4- Pagamentos.");
         m.append("\n5- Incrementar dias.");
         m.append("\n6- Relatórios.");
-        m.append("\n7- Voltar.");
-        m.append("\n\n0- Sair.");
+        m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -89,8 +79,7 @@ public class GUI {
         m.append("\n5- Visualizar pagamentos.");
         m.append("\n6- Incrementar dias.");
         m.append("\n7- Relatórios.");
-        m.append("\n8- Voltar.");
-        m.append("\n\n0- Sair.");
+        m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -110,8 +99,7 @@ public class GUI {
         m.append("\n3- Visualizar pagamentos.");
         m.append("\n4- Incrementar dias.");
         m.append("\n5- Relatórios.");
-        m.append("\n6- Voltar.");
-        m.append("\n\n0- Sair.");
+        m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -127,25 +115,27 @@ public class GUI {
         m.append("\n\n1- Enviar presente.");
         m.append("\n2- Enviar mensagem.");
         m.append("\n3- Informar presença da família.");
-        m.append("\n\n0 - Sair.");
+        m.append("\n\n0 - Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
     }
 
+    //CRUDS
     public int crudConvFamilia(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append("----- Menu de Famílias -----");
-        m.append("\n\n1- Convidar famílias.");
-        m.append("\n2- Editar famílias.");
-        m.append("\n3- Exibir famílias.");
-        m.append("\n4- Excluir famlílias.");
-        m.append("\n5- Voltar");
-        m.append("\n\n0- Sair.");
+        m.append("----- Menu de Convites Famílias -----");
+        m.append("\n\n1- Gerar Convite Família.");
+        m.append("\n2- Adicionar pessoas em Convites Família.");
+        m.append("\n3- Gerar novos codigos de acesso para Convites Família.");
+        m.append("\n4- Editar Convites Família.");
+        m.append("\n5- Exibir Convites Família.");
+        m.append("\n6- Desfazer Convites Famlília.");
+        m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -164,8 +154,7 @@ public class GUI {
         m.append("\n2- Editar convites individuais.");
         m.append("\n3- Exibir convites individuais.");
         m.append("\n4- Desfazer convites.");
-        m.append("\n5- Voltar.");
-        m.append("\n\n0- Sair.");
+        m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 

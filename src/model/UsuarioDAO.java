@@ -56,7 +56,7 @@ public class UsuarioDAO {
         }
     }
 
-    public Usuario retornaUsuario(String login, String senha){
+    public Usuario retornaUsuario(String login, String senha) {
         for (Usuario usuario : usuarios) {
             if (usuario != null && login.equals(usuario.getLogin()) && senha.equals(usuario.getSenha())) {
                 return usuario;

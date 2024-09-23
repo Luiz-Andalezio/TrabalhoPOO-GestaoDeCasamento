@@ -1,13 +1,14 @@
 package controller;
 
 import model.ConvidadoFamiliaDAO;
+import model.Pessoa;
 import model.PessoaDAO;
 import model.Usuario;
 import view.GUI;
 
 public class ControllerConviteFamilia {
 
-    public void controllerCrudFamilia(GUI gui, Usuario usuarioLogado, PessoaDAO pessoadao, ConvidadoFamiliaDAO convitefamilia) {
+    public void controllerCrudFamilia(GUI gui, Usuario usuarioLogado, PessoaDAO pessoadao, Pessoa pessoa, ConvidadoFamiliaDAO convitefamilia) {
         StringBuilder m;
         int menuFamiliaOpc = 0;
 

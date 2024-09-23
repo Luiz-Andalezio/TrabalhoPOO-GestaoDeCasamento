@@ -49,7 +49,7 @@ public class Main {
                             switch (adminOpc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
-                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, convitefamilia);
+                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, convitefamilia);
                                     break;
 
                                 case 2:
@@ -91,7 +91,7 @@ public class Main {
                             switch (adminOpc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
-                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, convitefamilia);
+                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, convitefamilia);
                                     break;
 
                                 case 2:
@@ -123,7 +123,7 @@ public class Main {
                                     //cr = Controller Relatorios
                                     //cr.controllerRelatorios(gui, usuarioLogado)
 
-                                case 8:
+                                case 0:
                                     //Voltar
                                     adminOpc = -1;
                                     break;
@@ -161,7 +161,7 @@ public class Main {
                                     //cr.controllerRelatorios(gui, usuarioLogado)
                                     break;
 
-                                case 6:
+                                case 0:
                                     //Voltar
                                     adminOpc = -1;
                                     break;
@@ -213,7 +213,7 @@ public class Main {
                     break;
 
                 default:
-                    mainOpc = 0;
+                    mainOpc = -1;
                     break;
             }
         }

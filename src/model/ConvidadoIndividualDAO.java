@@ -1,7 +1,6 @@
 
 package model;
 
-
 public class ConvidadoIndividualDAO {
 
     ConvidadoIndividual[] convidados = new ConvidadoIndividual[100];
@@ -93,7 +92,7 @@ public class ConvidadoIndividualDAO {
         return m;
     }
 
-    public void desfazerConvite(int id) {
+    public void desfazerConviteIndividual(int id) {
         int i = 0;
         while (convidados[i] != null && convidados[i].getId() != id || convidados[i] == null) {
             i++;
@@ -128,8 +127,8 @@ public class ConvidadoIndividualDAO {
             return m;
         }
         return null;
-    }*/
+    }
     public ConvidadoIndividual retornaConviteIndividual(int i, String login, String senha) {
         return convidados[i];
-    }
+    }*/
 }
