@@ -128,7 +128,8 @@ public class ConvidadoIndividualDAO {
         }
         return null;
     }
-    public ConvidadoIndividual retornaConviteIndividual(int i, String login, String senha) {
-        return convidados[i];
-    }*/
+    */
+    public ConvidadoIndividual retornaConviteIndividual(int id) {
+        return convidados[id-1];
+    }
 }

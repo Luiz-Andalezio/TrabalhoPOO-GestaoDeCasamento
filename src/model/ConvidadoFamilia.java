@@ -68,19 +68,24 @@ public class ConvidadoFamilia {
     public String toString() {
         String m = "";
         m += "--- Convite Família de ID: " + this.id + " ---\n";
+        m += "Nome da família: " + this.nomeDaFamilia + "\n";
         m += "Codigo de confirmação: " + this.acesso + "\n\n";
-        m += "Convidados:";
-        for (ConvidadoIndividual convite : convitesIndividuais) {
-            if (convite != null) {
-                m += "\nNome: " + convite.getPessoa().getNome();
-                m += "\nTelefone:" + convite.getPessoa().getTelefone();
-                m += "\nConfirmação:";
-                if (convite.isConfirmacao() == true) {
-                    m += "Confirmado";
-                } else {
-                    m += "Não confirmado";
+        if (convitesIndividuais == null) {
+            m += "Ainda não há convidados nesta família.\n";
+        } else {
+            m += "Convidados:";
+            for (ConvidadoIndividual convites : convitesIndividuais) {
+                if (convites != null) {
+                    m += "\nNome: " + convites.getPessoa().getNome();
+                    m += "\nTelefone: " + convites.getPessoa().getTelefone();
+                    m += "\nConfirmação: ";
+                    if (convites.isConfirmacao() == true) {
+                        m += "Confirmado";
+                    } else {
+                        m += "Não confirmado";
+                    }
+                    m += "\n";
                 }
-                m += "\n";
             }
         }
         m += "\nConvite Família feito no dia: " + this.getDataCriacao();

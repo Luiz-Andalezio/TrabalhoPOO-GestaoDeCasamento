@@ -10,18 +10,19 @@ public class ConvidadoFamiliaDAO {
     public ConvidadoFamiliaDAO() {
     }
 
-    public String convidaFamilia(String novoNomeDaFamilia, Evento evento) {
-        String m = "";
+    public ConvidadoFamilia convidaFamilia(String novoNomeDaFamilia, Evento evento) {
+        ConvidadoFamilia cf = new ConvidadoFamilia();
+        cf.setNomeDaFamilia(novoNomeDaFamilia);
+        cf.setAcesso(gerarAcesso(evento));
+        cf.setDataCriacao();
+
         for (int i = 0; i < convitesFamilia.length; i++) {
             if (convitesFamilia[i] == null) {
-                convitesFamilia[i] = new ConvidadoFamilia();
-                convitesFamilia[i].setNomeDaFamilia(novoNomeDaFamilia);
-                convitesFamilia[i].setAcesso(gerarAcesso(evento));
-                convitesFamilia[i].setDataCriacao();
-                m = convitesFamilia[i].getAcesso();
+                convitesFamilia[i] = cf;
+                return cf;
             }
         }
-        return m;
+        return null;
     }
 
     public void recebeConviteIndividual(int id, ConvidadoIndividual novoConviteIndividual) {
@@ -120,7 +121,7 @@ public class ConvidadoFamiliaDAO {
         return m;
     }
 
-    public String verConvidadosFamilia(int id) {
+    public String verConvitesFamilia(int id) {
         return convitesFamilia[id - 1].toString();
     }
 

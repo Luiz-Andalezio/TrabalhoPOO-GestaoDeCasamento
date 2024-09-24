@@ -1,6 +1,7 @@
 package controller;
 
 import model.ConvidadoFamiliaDAO;
+import model.ConvidadoIndividual;
 import model.ConvidadoIndividualDAO;
 import model.Evento;
 import model.EventoDAO;
@@ -24,6 +25,7 @@ public class Main {
     EventoDAO eventodao = new EventoDAO(pessoadao);
     Evento evento = eventodao.retornaEvento();
     PresentesDAO presentesdao = new PresentesDAO();
+    ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
     ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO();
     ConvidadoFamiliaDAO convitefamilia = new ConvidadoFamiliaDAO();
 
@@ -49,7 +51,7 @@ public class Main {
                             switch (adminOpc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
-                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, convitefamilia);
+                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia);
                                     break;
 
                                 case 2:
@@ -91,7 +93,7 @@ public class Main {
                             switch (adminOpc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
-                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, convitefamilia);
+                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia);
                                     break;
 
                                 case 2:

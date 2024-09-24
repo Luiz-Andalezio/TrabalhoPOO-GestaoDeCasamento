@@ -50,7 +50,6 @@ public class ControllerConvidadoIndividual {
                     }
 
                     if (id == 0) {
-                        menuPessoaOpc = -1;
                         break;
                     }
 
@@ -88,7 +87,6 @@ public class ControllerConvidadoIndividual {
                         break;
                     }
                     if (veredito == 0) {
-                        menuPessoaOpc = -1;
                         break;
                     }
 
@@ -112,7 +110,6 @@ public class ControllerConvidadoIndividual {
                     }
 
                     if (id == 0) {
-                        menuPessoaOpc = -1;
                         break;
                     }
 
@@ -128,7 +125,6 @@ public class ControllerConvidadoIndividual {
                         break;
                     }
                     if (veredito == 0) {
-                        menuPessoaOpc = -1;
                         break;
                     }
                     break;
