@@ -129,12 +129,13 @@ public class GUI {
         StringBuilder m = new StringBuilder();
 
         m.append("----- Menu de Convites Famílias -----");
-        m.append("\n\n1- Gerar Convite Família.");
-        m.append("\n2- Adicionar pessoas em Convites Família.");
-        m.append("\n3- Gerar novos codigos de acesso para Convites Família.");
-        m.append("\n4- Editar Convites Família.");
-        m.append("\n5- Exibir Convites Família.");
-        m.append("\n6- Desfazer Convites Famlília.");
+        m.append("\n\n1- Gerar Convite Família.");        
+        m.append("\n2- Gerar novos codigos de acesso para Convites Família.");
+        m.append("\n3- Adicionar pessoas em Convites Família.");        
+        m.append("\n4- Excluir pessoas em Convites Família.");
+        m.append("\n5- Editar Convites Família.");
+        m.append("\n6- Exibir Convites Família.");
+        m.append("\n7- Desfazer Convites Famlília.");
         m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));

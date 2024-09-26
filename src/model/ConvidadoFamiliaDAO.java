@@ -32,27 +32,11 @@ public class ConvidadoFamiliaDAO {
         return conviteFamilia.getAcesso();
     }
 
-    public void recebeConviteIndividual(int id, ConvidadoIndividual novoConviteIndividual) {
-        convitesFamilia[id - 1].setConvidadoIndividual(id, novoConviteIndividual);
+    public void recebeConviteIndividual(int id, int id2, ConvidadoIndividual novoConviteIndividual) {
+        convitesFamilia[id - 1].setConvidadoIndividual(id2, novoConviteIndividual);
     }
 
-    /*
-    private String gerarAcesso(Evento evento, String diamesano) {
-        String letrasAleatorias = gerarLetrasAleatorias(4);
-        return evento.getPessoaNoivo().getNome() + evento.getPessoaNoiva().getNome() + diamesano + letrasAleatorias;
-    }
-
-    private String gerarLetrasAleatorias(int tamanho) {
-        StringBuilder letras = new StringBuilder();
-        String caracteres = "abcdefghijklmnopqrstuvwxyz";
-        for (int i = 0; i < tamanho; i++) {
-            int indice = (int) (Math.random() * caracteres.length());
-            letras.append(caracteres.charAt(indice));
-        }
-        return letras.toString();
-    }*/
-
-    public String gerarAcesso(Evento evento) { 
+    private String gerarAcesso(Evento evento) { 
         String diamesano = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
         String caracteres = "abcdefghijklmnopqrstuvwxyz";
         StringBuilder letrasAleatorias = new StringBuilder();

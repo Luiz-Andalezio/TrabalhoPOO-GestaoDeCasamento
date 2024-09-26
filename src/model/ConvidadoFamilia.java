@@ -4,8 +4,6 @@ import java.time.LocalDate;
 
 public class ConvidadoFamilia {
 
-    public ConvidadoFamilia() {
-    }
     private long id;
     private String nomeDaFamilia;
     private ConvidadoIndividual[] convitesIndividuais = new ConvidadoIndividual[100];
@@ -70,19 +68,20 @@ public class ConvidadoFamilia {
         m += "--- Convite Família de ID: " + this.id + " ---\n";
         m += "Nome da família: " + this.nomeDaFamilia + "\n";
         m += "Codigo de confirmação: " + this.acesso + "\n\n";
-        if (convitesIndividuais == null) {
+        if (this.convitesIndividuais == null) {
             m += "Ainda não há convidados nesta família.\n";
         } else {
             m += "Convidados:";
             for (ConvidadoIndividual convites : convitesIndividuais) {
                 if (convites != null) {
+                    m += "\nID da pessoa: " + convites.getPessoa().getId();
                     m += "\nNome: " + convites.getPessoa().getNome();
                     m += "\nTelefone: " + convites.getPessoa().getTelefone();
-                    m += "\nConfirmação: ";
+                    m += "\nPresença: ";
                     if (convites.isConfirmacao() == true) {
-                        m += "Confirmado";
+                        m += "Confirmada";
                     } else {
-                        m += "Não confirmado";
+                        m += "Não confirmada";
                     }
                     m += "\n";
                 }

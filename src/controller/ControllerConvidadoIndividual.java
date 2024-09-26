@@ -18,6 +18,7 @@ public class ControllerConvidadoIndividual {
             System.out.println(menuPessoaOpc);
             switch (menuPessoaOpc) {
                 case 1:
+                    //Gerar convites
                     String novoNome = JOptionPane.showInputDialog("\n Informe o nome do(a) convidado(a): ");
 
                     String novoParentesco = JOptionPane.showInputDialog("\nInforme o parentesco de " + novoNome);
@@ -38,6 +39,7 @@ public class ControllerConvidadoIndividual {
                     break;
 
                 case 2:
+                    //Editar convites individuais
                     String s;
                     s = conviteindividualdao.verConvidados();
                     int id;
@@ -91,15 +93,16 @@ public class ControllerConvidadoIndividual {
                     }
 
                 case 3:
+                    //Exibir convites individuais
                     s = conviteindividualdao.verConvidados();
                     if ("".equals(s)) {
                         s += "Ainda não há convites feitos.";
-
                     }
                     JOptionPane.showMessageDialog(null, s);
                     break;
 
                 case 4:
+                    //Desfazer convites
                     s = conviteindividualdao.verConvidados();
                     if ("".equals(s)) {
                         s = "Ainda não há convites feitos.";
@@ -130,6 +133,7 @@ public class ControllerConvidadoIndividual {
                     break;
 
                 case 0:
+                    //Voltar
                     menuPessoaOpc = -1;
                     break;
 

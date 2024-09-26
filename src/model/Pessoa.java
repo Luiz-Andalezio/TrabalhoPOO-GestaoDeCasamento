@@ -72,7 +72,7 @@ public class Pessoa {
     @Override
     public String toString() {
         String m = "";
-        m += "Id: " + this.id + "\n";
+        m += "ID: " + this.id + "\n";
         m += "Nome: " + this.nome + "\n";
         m += "Nascimento: " + this.nascimento + "\n";
         m += "Telefone: " + this.telefone + "\n";

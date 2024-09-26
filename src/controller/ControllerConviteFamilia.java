@@ -21,6 +21,7 @@ public class ControllerConviteFamilia {
             menuFamiliaOpc = gui.crudConvFamilia(usuarioLogado);
             switch (menuFamiliaOpc) {
                 case 1:
+                    //Gerar Convite Família
                     String novoNomeDaFamilia = JOptionPane.showInputDialog("Digite o nome da família a ser convidada: \n\n0- Voltar");
                     if ("".equals(novoNomeDaFamilia)) {
                         JOptionPane.showMessageDialog(null, "Convite Família não sucedido.");
@@ -31,61 +32,18 @@ public class ControllerConviteFamilia {
                     } else {
                         m = new StringBuilder("Convite Família gerado para a família: ").append(novoNomeDaFamilia).append("\n\n").append(convidadoFamiliaDAO.convidaFamilia(novoNomeDaFamilia, evento));
                         JOptionPane.showMessageDialog(null, m);
-
                     }
                     break;
 
                 case 2:
+                    //Gerar novos codigos de acesso para Convites Família
                     String s = convidadoFamiliaDAO.verConvitesFamilia();
                     if ("".equals(s)) {
                         JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
                         break;
                     }
-                    m = new StringBuilder("Informe o ID do Convite Família a receber pessoas: \n\n").append(convidadoFamiliaDAO.verConvitesFamilia()).append("0- Voltar");
-                    int id = Integer.parseInt(JOptionPane.showInputDialog(m));
-                    if (id == 0) {
-                        JOptionPane.showMessageDialog(null, "Adição de pessoas em Convite Família não sucedida.");
-                        break;
-                    } else {
-                        m = new StringBuilder("Deseja mesmo acrescentar convites nesta família? \n\n").append(convidadoFamiliaDAO.verConviteFamilia(id)).append("1- Sim.\n2- Não.\n\n0- Voltar.");
-                        int veredito = Integer.parseInt(JOptionPane.showInputDialog(m));
-                        if (veredito == 1) {
-                            m = new StringBuilder("Informe o ID do Convite Individual a entrar no convite da família: ").append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia());
-                            m.append("\n\n-- CONVITES INDIVIDUAIS --\n\n").append(conviteIndividualDAO.verConvidados()).append("\n0- Voltar");
-                            int id2 = Integer.parseInt(JOptionPane.showInputDialog(m));
-                            if (id2 == 0) {
-                                JOptionPane.showMessageDialog(null, "Operação não sucedida.");
-                                break;
-                            } else {
-                                conviteIndividual = conviteIndividualDAO.retornaConviteIndividual(id2);
-                                convidadoFamiliaDAO.recebeConviteIndividual(id2, conviteIndividual);
-
-                                m = new StringBuilder("Convite Individual de: ").append(conviteIndividual.getPessoa().getNome()).append(" adicionado ao Convite Família da família: ");
-                                m.append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia());
-                                m.append("\n\nNovo estado do convite: \n\n").append(convidadoFamiliaDAO.verConviteFamilia(id));
-                                JOptionPane.showMessageDialog(null, m);
-                                break;
-                            }
-                        }
-                        if (veredito == 2) {
-                            m = new StringBuilder("Adição de pessoas no convite da família '").append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia()).append("' não sucedida.");
-                            JOptionPane.showMessageDialog(null, m);
-                            break;
-                        }
-                        if (veredito == 0) {
-                            break;
-                        }
-                    }
-                    break;
-
-                case 3:
-                s = convidadoFamiliaDAO.verConvitesFamilia();
-                    if ("".equals(s)) {
-                        JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
-                        break;
-                    }
                     m = new StringBuilder("Informe o ID do Convite Família a receber um novo codigo de acesso: \n\n").append(convidadoFamiliaDAO.verConvitesFamilia()).append("0- Voltar");
-                    id = Integer.parseInt(JOptionPane.showInputDialog(m));
+                    int id = Integer.parseInt(JOptionPane.showInputDialog(m));
                     if (id == 0) {
                         JOptionPane.showMessageDialog(null, "Atualização de codigo de acesso não sucedida.");
                         break;
@@ -114,35 +72,112 @@ public class ControllerConviteFamilia {
                     }
                     break;
 
-                case 4:
+                case 3:
+                    //Adicionar pessoas em Convites Família
+                    s = convidadoFamiliaDAO.verConvitesFamilia();
+                    if ("".equals(s)) {
+                        JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
+                        break;
+                    }
+                    m = new StringBuilder("Informe o ID do Convite Família a receber pessoas: \n\n").append(convidadoFamiliaDAO.verConvitesFamilia()).append("0- Voltar");
+                    id = Integer.parseInt(JOptionPane.showInputDialog(m));
+                    if (id == 0) {
+                        JOptionPane.showMessageDialog(null, "Adição de pessoas em Convite Família não sucedida.");
+                        break;
+                    } else {
+                        m = new StringBuilder("Deseja mesmo acrescentar convites nesta família? \n\n").append(convidadoFamiliaDAO.verConviteFamilia(id)).append("1- Sim.\n2- Não.\n\n0- Voltar.");
+                        int veredito = Integer.parseInt(JOptionPane.showInputDialog(m));
+                        if (veredito == 1) {
+                            m = new StringBuilder("Informe o ID do Convite Individual a entrar no convite da família: ").append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia());
+                            m.append("\n\n-- CONVITES INDIVIDUAIS --\n\n").append(conviteIndividualDAO.verConvidados()).append("\n0- Voltar");
+                            int id2 = Integer.parseInt(JOptionPane.showInputDialog(m));
+                            if (id2 == 0) {
+                                JOptionPane.showMessageDialog(null, "Operação não sucedida.");
+                                break;
+                            } else {
+                                conviteIndividual = conviteIndividualDAO.retornaConviteIndividual(id2);
+                                convidadoFamiliaDAO.recebeConviteIndividual(id, id2, conviteIndividual);
 
+                                m = new StringBuilder("Convite Individual de: ").append(conviteIndividual.getPessoa().getNome()).append(" adicionado ao Convite Família da família: ");
+                                m.append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia());
+                                m.append("\n\nNovo estado do convite: \n\n").append(convidadoFamiliaDAO.verConviteFamilia(id));
+                                JOptionPane.showMessageDialog(null, m);
+                                break;
+                            }
+                        }
+                        if (veredito == 2) {
+                            m = new StringBuilder("Adição de pessoas no convite da família '").append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia()).append("' não sucedida.");
+                            JOptionPane.showMessageDialog(null, m);
+                            break;
+                        }
+                        if (veredito == 0) {
+                            break;
+                        }
+                    }
+                    break;
+
+                case 4:
+                    //Excluir pessoas em Convites Família
+                    s = convidadoFamiliaDAO.verConvitesFamilia();
+                    if ("".equals(s)) {
+                        s += "Ainda não há Convites Família gerados.";
+                        JOptionPane.showMessageDialog(null, s);
+                        break;
+                    }
+                    String s2 = conviteIndividualDAO.verConvidados();
+                    if ("".equals(s2)) {
+                        s2 += "Não há pessoas em nenhum dos Convites Família. Impossível realizar exclusões.\n\n" + convidadoFamiliaDAO.verConvitesFamilia();
+                        JOptionPane.showMessageDialog(null, s2);
+                        break;
+                    }
                     break;
 
                 case 5:
+                    //Editar Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
                     if ("".equals(s)) {
-                        s += "Ainda não há convites feitos.";
+                        s += "Ainda não há Convites Família gerados.";
+                        JOptionPane.showMessageDialog(null, s);
+                        break;
+                    }
+
+
+
+                    s2 = conviteIndividualDAO.verConvidados();
+                    if ("".equals(s2)) {
+                        s2 += "Não há pessoas em nenhum dos Convites Família. Impossível realizar edições.\n\n" + convidadoFamiliaDAO.verConvitesFamilia();
+                        JOptionPane.showMessageDialog(null, s2);
+                        break;
+                    }
+                    break;
+
+                case 6:
+                    //Mostrar Convites Família
+                    s = convidadoFamiliaDAO.verConvitesFamilia();
+                    if ("".equals(s)) {
+                        s += "Ainda não há Convites Família feitos.";
                     }
                     JOptionPane.showMessageDialog(null, s);
                     break;
 
-                case 6:
+                case 7:
+                    //Excluir Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
                     if ("".equals(s)) {
                         JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
                         break;
                     } else {
-                        m = new StringBuilder("Insira o ID do Convite Família que deseja excluir: \n\n0- Voltar").append(s);
+                        m = new StringBuilder("Insira o ID do Convite Família que deseja excluir:\n\n").append(s).append("0- Voltar");
                         id = Integer.parseInt(JOptionPane.showInputDialog(m));
                     }
                     if (id == 0) {
                         break;
                     }
 
-                    int veredito = Integer.parseInt(JOptionPane.showInputDialog("Deseja mesmo desconvidar a familia do convite abaixo?\n\n" + convidadoFamiliaDAO.verConviteFamilia(id) + "\n\n1- Sim.\n2- Não.\n\n0- Sair."));
+                    int veredito = Integer.parseInt(JOptionPane.showInputDialog("Deseja mesmo desconvidar a família do convite abaixo?\n\n" + convidadoFamiliaDAO.verConviteFamilia(id) + "\n1- Sim.\n2- Não.\n\n0- Sair."));
 
                     if (veredito == 1) {
-                        JOptionPane.showMessageDialog(null, "Convite da familia abaixo desfeito com sucesso!\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
+                        JOptionPane.showMessageDialog(null, "Convite da família abaixo desfeito com sucesso!\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
                         convidadoFamiliaDAO.desfazerConviteFamilia(id);
                     }
                     if (veredito == 2) {
@@ -155,6 +190,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 0:
+                    //Voltar
                     menuFamiliaOpc = -1;
                     break;
 
