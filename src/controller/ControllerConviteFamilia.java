@@ -46,7 +46,7 @@ public class ControllerConviteFamilia {
                         JOptionPane.showMessageDialog(null, "Adição de pessoas em Convite Família não sucedida.");
                         break;
                     } else {
-                        m = new StringBuilder("Deseja mesmo acrescentar convites nesta família? \n\n").append(convidadoFamiliaDAO.verConvitesFamilia(id)).append("1- Sim.\n2- Não.\n\n0- Voltar.");
+                        m = new StringBuilder("Deseja mesmo acrescentar convites nesta família? \n\n").append(convidadoFamiliaDAO.verConviteFamilia(id)).append("1- Sim.\n2- Não.\n\n0- Voltar.");
                         int veredito = Integer.parseInt(JOptionPane.showInputDialog(m));
                         if (veredito == 1) {
                             m = new StringBuilder("Informe o ID do Convite Individual a entrar no convite da família: ").append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia()).append("\n\n-- CONVITES INDIVIDUAIS --\n\n").append(conviteIndividualDAO.verConvidados()).append("\n\n0- Voltar");
@@ -74,11 +74,11 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 3:
-                    
+
                     break;
-                
+
                 case 4:
-                    
+
                     break;
 
                 case 5:
@@ -90,7 +90,31 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 6:
-                    
+                    s = convidadoFamiliaDAO.verConvitesFamilia();
+                    if ("".equals(s)) {
+                        JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
+                        break;
+                    } else {
+                        m = new StringBuilder("Insira o ID do Convite Família que deseja excluir: \n\n0- Voltar").append(s);
+                        id = Integer.parseInt(JOptionPane.showInputDialog(m));
+                    }
+                    if (id == 0) {
+                        break;
+                    }
+
+                    int veredito = Integer.parseInt(JOptionPane.showInputDialog("Deseja mesmo desconvidar a familia do convite abaixo?\n\n" + convidadoFamiliaDAO.verConviteFamilia(id) + "\n\n1- Sim.\n2- Não.\n\n0- Sair."));
+
+                    if (veredito == 1) {
+                        JOptionPane.showMessageDialog(null, "Convite da familia abaixo desfeito com sucesso!\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
+                        convidadoFamiliaDAO.desfazerConviteFamilia(id);
+                    }
+                    if (veredito == 2) {
+                        JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");
+                        break;
+                    }
+                    if (veredito == 0) {
+                        break;
+                    }
                     break;
 
                 case 0:

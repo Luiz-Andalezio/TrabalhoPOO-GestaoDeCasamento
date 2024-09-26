@@ -121,7 +121,7 @@ public class ConvidadoFamiliaDAO {
         return m;
     }
 
-    public String verConvitesFamilia(int id) {
+    public String verConviteFamilia(int id) {
         return convitesFamilia[id - 1].toString();
     }
 

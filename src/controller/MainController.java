@@ -12,7 +12,8 @@ import model.Usuario;
 import model.UsuarioDAO;
 import view.GUI;
 
-public class Main {
+public class MainController {
+
     //controller
     ControllerConviteFamilia ccf = new ControllerConviteFamilia();
     ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
@@ -32,8 +33,7 @@ public class Main {
     //gui
     GUI gui = new GUI();
 
-    public void main(String[] args) {
-
+    public MainController() {
         int mainOpc = 0;
 
         while (mainOpc != -1) {
@@ -88,7 +88,8 @@ public class Main {
                                     break;
                             }
 
-                        } if (usuarioLogado.getTipo().equals("Admin")) {
+                        }
+                        if (usuarioLogado.getTipo().equals("Admin")) {
                             adminOpc = gui.menuAdmin(usuarioLogado);
                             switch (adminOpc) {
                                 case 1:
@@ -122,8 +123,8 @@ public class Main {
                                     break;
 
                                 case 7:
-                                    //cr = Controller Relatorios
-                                    //cr.controllerRelatorios(gui, usuarioLogado)
+                                //cr = Controller Relatorios
+                                //cr.controllerRelatorios(gui, usuarioLogado)
 
                                 case 0:
                                     //Voltar
@@ -134,7 +135,8 @@ public class Main {
                                     adminOpc = 0;
                                     break;
                             }
-                        } if (usuarioLogado.getTipo().equals("Cerimonial")) {
+                        }
+                        if (usuarioLogado.getTipo().equals("Cerimonial")) {
                             adminOpc = gui.menuCerimonial(usuarioLogado);
                             switch (adminOpc) {
                                 case 1:
@@ -220,54 +222,8 @@ public class Main {
             }
         }
     }
-    /*
-        //Testes
 
-        PessoaDAO pessoadao1 = new PessoaDAO("João", "991650733", "19/04/2004");
-        Pessoa p1 = pessoadao1.retornaPessoa(3);
-        JOptionPane.showMessageDialog(null, p1);
-
-        PessoaDAO pessoadao2 = new PessoaDAO("Mariaaa", "991241367", "20/02/2001");
-        Pessoa p2 = pessoadao2.retornaPessoa(4);
-        JOptionPane.showMessageDialog(null, p2);
-
-        /////////
-
-        PessoaDAO pessoadao1 = new PessoaDAO(1, "João", "19/04/2004", "991650733");
-        Pessoa p1 = pessoadao1.retornaPessoa();
-
-        UsuarioDAO usuariodao1 = new UsuarioDAO(p1, "noivo", "coxinha", "123");
-        Usuario u1 = usuariodao1.retornaUsuario();
-
-        PessoaDAO pessoadao2 = new PessoaDAO(2, "Maria", "29/06/2005", "991279145");
-        Pessoa p2 = pessoadao1.retornaPessoa();
-
-        UsuarioDAO usuariodao2 = new UsuarioDAO(p2, "noiva", "balinha", "123");
-        Usuario u2 = usuariodao2.retornaUsuario();
-
-        //Testes com JOptionPane
-        PessoaDAO pessoadao0 = new PessoaDAO(0, null, null, null);
-        Pessoa p0 = pessoadao0.retornaPessoa();
-
-        JOptionPane.showConfirmDialog(null, "Preparado para criar uma pessoa com usuario?");
-        p0.setId(Integer.parseInt(JOptionPane.showInputDialog("Insira um id: ")));
-        p0.setNome(JOptionPane.showInputDialog("Insira um nome: "));
-        p0.setTelefone(JOptionPane.showInputDialog("Insiga um telefone: "));
-        p0.setNascimento(JOptionPane.showInputDialog("Insina um nascimento: "));
-
-        JOptionPane.showConfirmDialog(null, p0 + " \nEstes sao os dados desejados?");
-        JOptionPane.showMessageDialog(null, "Dados confirmados!\n\nPessoa:\n" + p0);
-
-        JOptionPane.showConfirmDialog(null, "Preparado para criar um usuario para esta pessoa?");
-
-        UsuarioDAO usuariodao0 = new UsuarioDAO(p0, null, null, null);
-        Usuario u0 = usuariodao0.retornaUsuario();
-
-        u0.setId(Integer.parseInt(JOptionPane.showInputDialog("Insira um id: ")));
-        u0.setLogin(JOptionPane.showInputDialog("Insira um login: "));
-        u0.setSenha(JOptionPane.showInputDialog("Insira uma senha: "));
-
-        JOptionPane.showConfirmDialog(null, u0 + "\nEstes são os dados finais do " + p0.getNome() + " e seu usuario de id: " + u0.getId());
-        JOptionPane.showMessageDialog(null, "Usuario criado com sucesso!\n\nDados:\n" + u0);
-     */
+    public static void main(String[] args) {
+        new MainController();
+    }
 }
