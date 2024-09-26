@@ -25,6 +25,13 @@ public class ConvidadoFamiliaDAO {
         return null;
     }
 
+    public String atualizaAcesso(int id, Evento evento, ConvidadoFamilia conviteFamilia) {
+        conviteFamilia = convitesFamilia[id - 1];
+        conviteFamilia.setAcesso(gerarAcesso(evento));
+        conviteFamilia.setDataModificacao();
+        return conviteFamilia.getAcesso();
+    }
+
     public void recebeConviteIndividual(int id, ConvidadoIndividual novoConviteIndividual) {
         convitesFamilia[id - 1].setConvidadoIndividual(id, novoConviteIndividual);
     }

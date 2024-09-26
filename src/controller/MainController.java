@@ -1,5 +1,6 @@
 package controller;
 
+import model.ConvidadoFamilia;
 import model.ConvidadoFamiliaDAO;
 import model.ConvidadoIndividual;
 import model.ConvidadoIndividualDAO;
@@ -28,7 +29,8 @@ public class MainController {
     PresentesDAO presentesdao = new PresentesDAO();
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
     ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO();
-    ConvidadoFamiliaDAO convitefamilia = new ConvidadoFamiliaDAO();
+    ConvidadoFamilia convitefamilia = new ConvidadoFamilia();
+    ConvidadoFamiliaDAO convitefamiliadao = new ConvidadoFamiliaDAO();
 
     //gui
     GUI gui = new GUI();
@@ -51,7 +53,7 @@ public class MainController {
                             switch (adminOpc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
-                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia);
+                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
                                     break;
 
                                 case 2:
@@ -75,8 +77,8 @@ public class MainController {
                                     break;
 
                                 case 6:
-                                //cr = Controller Relatorios
-                                //cr.controllerRelatorios(gui, usuarioLogado)
+                                    //cr = Controller Relatorios
+                                    //cr.controllerRelatorios(gui, usuarioLogado)
 
                                 case 7:
                                     //Voltar
@@ -87,14 +89,13 @@ public class MainController {
                                     adminOpc = 0;
                                     break;
                             }
-
                         }
                         if (usuarioLogado.getTipo().equals("Admin")) {
                             adminOpc = gui.menuAdmin(usuarioLogado);
                             switch (adminOpc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
-                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia);
+                                    ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
                                     break;
 
                                 case 2:
@@ -123,8 +124,8 @@ public class MainController {
                                     break;
 
                                 case 7:
-                                //cr = Controller Relatorios
-                                //cr.controllerRelatorios(gui, usuarioLogado)
+                                    //cr = Controller Relatorios
+                                    //cr.controllerRelatorios(gui, usuarioLogado)
 
                                 case 0:
                                     //Voltar

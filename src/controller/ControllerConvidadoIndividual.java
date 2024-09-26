@@ -77,7 +77,7 @@ public class ControllerConvidadoIndividual {
 
                         conviteindividualdao.atualizaConviteIndividual(nomeAtt, telefoneAtt, nascimentoAtt, parentescoAtt, id);
 
-                        m.append("\nDepois: \n").append(conviteindividualdao.verConvite(id));
+                        m.append("\nAgora: \n").append(conviteindividualdao.verConvite(id));
 
                         JOptionPane.showMessageDialog(null, m);
                         break;
