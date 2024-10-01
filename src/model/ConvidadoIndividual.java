@@ -67,8 +67,7 @@ public class ConvidadoIndividual {
         String m = "";
         m += "--- Convite Individual de ID " + this.id + " ---\n";   
         m += "Informações da pessoa: \n";
-        //m += "ID: " + this.pessoa.getId()+ "\n";   
-        m += "ID da pessoa: " + this.pessoa.getId() + "\n";    
+        //m += "ID: " + this.pessoa.getId()+ "\n";     
         m += "Nome: " + this.pessoa.getNome()+ "\n";              
         m += "Parentesco: " + this.parentesco + "\n"; 
         m += "Telefone: " + this.pessoa.getTelefone()+ "\n";  

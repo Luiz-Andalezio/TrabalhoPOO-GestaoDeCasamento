@@ -33,8 +33,49 @@ public class ConvidadoFamilia {
         return convitesIndividuais[id - 1];
     }
 
+    public ConvidadoIndividual getConviteIndividualByID(int id) {
+        int i = 0;
+        while (convitesIndividuais[i] != null && convitesIndividuais[i].getId() != id || convitesIndividuais[i] == null) {
+            i++;
+        }
+
+        if (convitesIndividuais[i] != null && convitesIndividuais[i].getId() == id) {
+            return convitesIndividuais[i];
+        }
+        return null;
+    }
+
+    public boolean getVetorConvidadosIndividuais() {
+        int existe = 0;
+        for (int i = 0; i < convitesIndividuais.length; ++i) {
+            if (convitesIndividuais[i] != null) {
+                ++existe;
+            }
+        }
+        if (existe != 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void setConvidadoIndividual(int id, ConvidadoIndividual conviteIndividual) {
         this.convitesIndividuais[id - 1] = conviteIndividual;
+    }
+
+    public void setConvidadoIndividualByID(int id, ConvidadoIndividual conviteIndividual) {
+        int i = 0;
+        while (convitesIndividuais[i] != null && convitesIndividuais[i].getId() != id || convitesIndividuais[i] == null) {
+            i++;
+        }
+
+        if (convitesIndividuais[i] != null && convitesIndividuais[i].getId() == id) {
+            this.convitesIndividuais[i] = conviteIndividual;
+        }
+    }
+
+    public void setConvidadoIndividualVetor(int i, ConvidadoIndividual conviteIndividual) {
+        this.convitesIndividuais[i] = conviteIndividual;
     }
 
     public String getAcesso() {
@@ -68,13 +109,19 @@ public class ConvidadoFamilia {
         m += "--- Convite Família de ID: " + this.id + " ---\n";
         m += "Nome da família: " + this.nomeDaFamilia + "\n";
         m += "Codigo de confirmação: " + this.acesso + "\n\n";
-        if (this.convitesIndividuais == null) {
-            m += "Ainda não há convidados nesta família.\n";
+        int existe = 0;
+        for (int i = 0; i < convitesIndividuais.length; ++i) {
+            if (convitesIndividuais[i] != null) {
+                ++existe;
+            }
+        }
+        if (existe == 0) {
+            m += "Não há convidados nesta família.\n";
         } else {
             m += "Convidados:";
             for (ConvidadoIndividual convites : convitesIndividuais) {
                 if (convites != null) {
-                    m += "\nID da pessoa: " + convites.getPessoa().getId();
+                    m += "\nID do convite individual: " + convites.getId();
                     m += "\nNome: " + convites.getPessoa().getNome();
                     m += "\nTelefone: " + convites.getPessoa().getTelefone();
                     m += "\nPresença: ";

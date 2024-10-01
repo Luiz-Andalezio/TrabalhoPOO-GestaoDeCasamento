@@ -7,21 +7,21 @@ public class PessoaDAO {
     public PessoaDAO() {
         Pessoa p1 = new Pessoa();
         p1.setNome("João");
-        p1.setTelefone("34997212965");
+        p1.setTelefone("+55 (71) ####-####");
         p1.setNascimento("23/02/2000");
         p1.setDataCriacao();
         pessoas[0] = p1;
 
         Pessoa p2 = new Pessoa();
         p2.setNome("Maria");
-        p2.setTelefone("34993126786");
+        p2.setTelefone("+55 (68) ####-####");
         p2.setNascimento("01/12/2003");
         p2.setDataCriacao();
         pessoas[1] = p2;
 
         Pessoa p3 = new Pessoa();
         p3.setNome("Rodolfo");
-        p3.setTelefone("34996839138");
+        p3.setTelefone("+55 (34) ####-####");
         p3.setNascimento("02/12/1993");
         p3.setDataCriacao();
         pessoas[2] = p3;
@@ -36,9 +36,30 @@ public class PessoaDAO {
         Pessoa p5 = new Pessoa();
         p5.setNome("Gabriel");
         p5.setTelefone("+55 (34) ####-####");
-        p5.setNascimento("19/04/2004");
+        p5.setNascimento("10/11/2004");
         p5.setDataCriacao();
         pessoas[4] = p5;
+
+        Pessoa p6 = new Pessoa();
+        p6.setNome("Ana");
+        p6.setTelefone("+55 (71) ####-####");
+        p6.setNascimento("22/09/2005");
+        p6.setDataCriacao();
+        pessoas[5] = p6;
+
+        Pessoa p7 = new Pessoa();
+        p7.setNome("Dario");
+        p7.setTelefone("+55 (21) ####-####");
+        p7.setNascimento("13/06/1966");
+        p7.setDataCriacao();
+        pessoas[6] = p7;
+
+        Pessoa p8 = new Pessoa();
+        p8.setNome("Eustáquio");
+        p8.setTelefone("+55 (71) ####-####");
+        p8.setNascimento("07/01/1949");
+        p8.setDataCriacao();
+        pessoas[7] = p8;
         /*
         p1.setId(1);
         p1.setNome("Luiz");

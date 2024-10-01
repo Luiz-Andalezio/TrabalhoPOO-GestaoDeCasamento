@@ -28,9 +28,9 @@ public class MainController {
     Evento evento = eventodao.retornaEvento();
     PresentesDAO presentesdao = new PresentesDAO();
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
-    ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO();
+    ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao);    
     ConvidadoFamilia convitefamilia = new ConvidadoFamilia();
-    ConvidadoFamiliaDAO convitefamiliadao = new ConvidadoFamiliaDAO();
+    ConvidadoFamiliaDAO convitefamiliadao = new ConvidadoFamiliaDAO(conviteindividualdao, evento);
 
     //gui
     GUI gui = new GUI();
