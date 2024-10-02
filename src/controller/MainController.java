@@ -18,6 +18,7 @@ public class MainController {
     //controller
     ControllerConviteFamilia ccf = new ControllerConviteFamilia();
     ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
+    ControllerUsuario cu = new ControllerUsuario();
 
     //model
     Pessoa pessoa = new Pessoa();
@@ -80,7 +81,7 @@ public class MainController {
                                     //cr = Controller Relatorios
                                     //cr.controllerRelatorios(gui, usuarioLogado)
 
-                                case 7:
+                                case 0:
                                     //Voltar
                                     adminOpc = -1;
                                     break;
@@ -105,7 +106,7 @@ public class MainController {
 
                                 case 3:
                                     //cu = Controller Usuarios
-                                    //cu.controllerCrudUsuarios(gui, usuarioLogado, usuariodao);
+                                    cu.controllerCrudUsuarios(gui, usuarioLogado, usuariodao, pessoadao, pessoa);
                                     break;
 
                                 case 4:

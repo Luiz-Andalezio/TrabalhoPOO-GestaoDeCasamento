@@ -105,16 +105,6 @@ public class ConvidadoIndividualDAO {
         return null;
     }    
 
-    public String verConvite(String nome) {
-        String m = "";
-        for (int i = 0; i < convidados.length; i++) {
-            if (convidados[i].getPessoa().getNome().equals(nome)) {
-                m += convidados[i].toString() + "\n";
-            }
-        }
-        return m;
-    }
-
     public ConvidadoIndividual retornaConviteIndividual(int id) {
         return convidados[id-1];
     }

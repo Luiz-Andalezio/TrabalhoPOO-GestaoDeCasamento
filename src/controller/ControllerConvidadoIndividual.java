@@ -15,10 +15,9 @@ public class ControllerConvidadoIndividual {
 
         while (menuPessoaOpc != -1) {
             menuPessoaOpc = gui.crudConvIndividual(usuarioLogado);
-            System.out.println(menuPessoaOpc);
             switch (menuPessoaOpc) {
                 case 1:
-                    // Gerar convites
+                    //Gerar convites
                     String novoNome = JOptionPane.showInputDialog("\n Informe o nome do(a) convidado(a): ");
                     String novoParentesco = JOptionPane.showInputDialog("\nInforme o parentesco de " + novoNome);
                     String novoTelefone = JOptionPane.showInputDialog("\nInforme o telefone de " + novoNome);
@@ -34,7 +33,7 @@ public class ControllerConvidadoIndividual {
                     break;
 
                 case 2:
-                    // Editar convites individuais
+                    //Editar convites individuais
                     String s = conviteindividualdao.verConvidados();
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do convite da pessoa que deseja editar: \n\n0- Voltar"));
@@ -64,7 +63,7 @@ public class ControllerConvidadoIndividual {
                     break;
 
                 case 3:
-                    // Exibir convites individuais
+                    //Exibir convites individuais
                     s = conviteindividualdao.verConvidados();
                     if ("".equals(s)) {
                         s = "Ainda não há convites feitos.";
@@ -73,7 +72,7 @@ public class ControllerConvidadoIndividual {
                     break;
 
                 case 4:
-                    // Desfazer convites
+                    //Desfazer convites
                     s = conviteindividualdao.verConvidados();
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do convite a ser desfeito: \n\n0- Voltar"));
@@ -92,7 +91,7 @@ public class ControllerConvidadoIndividual {
                     break;
 
                 case 0:
-                    // Voltar
+                    //Voltar
                     menuPessoaOpc = -1;
                     break;
 

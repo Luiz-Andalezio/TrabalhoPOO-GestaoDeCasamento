@@ -10,6 +10,7 @@ public class UsuarioDAO {
         u1.setLogin("coxinho");
         u1.setSenha("123");
         u1.setTipo("Noivo");
+        u1.setDataCriacao();
         usuarios[0] = u1;
 
         Usuario u2 = new Usuario();
@@ -17,28 +18,16 @@ public class UsuarioDAO {
         u2.setLogin("coxinha");
         u2.setSenha("123");
         u2.setTipo("Noiva");
+        u2.setDataCriacao();
         usuarios[1] = u2;
 
         Usuario u3 = new Usuario();
-        u3.setPessoa(pessoadao.retornaPessoa(2));
-        u3.setLogin("cerimonio");
+        u3.setPessoa(pessoadao.retornaPessoa(3));
+        u3.setLogin("admin");
         u3.setSenha("123");
-        u3.setTipo("Cerimonial");
+        u3.setTipo("Admin");
+        u3.setDataCriacao();
         usuarios[2] = u3;
-
-        Usuario u4 = new Usuario();
-        u4.setPessoa(pessoadao.retornaPessoa(3));
-        u4.setLogin("luiz");
-        u4.setSenha("123");
-        u4.setTipo("Admin");
-        usuarios[3] = u4;
-
-        Usuario u5 = new Usuario();
-        u5.setPessoa(pessoadao.retornaPessoa(4));
-        u5.setLogin("gabriel");
-        u5.setSenha("123");
-        u5.setTipo("Admin");
-        usuarios[4] = u5;
     }
 
     public UsuarioDAO(Pessoa pessoa, String t, String l, String s) {
@@ -54,6 +43,91 @@ public class UsuarioDAO {
                 usuarios[v] = u;
             }
         }
+    }
+
+    public boolean recebePessoa(Pessoa novaPessoa, String tipo, String login, String senha) {
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] == null) {
+                usuarios[i] = new Usuario();
+                usuarios[i].setPessoa(novaPessoa);
+                usuarios[i].setTipo(tipo);
+                usuarios[i].setLogin(login);
+                usuarios[i].setSenha(senha);
+                usuarios[i].setDataCriacao();
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean atualizaPessoaUsuario(String nome, String telefone, String nascimento, int id) {
+        int i = 0;
+        while (usuarios[i] != null && usuarios[i].getId() != id || usuarios[i] == null) {
+            i++;
+        }
+
+        if (usuarios[i] != null && usuarios[i].getId() == id) {
+            if (!nome.equals("")) {
+                usuarios[i].getPessoa().setNome(nome);
+            }
+            if (!telefone.equals("")) {
+                usuarios[i].getPessoa().setTelefone(telefone);
+            }
+            if (!nascimento.equals("")) {
+                usuarios[i].getPessoa().setNascimento(nascimento);
+            }            
+            usuarios[i].getPessoa().setDataModificacao();
+            usuarios[i].setDataModificacao();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean atualizaUsuario(String tipo, String login, String senha, int id) {
+        int i = 0;
+        while (usuarios[i] != null && usuarios[i].getId() != id || usuarios[i] == null) {
+            i++;
+        }
+
+        if (usuarios[i] != null && usuarios[i].getId() == id) {
+            if (!tipo.equals("")) {
+                usuarios[i].setTipo(tipo);
+            }
+            if (!login.equals("")) {
+                usuarios[i].setLogin(login);
+            }
+            if (!senha.equals("")) {
+                usuarios[i].setSenha(senha);
+            }
+            usuarios[i].setDataModificacao();
+            return true;
+        }
+        return false;
+    }
+
+    public void excluirUsuario(int id) {
+        int i = 0;
+        while (usuarios[i] != null && usuarios[i].getId() != id || usuarios[i] == null) {
+            i++;
+        }
+
+        if (usuarios[i] != null && usuarios[i].getId() == id) {
+            usuarios[i] = null;
+        }
+    }
+
+    public String verUsuarios() {
+        String m = "";
+        for (int i = 0; i < usuarios.length; i++) {
+            if (usuarios[i] != null) {
+                m += usuarios[i].toString() + "\n";
+            }
+        }
+        return m;
+    }
+
+    public Usuario verUsuario(int id) {
+        return usuarios[id - 1];
     }
 
     public Usuario retornaUsuario(String login, String senha) {

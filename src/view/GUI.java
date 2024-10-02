@@ -162,6 +162,25 @@ public class GUI {
         return opc;
     }
 
+    public int crudUsuario(Usuario usuarioLogado) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+        
+        m.append(headerAdmin(usuarioLogado));
+
+        m.append("----- Menu de Usuarios -----");
+        m.append("\n\n1- Cadastrar usuarios.");
+        m.append("\n2- Editar usuarios.");
+        m.append("\n3- Exibir usuarios.");
+        m.append("\n4- Desfazer usuarios.");
+        m.append("\n\n0- Voltar.");
+
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
     public int crudPresentesConvidado(PresentesDAO presentesdao) {
         int opc;
 

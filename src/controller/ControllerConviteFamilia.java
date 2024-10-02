@@ -21,7 +21,7 @@ public class ControllerConviteFamilia {
             menuFamiliaOpc = gui.crudConvFamilia(usuarioLogado);
             switch (menuFamiliaOpc) {
                 case 1:
-                    // Gerar Convite Família
+                    //Gerar Convite Família
                     String novoNomeDaFamilia = JOptionPane.showInputDialog("Digite o nome da família a ser convidada: \n\n0- Voltar");
 
                     if ("".equals(novoNomeDaFamilia)) {
@@ -37,7 +37,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 2:
-                    // Gerar novos códigos de acesso para Convites Família
+                    //Gerar novos códigos de acesso para Convites Família
                     String s = convidadoFamiliaDAO.verConvitesFamilia();
 
                     if ("".equals(s)) {
@@ -79,7 +79,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 3:
-                    // Adicionar pessoas em Convites Família
+                    //Adicionar pessoas em Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
 
                     if ("".equals(s)) {
@@ -139,7 +139,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 4:
-                    // Excluir pessoas em Convites Família
+                    //Excluir pessoas em Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
 
                     if ("".equals(s)) {
@@ -190,7 +190,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 5:
-                    // Editar Convites Família
+                    //Editar Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
 
                     if ("".equals(s)) {
@@ -201,6 +201,7 @@ public class ControllerConviteFamilia {
 
                         if (id == 0) {
                         } else {
+                            JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
                             m = new StringBuilder("Insira o novo nome a ser atualizado para a família ")
                                     .append(convidadoFamiliaDAO.retornaConviteFamilia(id).getNomeDaFamilia())
                                     .append(" de ID ")
@@ -273,7 +274,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 case 7:
-                    // Excluir Convites Família
+                    //Excluir Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
 
                     if ("".equals(s)) {

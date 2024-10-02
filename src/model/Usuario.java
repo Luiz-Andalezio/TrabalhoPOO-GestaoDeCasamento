@@ -3,20 +3,21 @@ package model;
 import java.time.LocalDate;
 
 public class Usuario {
-    private int id;
+    private long id;
     private Pessoa pessoa;
     private String tipo;
     private String login;
     private String senha;
     private LocalDate dataCriacao;
-    private LocalDate dataModificacao;
+    private LocalDate dataModificacao;    
+    private static long incrementaId = 0;
 
     //GETTERS E SETTERS
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -56,27 +57,31 @@ public class Usuario {
         return dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setDataCriacao() {
         this.dataCriacao = LocalDate.now();
-        this.dataModificacao = LocalDate.now();
+        this.id = ++Usuario.incrementaId;
     }
 
     public LocalDate getDataModificacao() {
         return dataModificacao;
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
+    public void setDataModificacao() {
         this.dataModificacao = LocalDate.now();
     }
     
     @Override
     public String toString(){
         String m = "";
-        m += "--- Usuário ID " + this.id + " ---\n";
-        m += this.pessoa;
-        m += "\nData de criação: " + this.dataCriacao ;
+        m += "--- Usuário ID " + this.id + " ---";
+        m += "\nNome da pessoa: " + this.pessoa.getNome();
+        m += "\nTelefone da pessoa: " + this.pessoa.getTelefone();       
+        m += "\nTipo: " + this.tipo;
+        m += "\nLogin: " + this.login;
+        m += "\nSenha: " + this.senha;
+        m += "\nUsuario criado no dia: " + this.dataCriacao;
         if(this.dataModificacao != null){
-            m += "\nData de modificação: " + this.dataModificacao;
+            m += " e modificado no dia: " + this.dataModificacao;
         }        
         m += "\n\n";
     return m;
