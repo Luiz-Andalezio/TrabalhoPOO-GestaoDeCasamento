@@ -141,51 +141,47 @@ public class ControllerConviteFamilia {
                 case 4:
                     //Excluir pessoas em Convites Família
                     s = convidadoFamiliaDAO.verConvitesFamilia();
+                    String s2 = conviteIndividualDAO.verConvidados();
 
                     if ("".equals(s)) {
                         JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
-                        break;
-                    }
-
-                    String s2 = conviteIndividualDAO.verConvidados();
-                    if ("".equals(s2)) {
+                    } else if ("".equals(s2)) {
                         JOptionPane.showMessageDialog(null, "Não há convidados em nenhum dos Convites Família. Impossível realizar exclusões.\n\n" + convidadoFamiliaDAO.verConvitesFamilia());
-                        break;
-                    }
-
-                    int continuarAtt = 0;
-                    int id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família a ter convites individuais excluídos.\n\n" + s + "\n0- Voltar"));
-
-                    if (id == 0) {
-                    } else if (convidadoFamiliaDAO.retornaConviteFamilia(id) == null || !convidadoFamiliaDAO.retornaConviteFamilia(id).getVetorConvidadosIndividuais()) {
-                        JOptionPane.showMessageDialog(null, "Não há convidados neste Convite Família para serem excluídos.\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
                     } else {
-                        while (continuarAtt != -1) {
-                            m = new StringBuilder("Deseja continuar para excluir convidados deste Convite Família?\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id));
-                            int continuar = JOptionPane.showConfirmDialog(null, m.toString(), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                        int continuarAtt = 0;
+                        int id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família a ter convites individuais excluídos.\n\n" + s + "\n0- Voltar"));
 
-                            if (continuar == JOptionPane.YES_OPTION) {
-                                int conviteID = Integer.parseInt(JOptionPane.showInputDialog("Digite o ID do convite individual da pessoa a ser excluída do Convite Família:\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id) + "\n\n0- Voltar"));
+                        if (id == 0) {
+                        } else if (convidadoFamiliaDAO.retornaConviteFamilia(id) == null || !convidadoFamiliaDAO.retornaConviteFamilia(id).getVetorConvidadosIndividuais()) {
+                            JOptionPane.showMessageDialog(null, "Não há convidados neste Convite Família para serem excluídos.\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
+                        } else {
+                            while (continuarAtt != -1) {
+                                m = new StringBuilder("Deseja continuar para excluir convidados deste Convite Família?\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id));
+                                int continuar = JOptionPane.showConfirmDialog(null, m.toString(), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
-                                if (conviteID == 0) {
-                                    JOptionPane.showMessageDialog(null, "Exclusão de convidados não sucedida...");
-                                    continuarAtt = -1;
-                                } else {
-                                    int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir a pessoa abaixo?\n\n" + conviteIndividualDAO.verConvite(conviteID), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                                if (continuar == JOptionPane.YES_OPTION) {
+                                    int conviteID = Integer.parseInt(JOptionPane.showInputDialog("Digite o ID do convite individual da pessoa a ser excluída do Convite Família:\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id) + "\n\n0- Voltar"));
 
-                                    if (veredito == JOptionPane.YES_OPTION) {
-                                        JOptionPane.showMessageDialog(null, "Convidado abaixo excluído com sucesso!\n\n" + conviteIndividualDAO.verConvite(conviteID));
-                                        convidadoFamiliaDAO.excluirConviteIndividualConviteFamilia(id, conviteID);
+                                    if (conviteID == 0) {
+                                        JOptionPane.showMessageDialog(null, "Exclusão de convidados não sucedida...");
+                                        continuarAtt = -1;
                                     } else {
-                                        JOptionPane.showMessageDialog(null, "Exclusão não realizada...");
+                                        int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir a pessoa abaixo?\n\n" + conviteIndividualDAO.verConvite(conviteID), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+
+                                        if (veredito == JOptionPane.YES_OPTION) {
+                                            JOptionPane.showMessageDialog(null, "Convidado abaixo excluído com sucesso!\n\n" + conviteIndividualDAO.verConvite(conviteID));
+                                            convidadoFamiliaDAO.excluirConviteIndividualConviteFamilia(id, conviteID);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Exclusão não realizada...");
+                                        }
                                     }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Exclusão de convidados não continuada...");
+                                    continuarAtt = -1;
                                 }
-                            } else {
-                                JOptionPane.showMessageDialog(null, "Exclusão de convidados não continuada...");
-                                continuarAtt = -1;
                             }
+                            JOptionPane.showMessageDialog(null, "Exclusões finalizadas!\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id));
                         }
-                        JOptionPane.showMessageDialog(null, "Exclusões finalizadas!\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id));
                     }
                     break;
 
@@ -197,7 +193,7 @@ public class ControllerConviteFamilia {
                         s = "Ainda não há Convites Família gerados.";
                         JOptionPane.showMessageDialog(null, s);
                     } else {
-                        id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família a ser atualizado.\n\n" + s + "\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família a ser atualizado.\n\n" + s + "\n0- Voltar"));
 
                         if (id == 0) {
                         } else {
@@ -224,7 +220,7 @@ public class ControllerConviteFamilia {
                             } else if (!convidadoFamiliaDAO.retornaConviteFamilia(id).getVetorConvidadosIndividuais()) {
                                 JOptionPane.showMessageDialog(null, "Não há convidados neste Convite Família para serem atualizados.\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
                             } else {
-                                continuarAtt = 0;
+                                int continuarAtt = 0;
                                 while (continuarAtt != -1) {
                                     m = new StringBuilder("Deseja continuar para atualizar os convidados deste Convite Família?\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id));
                                     int continuar = JOptionPane.showConfirmDialog(null, m, "Confirmar Atualização", JOptionPane.YES_NO_OPTION);
@@ -281,19 +277,18 @@ public class ControllerConviteFamilia {
                         JOptionPane.showMessageDialog(null, "Ainda não há Convites Família gerados.");
                     } else {
                         m = new StringBuilder("Insira o ID do Convite Família que deseja excluir:\n\n").append(s).append("0- Voltar");
-                        id = Integer.parseInt(JOptionPane.showInputDialog(m));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(m));
 
                         if (id == 0) {
-                            break;
-                        }
+                        } else {
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo desconvidar a família do convite abaixo?\n\n" + convidadoFamiliaDAO.verConviteFamilia(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
-                        int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo desconvidar a família do convite abaixo?\n\n" + convidadoFamiliaDAO.verConviteFamilia(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
-
-                        if (veredito == JOptionPane.YES_OPTION) {
-                            JOptionPane.showMessageDialog(null, "Convite da família abaixo desfeito com sucesso!\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
-                            convidadoFamiliaDAO.desfazerConviteFamilia(id);
-                        } else if (veredito == JOptionPane.NO_OPTION) {
-                            JOptionPane.showMessageDialog(null, "Exclusão não continuada...");
+                            if (veredito == JOptionPane.YES_OPTION) {
+                                JOptionPane.showMessageDialog(null, "Convite da família abaixo desfeito com sucesso!\n\n" + convidadoFamiliaDAO.verConviteFamilia(id));
+                                convidadoFamiliaDAO.desfazerConviteFamilia(id);
+                            } else {
+                                JOptionPane.showMessageDialog(null, "Exclusão não continuada...");
+                            }
                         }
                     }
                     break;
