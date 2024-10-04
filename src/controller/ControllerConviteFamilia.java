@@ -299,7 +299,7 @@ public class ControllerConviteFamilia {
                     break;
 
                 default:
-                    menuFamiliaOpc = 0;
+                    menuFamiliaOpc = -1;
                     break;
             }
         }

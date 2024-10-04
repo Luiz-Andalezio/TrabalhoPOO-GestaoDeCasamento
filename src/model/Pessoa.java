@@ -13,8 +13,6 @@ public class Pessoa {
     private LocalDate dataModificacao;
     private static long incrementaId = 0;
 
-    // METODOS
-    //GETTERS E SETTERS
     public String getTelefone() {
         return telefone;
     }
@@ -45,7 +43,7 @@ public class Pessoa {
 
     public void setNascimento(String nascimento) {
         DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        if (nascimento == null) {
+        if ("".equals(nascimento)) {
             this.nascimento = LocalDate.now();
         } else {
             this.nascimento = LocalDate.parse(nascimento, dtf);

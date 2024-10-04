@@ -1,11 +1,15 @@
 package controller;
 
+import java.time.LocalDate;
+import model.CalendarioDAO;
 import model.ConvidadoFamilia;
 import model.ConvidadoFamiliaDAO;
 import model.ConvidadoIndividual;
 import model.ConvidadoIndividualDAO;
 import model.Evento;
 import model.EventoDAO;
+import model.Mensagens;
+import model.MensagensDAO;
 import model.Pessoa;
 import model.PessoaDAO;
 import model.PresentesDAO;
@@ -16,8 +20,10 @@ import view.GUI;
 public class MainController {
 
     //controller
+    ControllerCalendario cc = new ControllerCalendario();
     ControllerConviteFamilia ccf = new ControllerConviteFamilia();
     ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
+    ControllerMensagens cm = new ControllerMensagens();
     ControllerUsuario cu = new ControllerUsuario();
 
     //model
@@ -27,14 +33,20 @@ public class MainController {
     Usuario usuarioLogado = null;
     EventoDAO eventodao = new EventoDAO(pessoadao);
     Evento evento = eventodao.retornaEvento();
+    Mensagens mensagens = new Mensagens();
+    MensagensDAO mensagensdao = new MensagensDAO();
     PresentesDAO presentesdao = new PresentesDAO();
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
     ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao);    
     ConvidadoFamilia convitefamilia = new ConvidadoFamilia();
     ConvidadoFamiliaDAO convitefamiliadao = new ConvidadoFamiliaDAO(conviteindividualdao, evento);
 
-    //gui
+    //view
     GUI gui = new GUI();
+
+    //Calendário
+    LocalDate calendario = LocalDate.now();
+    CalendarioDAO calendarioDAO = new CalendarioDAO();
 
     public MainController() {
         int mainOpc = 0;
@@ -47,11 +59,11 @@ public class MainController {
                 case 1:
                     usuarioLogado = gui.login(usuariodao);
 
-                    int adminOpc = 0;
-                    while (adminOpc != -1) {
+                    int opc = 0;
+                    while (opc != -1) {
                         if (usuarioLogado.getTipo().equals("Noivo") || usuarioLogado.getTipo().equals("Noiva")) {
-                            adminOpc = gui.menuNoivos(usuarioLogado);
-                            switch (adminOpc) {
+                            opc = gui.menuNoivos(usuarioLogado);
+                            switch (opc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
                                     ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
@@ -68,32 +80,37 @@ public class MainController {
                                     break;
 
                                 case 4:
-                                    //cvp = Controller Pagamentos
+                                    //cvp = Controller Ver Presentes
                                     //cvp.controllerVerPagamentos(gui, usuarioLogado);
                                     break;
 
                                 case 5:
-                                    //cc = Controller Calendario
-                                    //cc.controllerIncrementaData(gui, usuarioLogado);
+                                    //cvp = Controller Pagamentos
+                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
                                     break;
 
                                 case 6:
+                                    //cc = Controller Calendario
+                                    cc.controllerCrudIncrementaData(gui, usuarioLogado, calendario, calendarioDAO);
+                                    break;
+
+                                case 7:
                                     //cr = Controller Relatorios
                                     //cr.controllerRelatorios(gui, usuarioLogado)
 
                                 case 0:
                                     //Voltar
-                                    adminOpc = -1;
+                                    opc = -1;
                                     break;
 
                                 default:
-                                    adminOpc = 0;
+                                    opc = 0;
                                     break;
                             }
                         }
                         if (usuarioLogado.getTipo().equals("Admin")) {
-                            adminOpc = gui.menuAdmin(usuarioLogado);
-                            switch (adminOpc) {
+                            opc = gui.menuAdmin(usuarioLogado);
+                            switch (opc) {
                                 case 1:
                                     //ccf = Controller Convite Familia
                                     ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
@@ -111,69 +128,68 @@ public class MainController {
 
                                 case 4:
                                     //cm = Controller Mensagens
-                                    //cm.controllerVerMensagens(gui, usuarioLogado);
+                                    cm.controllerCrudMensagens(gui, usuarioLogado, usuariodao, pessoadao, pessoa, evento, mensagens, mensagensdao);
                                     break;
 
                                 case 5:
-                                    //cvp = Controller Ver Pagamentos
+                                    //cvp = Controller Ver Presentes
                                     //cvp.controllerVerPagamentos(gui, usuarioLogado);
                                     break;
 
                                 case 6:
-                                    //cc = Controller Calendario
-                                    //cc.controllerIncrementaData(gui, usuarioLogado);
+                                    //cvp = Controller Ver Pagamentos
+                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
                                     break;
 
                                 case 7:
+                                    //cc = Controller Calendario
+                                    cc.controllerCrudIncrementaData(gui, usuarioLogado, calendario, calendarioDAO);
+                                    break;
+
+                                case 8:
                                     //cr = Controller Relatorios
                                     //cr.controllerRelatorios(gui, usuarioLogado)
 
                                 case 0:
                                     //Voltar
-                                    adminOpc = -1;
+                                    opc = -1;
                                     break;
 
                                 default:
-                                    adminOpc = 0;
+                                    opc = 0;
                                     break;
                             }
                         }
                         if (usuarioLogado.getTipo().equals("Cerimonial")) {
-                            adminOpc = gui.menuCerimonial(usuarioLogado);
-                            switch (adminOpc) {
+                            opc = gui.menuCerimonial(usuarioLogado);
+                            switch (opc) {
                                 case 1:
-                                    //Ver convidados
-                                    //ccf = Controller Convite Familia
-                                    //convitesfamilias.verConvidados();
+                                    //Ver Convites Família
+                                    convitefamiliadao.verConvitesFamilia();
                                     break;
 
                                 case 2:
-                                    //cvp = Controller Ver Pagamentos
-                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cm = Controller Mensagens
+                                    mensagensdao.enviarMensagem(evento, mensagens, mensagensdao);
                                     break;
 
-                                case 3:
-                                    //cvp = Controller Ver Pagamentos
-                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
+                                case 3:                                    
+                                    //cp = Controller Presentes
+                                    //cp.controllerDarPresente(gui, usuarioLogado, presentesdao);
                                     break;
 
                                 case 4:
-                                    //cc = Controller Calendario
-                                    //cc.controllerIncrementaData(gui, usuarioLogado);
-                                    break;
-
-                                case 5:
                                     //cr = Controller Relatorios
                                     //cr.controllerRelatorios(gui, usuarioLogado)
                                     break;
 
                                 case 0:
                                     //Voltar
-                                    adminOpc = -1;
+                                    opc = -1;
                                     break;
 
                                 default:
-                                    adminOpc = 0;
+                                    opc = 0;
                                     break;
                             }
                         }
@@ -181,20 +197,20 @@ public class MainController {
                     break;
 
                 case 2:
-                    int convidadoOpc = gui.menuConvidado();
-                    //int convidadoOpc = gui.loginConvidado();
-                    while (convidadoOpc != -1) {
-                        //convidadoOpc = gui.gui.menuConvidado();
-                        switch (convidadoOpc) {
+                    convitefamilia = gui.loginConviteFamilia(convitefamiliadao);
+                    opc = 0;
+                    while (opc != -1) {                        
+                        opc = gui.menuConvidado(convitefamilia);
+                        //opc = gui.gui.menuConvidado();
+                        switch (opc) {
                             case 1:
-                                //cp = Controller Presentes
-                                //cp.controllerDarPresente(gui, usuarioLogado, presentesdao); 
-                                gui.crudPresentesConvidado(presentesdao);
+                                //cm = Controller Mensagens
+                                mensagensdao.enviarMensagem(evento, mensagens, mensagensdao);
                                 break;
 
-                            case 2:
-                                //cm = Controller Mensagens
-                                //cm.controllerEnviarMensagem(gui, usuarioLogado);
+                            case 2:                            
+                                //cp = Controller Presentes
+                                //cp.controllerDarPresente(gui, usuarioLogado, presentesdao);
                                 break;
 
                             case 3:
@@ -204,11 +220,11 @@ public class MainController {
 
                             case 0:
                                 //Voltar
-                                convidadoOpc = -1;
+                                opc = -1;
                                 break;
 
                             default:
-                                convidadoOpc = 0;
+                                opc = 0;
                                 break;
                         }
                     }

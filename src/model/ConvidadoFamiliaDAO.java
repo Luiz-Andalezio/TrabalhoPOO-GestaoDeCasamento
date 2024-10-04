@@ -12,7 +12,7 @@ public class ConvidadoFamiliaDAO {
         cf1.setNomeDaFamilia("Dantas");
         cf1.setConvidadoIndividualVetor(0, conviteindividualdao.retornaConviteIndividualVetor(0));
         cf1.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(2));
-        cf1.setAcesso(gerarAcesso(evento));
+        cf1.setAcesso(/*gerarAcesso(evento)*/"123");
         cf1.setDataCriacao();
         convitesFamilia[0] = cf1;
 
@@ -154,6 +154,15 @@ public class ConvidadoFamiliaDAO {
 
     public String verConviteFamilia(int id) {
         return convitesFamilia[id - 1].toString();
+    }
+
+    public ConvidadoFamilia retornaAcessoConviteFamilia(String acesso) {
+        for (ConvidadoFamilia convitefamilia : convitesFamilia) {
+            if (convitefamilia != null && convitefamilia.getAcesso().equals(acesso)) {
+                return convitefamilia;
+            }
+        }
+        return null;
     }
 
     public ConvidadoFamilia retornaConviteFamilia(int id) {

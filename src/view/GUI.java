@@ -1,6 +1,9 @@
 package view;
 
+import java.time.LocalDate;
 import javax.swing.JOptionPane;
+import model.ConvidadoFamilia;
+import model.ConvidadoFamiliaDAO;
 import model.Evento;
 import model.PresentesDAO;
 import model.Usuario;
@@ -29,7 +32,7 @@ public class GUI {
         Usuario usuario = null;
         String loginAtt, senhaAtt;
 
-        while (usuario==null) {
+        while (usuario == null) {
             loginAtt = JOptionPane.showInputDialog("Informe seu login: ");
             senhaAtt = JOptionPane.showInputDialog("Informe sua senha: ");
             
@@ -40,6 +43,22 @@ public class GUI {
             }
         }
         return usuario;
+    }
+
+    public ConvidadoFamilia loginConviteFamilia(ConvidadoFamiliaDAO convitefamiliadao) {
+        ConvidadoFamilia convitefamilia = null;
+        String acesso;
+
+        while (convitefamilia == null) {
+            acesso = JOptionPane.showInputDialog("Informe o acesso do seu Convite Família: ");
+            
+            convitefamilia = convitefamiliadao.retornaAcessoConviteFamilia(acesso);
+
+            if (convitefamilia == null) {
+                JOptionPane.showMessageDialog(null, "Acesso inválido. Tente novamente.");
+            }
+        }
+        return convitefamilia;
     }
 
     //MENUS
@@ -53,10 +72,11 @@ public class GUI {
         m.append("----- Menu dos Noivos -----");
         m.append("\n\n1- Crud de famílias.");
         m.append("\n2- Crud de convites individuais.");
-        m.append("\n3- Visualizar presentes recebidos.");
-        m.append("\n4- Pagamentos.");
-        m.append("\n5- Incrementar dias.");
-        m.append("\n6- Relatórios.");
+        m.append("\n3- Visualizar mensagens recebidas.");
+        m.append("\n4- Visualizar presentes recebidos.");
+        m.append("\n5- Pagamentos.");
+        m.append("\n6- Incrementar dias.");
+        m.append("\n7- Relatórios.");
         m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -74,11 +94,12 @@ public class GUI {
         m.append("----- Menu do Administrador -----");
         m.append("\n\n1- Crud de famílias.");
         m.append("\n2- Crud de convites individuais.");
-        m.append("\n3- Crud de usuários.");
-        m.append("\n4- Visualizar presentes entregues aos noivos.");
-        m.append("\n5- Visualizar pagamentos.");
-        m.append("\n6- Incrementar dias.");
-        m.append("\n7- Relatórios.");
+        m.append("\n3- Crud de usuários.");        
+        m.append("\n4- Crud de mensagens.");
+        m.append("\n5- Visualizar presentes entregues aos noivos.");
+        m.append("\n6- Visualizar pagamentos.");
+        m.append("\n7- Incrementar dias.");
+        m.append("\n8- Relatórios.");
         m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -94,11 +115,10 @@ public class GUI {
         m.append(headerAdmin(usuarioLogado));
 
         m.append("----- Menu do Cerimonial -----");
-        m.append("\n\n1- Ver convites.");
-        m.append("\n2- Visualizar presentes entregues aos noivos.");
-        m.append("\n3- Visualizar pagamentos.");
-        m.append("\n4- Incrementar dias.");
-        m.append("\n5- Relatórios.");
+        m.append("\n\n1- Ver Convites Família.");
+        m.append("\n2- Enviar mensagem para os noivos.");
+        m.append("\n3- Comprar presentes para os noivos.");
+        m.append("\n4- Relatórios.");
         m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -106,14 +126,16 @@ public class GUI {
         return opc;
     }
 
-    public int menuConvidado() {
+    public int menuConvidado(ConvidadoFamilia convitefamilia) {
         int opc;
 
         StringBuilder m = new StringBuilder();
+
+        m.append(headerConvidado(convitefamilia));
         
         m.append("----- Menu de Convidados -----");
-        m.append("\n\n1- Enviar presente.");
-        m.append("\n2- Enviar mensagem.");
+        m.append("\n\n1- Enviar mensagem para os noivos.");
+        m.append("\n2- Comprar presentes para os noivos.");
         m.append("\n3- Informar presença da família.");
         m.append("\n\n0 - Voltar.");
 
@@ -181,6 +203,53 @@ public class GUI {
         return opc;
     }
 
+    public int enviaMensagem(ConvidadoFamilia convitefamilia, Evento evento) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append("----- Menu de Mensagens -----");
+        m.append("\n\n1- Envie uma mensagem para ")
+            .append(evento.getPessoaNoivo().getNome())
+            .append(" e ")
+            .append(evento.getPessoaNoiva().getNome());
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
+    public int crudMensagem(Usuario usuarioLogado, Evento evento) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append("----- Menu de Mensagens -----");
+        m.append("\n\n1- Exibir mensagens enviadas aos noivos.");
+        m.append("\n2- Excluir mensagens enviadas aos noivos.");
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
+    /*
+    public int crudMensagem(Usuario usuarioLogado, Evento evento) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append("----- Menu de Mensagens -----");
+        m.append("\n\n1- Editar mensagens.");
+        m.append("\n2- Exibir mensagens.");
+        m.append("\n3- Excluir mensagens.");
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+    */
+
     public int crudPresentesConvidado(PresentesDAO presentesdao) {
         int opc;
 
@@ -226,12 +295,40 @@ public class GUI {
         return opc;
     }
 
+    public int crudData(Usuario usuarioLogado, LocalDate calendario) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
+
+        m.append(calendario);
+
+        m.append("\n\n----- Menu de Calendario -----");
+        m.append("\n\n1- Adicionar dias ");
+        m.append("\n2- Adicionar meses.");
+        m.append("\n3- Adicionar anos");
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
     public StringBuilder headerAdmin(Usuario usuarioLogado) {
         //Aqui aparecerá o dia do calendário.
-        StringBuilder m = new StringBuilder("--------------------------------------------------------");
+        StringBuilder m = new StringBuilder("-------------------------------------------------------------------");
         m.append("\nUsuário: ").append(usuarioLogado.getPessoa().getNome());
         m.append("\nTipo: ").append(usuarioLogado.getTipo());
-        m.append("\n--------------------------------------------------------\n\n");
+        m.append("\n-------------------------------------------------------------------\n\n");
+
+        return m;
+    }
+
+    public StringBuilder headerConvidado(ConvidadoFamilia convitefamilia) {
+        //Aqui aparecerá o dia do calendário.
+        StringBuilder m = new StringBuilder("-------------------------------------------------------------------");
+        m.append("\nConvite Família dos: ").append(convitefamilia.getNomeDaFamilia());
+        m.append("\n-------------------------------------------------------------------\n\n");
 
         return m;
     }
