@@ -12,7 +12,6 @@ import model.Mensagens;
 import model.MensagensDAO;
 import model.Pessoa;
 import model.PessoaDAO;
-import model.Presentes;
 import model.PresentesDAO;
 import model.Usuario;
 import model.UsuarioDAO;
@@ -37,7 +36,6 @@ public class MainController {
     Evento evento = eventodao.retornaEvento();
     Mensagens mensagens = new Mensagens();
     MensagensDAO mensagensdao = new MensagensDAO();
-    Presentes presentes = new Presentes();
     PresentesDAO presentesdao = new PresentesDAO();
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
     ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao);    
@@ -84,7 +82,7 @@ public class MainController {
 
                                 case 4:
                                     //cp = Controller Presentes
-                                    presentesdao.verPresentesAdmin(usuarioLogado);
+                                    cp.controllerVerPresentes(usuarioLogado, presentesdao);
                                     break;
 
                                 case 5:
@@ -168,12 +166,12 @@ public class MainController {
                             switch (opc) {
                                 case 1:
                                     //Ver Convites Família
-                                    convitefamiliadao.verConvitesFamilia();
+                                    ccf.controllerVerConvitesFamilia(convitefamiliadao);
                                     break;
 
                                 case 2:
                                     //cm = Controller Mensagens
-                                    mensagensdao.enviarMensagem(evento, mensagens, mensagensdao);
+                                    cm.controllerEnviarMensagens(evento, mensagens, mensagensdao);
                                     break;
 
                                 case 3:                                    
@@ -208,7 +206,7 @@ public class MainController {
                         switch (opc) {
                             case 1:
                                 //cm = Controller Mensagens
-                                mensagensdao.enviarMensagem(evento, mensagens, mensagensdao);
+                                cm.controllerEnviarMensagens(evento, mensagens, mensagensdao);
                                 break;
 
                             case 2:                            

@@ -304,4 +304,12 @@ public class ControllerConviteFamilia {
             }
         }
     }
+
+    public void controllerVerConvitesFamilia(ConvidadoFamiliaDAO convidadoFamiliaDAO) {
+        String s = convidadoFamiliaDAO.verConvitesFamilia();
+        if ("".equals(s)) {
+            s += "Ainda não há Convites Família feitos.";
+        }
+        JOptionPane.showMessageDialog(null, s);
+    }
 }

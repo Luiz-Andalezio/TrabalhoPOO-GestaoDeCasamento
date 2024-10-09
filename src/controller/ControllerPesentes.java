@@ -7,7 +7,7 @@ import view.GUI;
 
 public class ControllerPesentes {
 
-    public void controllerCrudPresentes(GUI gui, Usuario usuarioLogado, PresentesDAO presentesdao) {
+    public void controllerCrudPresentes(Usuario usuarioLogado, PresentesDAO presentesdao) {
         String s = presentesdao.verPresentesAdmin(usuarioLogado);
         if ("".equals(s)) {
             JOptionPane.showMessageDialog(null, "Ainda não há presentes comprados.");
@@ -15,7 +15,7 @@ public class ControllerPesentes {
         }
     }
     
-    public void controllerVerPresentes(GUI gui, Usuario usuarioLogado, PresentesDAO presentesdao) {
+    public void controllerVerPresentes(Usuario usuarioLogado, PresentesDAO presentesdao) {
         String s = presentesdao.verPresentesAdmin(usuarioLogado);
         if ("".equals(s)) {
             JOptionPane.showMessageDialog(null, "Ainda não há presentes comprados.");

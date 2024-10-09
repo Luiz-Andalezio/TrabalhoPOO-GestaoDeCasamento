@@ -1,7 +1,5 @@
 package model;
 
-import javax.swing.JOptionPane;
-
 public class MensagensDAO {    
     
     Mensagens[] mensagens = new Mensagens[100];
@@ -18,24 +16,6 @@ public class MensagensDAO {
         m2.setMensagem("Meu casal.");
         m2.setDataCriacao();      
         mensagens[0] = m2;
-    }
-
-    public void enviarMensagem(Evento evento, Mensagens mensagens, MensagensDAO mensagensdao) {
-        String mensagemTeste = JOptionPane.showInputDialog("Digite a mensagem que deseja enviar para " + evento.getPessoaNoivo().getNome() + " e " + evento.getPessoaNoiva().getNome() + ":");
-        if (!"0".equals(mensagemTeste)) {
-            String nomeDoMensageiro = JOptionPane.showInputDialog("Informe o seu nome: ");
-            if (!"0".equals(nomeDoMensageiro)) {
-                JOptionPane.showMessageDialog(null, "Sua mensagem foi enviada para " + evento.getPessoaNoivo().getNome() + " e " + evento.getPessoaNoiva().getNome() + "\n\nSeu nome: " + nomeDoMensageiro + "\n\nMensagem: " + mensagemTeste);
-                mensagensdao.criaMensagem(nomeDoMensageiro, mensagemTeste);
-            } else if ("".equals(nomeDoMensageiro)) {
-                JOptionPane.showMessageDialog(null, "Nome não enviado: nenhuma mensagem enviada");
-            } else {
-            }
-        } else if (!"".equals(mensagemTeste)) {
-
-        } else {
-            JOptionPane.showMessageDialog(null, "Dado não enviado: nenhuma mensagem enviada");
-        }
     }
 
     public boolean criaMensagem(String nomeEnviado, String mensagemEnviada) {
