@@ -7,7 +7,8 @@ public class Presentes {
     private String nome;
     private String tipo;
     private double valor;
-    private Pessoa pessoa;
+    private String nomeComprador;
+    //private Pessoa pessoa;
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;
 
@@ -44,6 +45,7 @@ public class Presentes {
         this.valor = valor;
     }
 
+    /* 
     public Pessoa getPessoa() {
         return pessoa;
     }
@@ -51,21 +53,48 @@ public class Presentes {
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
     }
-    
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    */
+
+    public String getNomeComprador() {
+        return nomeComprador;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
+    public void setNomeComprador(String nomeComprador) {
+        this.nomeComprador = nomeComprador;
+    }
+    
+    public String getDataCriacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
+    }
+
+    public void setDataCriacao() {
         this.dataCriacao = LocalDate.now();
         this.dataModificacao = LocalDate.now();
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
+    public void setDataModificacao() {
         this.dataModificacao = LocalDate.now();
     }   
     
@@ -76,7 +105,7 @@ public class Presentes {
         m += "\nTipo: " + this.tipo;
         m += "\nValor: " + this.valor;
         if(!usuario.getTipo().equals("convidado")){
-            m += "Comprador: " + this.pessoa.getNome();
+            m += "Comprador: " + /*this.getPessoa().getNome();*/this.getNomeComprador();
         }
         return m;
     } 

@@ -76,8 +76,17 @@ public class Evento {
         this.pessoaNoiva = pessoaNoiva;
     }
       
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
     }
 
     public void setDataCriacao(LocalDate dataCriacao) {
@@ -85,8 +94,17 @@ public class Evento {
         this.dataModificacao = LocalDate.now();
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        String alteraDia = "";
+        if (this.dataModificacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+        if (this.dataModificacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
+        return alteraDia;
     }
 
     public void setDataModificacao(LocalDate dataModificacao) {

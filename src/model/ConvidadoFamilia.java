@@ -86,8 +86,17 @@ public class ConvidadoFamilia {
         this.acesso = acesso;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
     }
 
     public void setDataCriacao() {
@@ -95,8 +104,21 @@ public class ConvidadoFamilia {
         this.id = ++ConvidadoFamilia.incrementaId;
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        String alteraDia = "";
+        if (this.dataModificacao == null) {
+
+        } else {
+            if (this.dataModificacao.getDayOfMonth() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+            if (this.dataModificacao.getMonthValue() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
+        }
+        return alteraDia;
     }
 
     public void setDataModificacao() {
@@ -135,7 +157,7 @@ public class ConvidadoFamilia {
             }
         }
         m += "\nConvite Família feito no dia: " + this.getDataCriacao();
-        if (this.getDataModificacao() != null) {
+        if (!"".equals(this.getDataModificacao())) {
             m += " e modificado no dia: " + this.getDataModificacao();
         }
         m += "\n--------------------------------\n\n";

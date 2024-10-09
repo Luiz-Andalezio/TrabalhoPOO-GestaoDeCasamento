@@ -78,7 +78,35 @@ public class PresentesDAO {
         presentes[9] = presente10;*/
     }
 
-    public String lerPesentesConvidado(/*Usuario usuarioLogado*/) {
+    public boolean verificaPresente(int id) {
+        int i = 0;
+        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
+            i++;
+        }
+
+        if (presentes[i] != null && presentes[i].getId() == id) {
+            if(presentes[i].getNomeComprador() != null){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean compraPresente(String nomeComprador, int id) {
+        int i = 0;
+        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
+            i++;
+        }
+
+        if (presentes[i] != null && presentes[i].getId() == id) {
+            presentes[i].setNomeComprador(nomeComprador);
+            presentes[i].setDataModificacao();
+            return true;
+        }
+        return false;
+    }
+
+    public String verPresentesConvidado(/*Usuario usuarioLogado*/) {
         String m = "";
         for (int i = 0; i < presentes.length; i++)
             if (presentes[i] != null) {
@@ -87,7 +115,11 @@ public class PresentesDAO {
         return m;
     }
 
-    public String lerPesentesAdmin(Usuario usuarioLogado) {
+    public Presentes verPresentesConvidado(int id) {
+        return presentes[id - 1];
+    }
+
+    public String verPresentesAdmin(Usuario usuarioLogado) {
         String m = "";
         for (int i = 0; i < presentes.length; i++)
             if (presentes[i] != null) {

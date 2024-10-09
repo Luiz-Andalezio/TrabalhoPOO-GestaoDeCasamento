@@ -257,7 +257,7 @@ public class GUI {
 
         m.append("\nDê um presente para os pombinhos!");
         m.append("\n\n\tPRESENTES: ");
-        m.append(presentesdao.lerPesentesConvidado());
+        m.append(presentesdao.verPresentesConvidado());
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -273,7 +273,7 @@ public class GUI {
 
         m.append("\nDê um presente para os pombinhos!");
         m.append("\n\n\tPRESENTES: ");
-        m.append(presentesdao.lerPesentesAdmin(usuarioLogado));
+        m.append(presentesdao.verPresentesAdmin(usuarioLogado));
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -302,7 +302,7 @@ public class GUI {
 
         m.append(headerAdmin(usuarioLogado));
 
-        m.append(calendario);
+        m.append(calendarioFormatado(calendario));
 
         m.append("\n\n----- Menu de Calendario -----");
         m.append("\n\n1- Adicionar dias ");
@@ -331,5 +331,18 @@ public class GUI {
         m.append("\n-------------------------------------------------------------------\n\n");
 
         return m;
+    }
+
+    public String calendarioFormatado(LocalDate calendario){        
+        String alteraDia = "";
+        if (calendario.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += calendario.getDayOfMonth() + "/";
+        if (calendario.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += calendario.getMonthValue() + "/" + calendario.getYear();
+        return alteraDia;
     }
 }

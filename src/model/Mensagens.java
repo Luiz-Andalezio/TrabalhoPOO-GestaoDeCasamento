@@ -35,8 +35,17 @@ public class Mensagens {
         this.nomeDoMensageiro = nomeDoMensageiro;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
     }
 
     public void setDataCriacao() {
@@ -44,8 +53,17 @@ public class Mensagens {
         this.id = ++Mensagens.incrementaId;
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        String alteraDia = "";
+        if (this.dataModificacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+        if (this.dataModificacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
+        return alteraDia;
     }
 
     public void setDataModificacao() {
@@ -58,9 +76,9 @@ public class Mensagens {
         m += "--- Mensagem de ID " + this.id + " ---";
         m += "\nNome do mensageiro: " + this.getNomeDoMensageiro();
         m += "\n\nMensagem: " + this.getMensagem();
-        m += "\n\nMensagem enviada no dia: " + this.dataCriacao;
-        if (this.dataModificacao != null) {
-            m += " e modificada no dia: " + this.dataModificacao;
+        m += "\n\nMensagem enviada no dia: " + getDataCriacao();
+        if (getDataModificacao() != null) {
+            m += " e modificada no dia: " + getDataModificacao();
         }
         m += "\n\n";
         return m;

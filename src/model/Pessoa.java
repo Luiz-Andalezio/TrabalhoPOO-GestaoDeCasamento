@@ -37,8 +37,17 @@ public class Pessoa {
         this.nome = nome;
     }
 
-    public LocalDate getNascimento() {
-        return nascimento;
+    public String getNascimento() {
+        String alteraDia = "";
+        if (this.nascimento.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.nascimento.getDayOfMonth() + "/";
+        if (this.nascimento.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.nascimento.getMonthValue() + "/" + this.nascimento.getYear();
+        return alteraDia;
     }
 
     public void setNascimento(String nascimento) {
@@ -50,8 +59,17 @@ public class Pessoa {
         }
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
     }
 
     public void setDataCriacao() {
@@ -59,8 +77,17 @@ public class Pessoa {
         this.id = ++Pessoa.incrementaId;
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        String alteraDia = "";
+        if (this.dataModificacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+        if (this.dataModificacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
+        return alteraDia;
     }
 
     public void setDataModificacao() {
@@ -72,11 +99,11 @@ public class Pessoa {
         String m = "";
         m += "ID: " + this.id + "\n";
         m += "Nome: " + this.nome + "\n";
-        m += "Nascimento: " + this.nascimento + "\n";
+        m += "Nascimento: " + getNascimento() + "\n";
         m += "Telefone: " + this.telefone + "\n";
-        m += "Criado no dia: " + this.dataCriacao + "\n";
-        if (this.dataModificacao != null) {
-            m += "Modificado no dia: " + this.dataModificacao + "\n";
+        m += "Criado no dia: " + getDataCriacao() + "\n";
+        if (getDataModificacao() != null) {
+            m += "Modificado no dia: " + getDataModificacao() + "\n";
         }
         return m;
     }

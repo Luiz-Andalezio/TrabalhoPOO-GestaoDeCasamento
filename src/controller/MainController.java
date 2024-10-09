@@ -12,6 +12,7 @@ import model.Mensagens;
 import model.MensagensDAO;
 import model.Pessoa;
 import model.PessoaDAO;
+import model.Presentes;
 import model.PresentesDAO;
 import model.Usuario;
 import model.UsuarioDAO;
@@ -23,6 +24,7 @@ public class MainController {
     ControllerCalendario cc = new ControllerCalendario();
     ControllerConviteFamilia ccf = new ControllerConviteFamilia();
     ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
+    ControllerPesentes cp = new ControllerPesentes();
     ControllerMensagens cm = new ControllerMensagens();
     ControllerUsuario cu = new ControllerUsuario();
 
@@ -35,6 +37,7 @@ public class MainController {
     Evento evento = eventodao.retornaEvento();
     Mensagens mensagens = new Mensagens();
     MensagensDAO mensagensdao = new MensagensDAO();
+    Presentes presentes = new Presentes();
     PresentesDAO presentesdao = new PresentesDAO();
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
     ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao);    
@@ -45,7 +48,7 @@ public class MainController {
     GUI gui = new GUI();
 
     //Calendário
-    LocalDate calendario = LocalDate.now();
+    LocalDate calendario = LocalDate.of(2024, 04, 02);
     CalendarioDAO calendarioDAO = new CalendarioDAO();
 
     public MainController() {
@@ -80,13 +83,13 @@ public class MainController {
                                     break;
 
                                 case 4:
-                                    //cvp = Controller Ver Presentes
-                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cp = Controller Presentes
+                                    presentesdao.verPresentesAdmin(usuarioLogado);
                                     break;
 
                                 case 5:
-                                    //cvp = Controller Pagamentos
-                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cp = Controller Pagamentos
+                                    //cp.controllerVerPagamentos(gui, usuarioLogado);
                                     break;
 
                                 case 6:
@@ -132,13 +135,13 @@ public class MainController {
                                     break;
 
                                 case 5:
-                                    //cvp = Controller Ver Presentes
-                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cp = Controller Presentes
+                                    //cp.controllerCrudPresentes(gui, usuarioLogado);
                                     break;
 
                                 case 6:
-                                    //cvp = Controller Ver Pagamentos
-                                    //cvp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cp = Controller Pagamentos
+                                    //cp.controllerVerPagamentos(gui, usuarioLogado);
                                     break;
 
                                 case 7:
@@ -175,7 +178,7 @@ public class MainController {
 
                                 case 3:                                    
                                     //cp = Controller Presentes
-                                    //cp.controllerDarPresente(gui, usuarioLogado, presentesdao);
+                                    cp.controllerDarPresentes(gui, presentesdao);
                                     break;
 
                                 case 4:
@@ -210,11 +213,11 @@ public class MainController {
 
                             case 2:                            
                                 //cp = Controller Presentes
-                                //cp.controllerDarPresente(gui, usuarioLogado, presentesdao);
+                                cp.controllerDarPresentes(gui, presentesdao);                                    
                                 break;
 
                             case 3:
-                                //ccf = Controller Convidado Familia
+                                //ccf = Controller Convite Familia
                                 //ccf.controllerConfirmarFamiliares(gui, usuarioLogado);
                                 break;
 

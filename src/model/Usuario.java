@@ -53,8 +53,17 @@ public class Usuario {
         this.senha = senha;
     }
 
-    public LocalDate getDataCriacao() {
-        return dataCriacao;
+    public String getDataCriacao() {
+        String alteraDia = "";
+        if (this.dataCriacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
+        if (this.dataCriacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
+        return alteraDia;
     }
 
     public void setDataCriacao() {
@@ -62,8 +71,17 @@ public class Usuario {
         this.id = ++Usuario.incrementaId;
     }
 
-    public LocalDate getDataModificacao() {
-        return dataModificacao;
+    public String getDataModificacao() {
+        String alteraDia = "";
+        if (this.dataModificacao.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+        if (this.dataModificacao.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
+        return alteraDia;
     }
 
     public void setDataModificacao() {
@@ -79,9 +97,9 @@ public class Usuario {
         m += "\nTipo: " + this.tipo;
         m += "\nLogin: " + this.login;
         m += "\nSenha: " + this.senha;
-        m += "\nUsuario criado no dia: " + this.dataCriacao;
+        m += "\nUsuario criado no dia: " + getDataCriacao();
         if(this.dataModificacao != null){
-            m += " e modificado no dia: " + this.dataModificacao;
+            m += " e modificado no dia: " + getDataModificacao();
         }        
         m += "\n\n";
     return m;
