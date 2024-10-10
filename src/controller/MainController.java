@@ -12,6 +12,7 @@ import model.Mensagens;
 import model.MensagensDAO;
 import model.Pessoa;
 import model.PessoaDAO;
+import model.Presentes;
 import model.PresentesDAO;
 import model.Usuario;
 import model.UsuarioDAO;
@@ -36,6 +37,7 @@ public class MainController {
     Evento evento = eventodao.retornaEvento();
     Mensagens mensagens = new Mensagens();
     MensagensDAO mensagensdao = new MensagensDAO();
+    Presentes presentes = new Presentes();
     PresentesDAO presentesdao = new PresentesDAO();
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
     ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao);    
@@ -49,6 +51,7 @@ public class MainController {
     LocalDate calendario = LocalDate.of(2024, 04, 02);
     CalendarioDAO calendarioDAO = new CalendarioDAO();
 
+    //Main
     public MainController() {
         int mainOpc = 0;
 
@@ -77,12 +80,12 @@ public class MainController {
 
                                 case 3:
                                     //cm = Controller Mensagens
-                                    //cm.controllerVerMensagens(gui, usuarioLogado);
+                                    cm.controllerVerMensagens(mensagensdao);
                                     break;
 
                                 case 4:
                                     //cp = Controller Presentes
-                                    cp.controllerVerPresentes(usuarioLogado, presentesdao);
+                                    cp.controllerVerPresentes(gui, usuarioLogado, presentesdao);
                                     break;
 
                                 case 5:
@@ -134,7 +137,7 @@ public class MainController {
 
                                 case 5:
                                     //cp = Controller Presentes
-                                    //cp.controllerCrudPresentes(gui, usuarioLogado);
+                                    cp.controllerCrudPresentes(gui, usuarioLogado, presentes, presentesdao);
                                     break;
 
                                 case 6:
@@ -198,11 +201,9 @@ public class MainController {
                     break;
 
                 case 2:
-                    convitefamilia = gui.loginConviteFamilia(convitefamiliadao);
                     opc = 0;
                     while (opc != -1) {                        
-                        opc = gui.menuConvidado(convitefamilia);
-                        //opc = gui.gui.menuConvidado();
+                        opc = gui.menuConvidado();
                         switch (opc) {
                             case 1:
                                 //cm = Controller Mensagens
@@ -216,7 +217,7 @@ public class MainController {
 
                             case 3:
                                 //ccf = Controller Convite Familia
-                                //ccf.controllerConfirmarFamiliares(gui, usuarioLogado);
+                                //ccf.controllerConfirmarFamiliares(gui, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
                                 break;
 
                             case 0:

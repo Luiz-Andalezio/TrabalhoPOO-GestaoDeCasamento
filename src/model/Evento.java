@@ -96,14 +96,18 @@ public class Evento {
 
     public String getDataModificacao() {
         String alteraDia = "";
-        if (this.dataModificacao.getDayOfMonth() < 10){
-            alteraDia += "0";
+        if (this.dataModificacao == null) {
+
+        } else {
+            if (this.dataModificacao.getDayOfMonth() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+            if (this.dataModificacao.getMonthValue() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
         }
-        alteraDia += this.dataModificacao.getDayOfMonth() + "/";
-        if (this.dataModificacao.getMonthValue() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
         return alteraDia;
     }
 

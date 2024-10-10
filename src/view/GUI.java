@@ -72,8 +72,8 @@ public class GUI {
         m.append("----- Menu dos Noivos -----");
         m.append("\n\n1- Crud de famílias.");
         m.append("\n2- Crud de convites individuais.");
-        m.append("\n3- Visualizar mensagens recebidas.");
-        m.append("\n4- Visualizar presentes recebidos.");
+        m.append("\n3- Visualizar mensagens recebidas.");  
+        m.append("\n4- Visualizar presentes.");
         m.append("\n5- Pagamentos.");
         m.append("\n6- Incrementar dias.");
         m.append("\n7- Relatórios.");
@@ -92,11 +92,11 @@ public class GUI {
         m.append(headerAdmin(usuarioLogado));
 
         m.append("----- Menu do Administrador -----");
-        m.append("\n\n1- Crud de famílias.");
-        m.append("\n2- Crud de convites individuais.");
-        m.append("\n3- Crud de usuários.");        
-        m.append("\n4- Crud de mensagens.");
-        m.append("\n5- Visualizar presentes entregues aos noivos.");
+        m.append("\n\n1- CRUD de famílias.");
+        m.append("\n2- CRUD convites individuais.");
+        m.append("\n3- CRUD usuários.");        
+        m.append("\n4- CRUD mensagens.");
+        m.append("\n5- CRUD presentes.");
         m.append("\n6- Visualizar pagamentos.");
         m.append("\n7- Incrementar dias.");
         m.append("\n8- Relatórios.");
@@ -126,12 +126,10 @@ public class GUI {
         return opc;
     }
 
-    public int menuConvidado(ConvidadoFamilia convitefamilia) {
+    public int menuConvidado() {
         int opc;
 
         StringBuilder m = new StringBuilder();
-
-        m.append(headerConvidado(convitefamilia));
         
         m.append("----- Menu de Convidados -----");
         m.append("\n\n1- Enviar mensagem para os noivos.");
@@ -191,11 +189,11 @@ public class GUI {
         
         m.append(headerAdmin(usuarioLogado));
 
-        m.append("----- Menu de Usuarios -----");
-        m.append("\n\n1- Cadastrar usuarios.");
-        m.append("\n2- Editar usuarios.");
-        m.append("\n3- Exibir usuarios.");
-        m.append("\n4- Desfazer usuarios.");
+        m.append("----- CRUD Usuários -----");
+        m.append("\n\n1- Cadastrar usuários.");
+        m.append("\n2- Editar usuários.");
+        m.append("\n3- Exibir usuários.");
+        m.append("\n4- Desfazer usuários.");
         m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -224,7 +222,7 @@ public class GUI {
 
         StringBuilder m = new StringBuilder();
 
-        m.append("----- Menu de Mensagens -----");
+        m.append("----- CRUD Mensagens -----");
         m.append("\n\n1- Exibir mensagens enviadas aos noivos.");
         m.append("\n2- Excluir mensagens enviadas aos noivos.");
         m.append("\n\n0- Voltar.");
@@ -250,30 +248,45 @@ public class GUI {
     }
     */
 
-    public int crudPresentesConvidado(PresentesDAO presentesdao) {
+    public int crudPresentesNoivos(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append("\nDê um presente para os pombinhos!");
-        m.append("\n\n\tPRESENTES: ");
-        m.append(presentesdao.verPresentesConvidado());
+        m.append("----- Presentes -----");
+        m.append("\n\n1- Ver presentes disponíveis.");
+        m.append("\n2- Ver presentes comprados.");  
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
     }
 
-    public int crudPresentesAdmin(PresentesDAO presentesdao, Usuario usuarioLogado) {
+    public int crudPresentesAdmin(Usuario usuarioLogado) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append("----- CRUD Presentes -----");
+        m.append("\n\n1- Registrar presente.");
+        m.append("\n2- Editar presentes.");
+        m.append("\n3- Exibir presentes disponíveis.");        
+        m.append("\n4- Exibir presentes comprados aos noivos.");
+        m.append("\n5- Excluir presentes.");     
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
-        m.append("\nDê um presente para os pombinhos!");
-        m.append("\n\n\tPRESENTES: ");
-        m.append(presentesdao.verPresentesAdmin(usuarioLogado));
+        return opc;
+    }
+
+    public int crudPresentesConvidado(PresentesDAO presentesdao) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append("\nDigite o código do presente à venda que deseja comprar aos pombinhos!");
+        m.append("\n\n\tPRESENTES: \n");
+        m.append(presentesdao.verPresentesConvidado());
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 

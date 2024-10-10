@@ -9,7 +9,6 @@ import view.GUI;
 public class ControllerCalendario {
 
     public void controllerCrudIncrementaData(GUI gui, Usuario usuarioLogado, LocalDate calendario, CalendarioDAO calendarioDAO) {
-        StringBuilder m;
         int menuCalendarioOpc = 0;
 
         while (menuCalendarioOpc != -1) {

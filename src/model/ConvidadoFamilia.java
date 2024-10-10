@@ -120,7 +120,7 @@ public class ConvidadoFamilia {
         }
         return alteraDia;
     }
-
+    
     public void setDataModificacao() {
         this.dataModificacao = LocalDate.now();
     }

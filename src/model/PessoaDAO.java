@@ -101,13 +101,13 @@ public class PessoaDAO {
         return null;
     }
 
-    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, String nome) {
+    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, int id) {
         int i = 0;
-        while (pessoas[i] != null && pessoas[i].getNome() != nome) {
+        while (pessoas[i] != null && pessoas[i].getId() != id || pessoas[i] == null) {
             i++;
         }
         //equals() with null check (temary) - Same shit of: (pessoas[i].getNome() != nome)
-        if (pessoas[i] != null && (pessoas[i].getNome() == null ? nome == null : pessoas[i].getNome().equals(nome))) {
+        if (pessoas[i] != null && pessoas[i].getId() == id) {
             if (!nomeAtt.equals("")) {
                 pessoas[i].setNome(nomeAtt);
             }
@@ -125,7 +125,7 @@ public class PessoaDAO {
 
     public void excluirPessoa(int id) {
         int i = 0;
-        while (pessoas[i] != null && pessoas[i].getId() != id) {
+        while (pessoas[i] != null && pessoas[i].getId() != id || pessoas[i] == null) {
             i++;
         }
 
@@ -151,6 +151,7 @@ public class PessoaDAO {
         }
         return m;
     }*/
+    
     public String verPessoa() {
         String m = "";
         /*

@@ -312,4 +312,9 @@ public class ControllerConviteFamilia {
         }
         JOptionPane.showMessageDialog(null, s);
     }
+
+    public void controllerConfirmarFamiliares(GUI gui, ConvidadoIndividual conviteIndividual, ConvidadoIndividualDAO conviteIndividualDAO, ConvidadoFamilia convidadoFamilia, ConvidadoFamiliaDAO convidadoFamiliaDAO) {
+        convidadoFamilia = gui.loginConviteFamilia(convidadoFamiliaDAO);
+        //Incompleto
+    }
 }

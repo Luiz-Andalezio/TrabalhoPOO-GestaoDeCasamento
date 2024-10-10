@@ -79,14 +79,18 @@ public class Pessoa {
 
     public String getDataModificacao() {
         String alteraDia = "";
-        if (this.dataModificacao.getDayOfMonth() < 10){
-            alteraDia += "0";
+        if (this.dataModificacao == null) {
+
+        } else {
+            if (this.dataModificacao.getDayOfMonth() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+            if (this.dataModificacao.getMonthValue() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
         }
-        alteraDia += this.dataModificacao.getDayOfMonth() + "/";
-        if (this.dataModificacao.getMonthValue() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
         return alteraDia;
     }
 
@@ -102,7 +106,7 @@ public class Pessoa {
         m += "Nascimento: " + getNascimento() + "\n";
         m += "Telefone: " + this.telefone + "\n";
         m += "Criado no dia: " + getDataCriacao() + "\n";
-        if (getDataModificacao() != null) {
+        if (!"".equals(getDataModificacao())) {
             m += "Modificado no dia: " + getDataModificacao() + "\n";
         }
         return m;

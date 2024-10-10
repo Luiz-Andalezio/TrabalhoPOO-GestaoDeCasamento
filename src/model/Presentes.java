@@ -1,23 +1,28 @@
 package model;
 
+import java.text.NumberFormat;
 import java.time.LocalDate;
+import java.util.Locale;
 
 public class Presentes {
-    private int id;
+
+    private long id;
     private String nome;
     private String tipo;
     private double valor;
     private String nomeComprador;
-    //private Pessoa pessoa;
     private LocalDate dataCriacao;
-    private LocalDate dataModificacao;
+    private LocalDate dataModificacao;    
+    private static long incrementaId = 0;
+    private static final Locale localeBR = new Locale("pt", "BR");
+    private static final NumberFormat formatador = NumberFormat.getCurrencyInstance(localeBR);
 
-    //GETTERS E SETTERS
-    public int getId() {
+    // GETTERS E SETTERS
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -45,16 +50,6 @@ public class Presentes {
         this.valor = valor;
     }
 
-    /* 
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }
-    */
-
     public String getNomeComprador() {
         return nomeComprador;
     }
@@ -62,14 +57,14 @@ public class Presentes {
     public void setNomeComprador(String nomeComprador) {
         this.nomeComprador = nomeComprador;
     }
-    
+
     public String getDataCriacao() {
         String alteraDia = "";
-        if (this.dataCriacao.getDayOfMonth() < 10){
+        if (this.dataCriacao.getDayOfMonth() < 10) {
             alteraDia += "0";
         }
         alteraDia += this.dataCriacao.getDayOfMonth() + "/";
-        if (this.dataCriacao.getMonthValue() < 10){
+        if (this.dataCriacao.getMonthValue() < 10) {
             alteraDia += "0";
         }
         alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
@@ -78,45 +73,59 @@ public class Presentes {
 
     public void setDataCriacao() {
         this.dataCriacao = LocalDate.now();
-        this.dataModificacao = LocalDate.now();
+        this.id = ++Presentes.incrementaId;
     }
 
     public String getDataModificacao() {
         String alteraDia = "";
-        if (this.dataCriacao.getDayOfMonth() < 10){
-            alteraDia += "0";
+        if (this.dataModificacao != null) {
+            if (this.dataModificacao.getDayOfMonth() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getDayOfMonth() + "/";
+            if (this.dataModificacao.getMonthValue() < 10) {
+                alteraDia += "0";
+            }
+            alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
         }
-        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
-        if (this.dataCriacao.getMonthValue() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
         return alteraDia;
     }
 
     public void setDataModificacao() {
         this.dataModificacao = LocalDate.now();
-    }   
-    
-    public String toString(Usuario usuario){
+    }
+
+    public String toString(Usuario usuario) {
         String m = "";
         m += "\nCodigo: " + this.id;
         m += "\nNome: " + this.nome;
         m += "\nTipo: " + this.tipo;
-        m += "\nValor: " + this.valor;
-        if(!usuario.getTipo().equals("convidado")){
-            m += "Comprador: " + /*this.getPessoa().getNome();*/this.getNomeComprador();
+        m += "\nValor: " + formatador.format(this.valor);
+        if (!usuario.getTipo().equals("convidado")) {
+            if (this.nomeComprador != null) {
+                m += "\nComprador: " + this.getNomeComprador();
+            }
+            m += "\nRegistrado no dia: " + this.getDataCriacao();
+            if (!"".equals(this.getDataModificacao())) {
+                m += " e modificado no dia: " + this.getDataModificacao();
+            }
         }
         return m;
-    } 
+    }
 
     @Override
-    public String toString(){
+    public String toString() {
         String m = "";
-        m += "\nCodigo: " + this.id;
+        m += "Presente de Codigo: " + this.id;
         m += "\nNome: " + this.nome;
         m += "\nTipo: " + this.tipo;
-        m += "\nValor: " + this.valor;
+        m += "\nValor: " + formatador.format(this.valor);
+        m += "\nStatus: ";
+        if (this.nomeComprador != null) {
+            m += "Comprado!\n";
+        } else {
+            m += "À venda!\n";
+        }
         return m;
-    } 
+    }
 }

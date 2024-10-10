@@ -15,7 +15,7 @@ public class MensagensDAO {
         m2.setNomeDoMensageiro("Fulano");
         m2.setMensagem("Meu casal.");
         m2.setDataCriacao();      
-        mensagens[0] = m2;
+        mensagens[1] = m2;
     }
 
     public boolean criaMensagem(String nomeEnviado, String mensagemEnviada) {

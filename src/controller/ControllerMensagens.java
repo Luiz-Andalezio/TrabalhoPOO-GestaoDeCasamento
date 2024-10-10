@@ -13,7 +13,6 @@ import view.GUI;
 public class ControllerMensagens {
 
     public void controllerCrudMensagens(GUI gui, Usuario usuarioLogado, UsuarioDAO usuariodao, PessoaDAO pessoadao, Pessoa pessoa, Evento evento, Mensagens mensagens, MensagensDAO mensagensdao) {
-        StringBuilder m;
         int menuCrudMensagemOpc = 0;
 
         while (menuCrudMensagemOpc != -1) {
@@ -88,8 +87,16 @@ public class ControllerMensagens {
                     break;
             }
         }
-    }      
-    
+    }
+
+    public void controllerVerMensagens(MensagensDAO mensagensdao) {
+        String s = mensagensdao.verMensagens();
+        if ("".equals(s)) {
+            s = "Ainda não há mensagens enviadas.";
+        }
+        JOptionPane.showMessageDialog(null, s);
+    }
+
     public void controllerEnviarMensagens(Evento evento, Mensagens mensagens, MensagensDAO mensagensdao) {
         String mensagemTeste = JOptionPane.showInputDialog("Digite a mensagem que deseja enviar para " + evento.getPessoaNoivo().getNome() + " e " + evento.getPessoaNoiva().getNome() + ":");
         if (!"0".equals(mensagemTeste)) {
