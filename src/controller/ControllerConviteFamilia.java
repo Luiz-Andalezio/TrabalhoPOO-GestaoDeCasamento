@@ -165,6 +165,8 @@ public class ControllerConviteFamilia {
                                     if (conviteID == 0) {
                                         JOptionPane.showMessageDialog(null, "Exclusão de convidados não sucedida...");
                                         continuarAtt = -1;
+                                    } else if (convidadoFamiliaDAO.retornaConviteIndividualByIDifNotNull(id, conviteID) == null) {
+                                        JOptionPane.showMessageDialog(null, "O ID de número " + conviteID + " inserido não corresponde ao de um convite individual deste Convite Família:\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id) + "Tente outro!");
                                     } else {
                                         int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir a pessoa abaixo?\n\n" + conviteIndividualDAO.verConvite(conviteID), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
@@ -230,6 +232,9 @@ public class ControllerConviteFamilia {
 
                                         if (conviteID == 0) {
                                             JOptionPane.showMessageDialog(null, "Edição de convidados não sucedida...");
+                                            continuarAtt = -1;
+                                        } else if (convidadoFamiliaDAO.retornaConviteIndividualByIDifNotNull(id, conviteID) == null) {
+                                            JOptionPane.showMessageDialog(null, "O ID de número " + conviteID + " inserido não corresponde ao de um convite individual deste Convite Família:\n\n" + convidadoFamiliaDAO.retornaConviteFamilia(id) + "Tente outro!");
                                         } else {
                                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar a pessoa abaixo?\n\n" + conviteIndividualDAO.verConvite(conviteID), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
 
@@ -308,13 +313,48 @@ public class ControllerConviteFamilia {
     public void controllerVerConvitesFamilia(ConvidadoFamiliaDAO convidadoFamiliaDAO) {
         String s = convidadoFamiliaDAO.verConvitesFamilia();
         if ("".equals(s)) {
-            s += "Ainda não há Convites Família feitos.";
+            JOptionPane.showMessageDialog(null, "Ainda não há Convites Família feitos.");
+        } else {
+            JOptionPane.showMessageDialog(null, s);
         }
-        JOptionPane.showMessageDialog(null, s);
     }
 
     public void controllerConfirmarFamiliares(GUI gui, ConvidadoIndividual conviteIndividual, ConvidadoIndividualDAO conviteIndividualDAO, ConvidadoFamilia convidadoFamilia, ConvidadoFamiliaDAO convidadoFamiliaDAO) {
-        convidadoFamilia = gui.loginConviteFamilia(convidadoFamiliaDAO);
-        //Incompleto
+        String s = convidadoFamiliaDAO.verConvitesFamilia();
+        if ("".equals(s)) {
+            JOptionPane.showMessageDialog(null, "Ainda não há Convites Família feitos.");
+        } else {
+            convidadoFamilia = gui.loginConviteFamilia(convidadoFamiliaDAO);
+            int parar = 0;
+
+            while (parar != -1) {
+                int conviteID = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do convidado que deseja informar a presença:\n\n " + convidadoFamiliaDAO.retornaConviteFamiliaByFamilia(convidadoFamilia) + "\n0- Voltar"));
+                if (conviteID == 0) {
+                    parar = -1;
+                } else if (convidadoFamiliaDAO.retornaConviteIndividualByIDifNotNull(convidadoFamilia, conviteID) == null) {
+                    JOptionPane.showMessageDialog(null, "O ID de número " + conviteID + " inserido não corresponde ao de um convite individual deste Convite Família:\n\n" + convidadoFamiliaDAO.retornaConviteFamiliaByFamilia(convidadoFamilia) + "Tente outro!");
+                } else {
+                    StringBuilder m;
+                    int veredito = JOptionPane.showConfirmDialog(null, "Deseja confirmar a presença da pessoa abaixo?\n\n" + convidadoFamilia.getConviteIndividualByID(conviteID), "Confirmar Presença", JOptionPane.YES_NO_OPTION);
+                    if (veredito == JOptionPane.YES_OPTION) {
+                        boolean registro = true;
+                        convidadoFamiliaDAO.registrarPresenca(convidadoFamilia, conviteID, registro);
+                        m = new StringBuilder("Presença de ")
+                                .append(conviteIndividualDAO.verConvite(conviteID).getPessoa().getNome())
+                                .append(" da família ")
+                                .append(convidadoFamiliaDAO.retornaConviteFamiliaByFamilia(convidadoFamilia).getNomeDaFamilia())
+                                .append(" confirmada!\n\nNos vemos no casamento!");
+                        JOptionPane.showMessageDialog(null, m);
+                    } else {
+                        m = new StringBuilder("Presença de ")
+                                .append(conviteIndividualDAO.verConvite(conviteID).getPessoa().getNome())
+                                .append(" da família ")
+                                .append(convidadoFamiliaDAO.retornaConviteFamiliaByFamilia(convidadoFamilia).getNomeDaFamilia())
+                                .append(" não confirmada!\n\nA presença pode ser confirmada novamente a qualquer momento!");
+                        JOptionPane.showMessageDialog(null, m);
+                    }
+                }
+            }
+        }
     }
 }

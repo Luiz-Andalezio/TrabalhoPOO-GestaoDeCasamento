@@ -33,6 +33,10 @@ public class ConvidadoFamilia {
         return convitesIndividuais[id - 1];
     }
 
+    public ConvidadoIndividual getConvidadoIndividualVetor(int i) {
+        return convitesIndividuais[i];
+    }
+
     public ConvidadoIndividual getConviteIndividualByID(int id) {
         int i = 0;
         while (convitesIndividuais[i] != null && convitesIndividuais[i].getId() != id || convitesIndividuais[i] == null) {
@@ -128,7 +132,7 @@ public class ConvidadoFamilia {
     @Override
     public String toString() {
         String m = "";
-        m += "--- Convite Família de ID: " + this.id + " ---\n";
+        m += "-------------- Convite Família de ID: " + this.id + " --------------\n";
         m += "Nome da família: " + this.nomeDaFamilia + "\n";
         m += "Codigo de confirmação: " + this.acesso + "\n\n";
         int existe = 0;
@@ -160,7 +164,7 @@ public class ConvidadoFamilia {
         if (!"".equals(this.getDataModificacao())) {
             m += " e modificado no dia: " + this.getDataModificacao();
         }
-        m += "\n--------------------------------\n\n";
+        m += "\n----------------------------------------------------------------\n\n";
         return m;
     }
 }

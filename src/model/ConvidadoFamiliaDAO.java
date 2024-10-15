@@ -66,14 +66,6 @@ public class ConvidadoFamiliaDAO {
         return primeiroNomeNoivo + primeiroNomeNoiva + diamesano + letrasAleatorias.toString();
     }
 
-    public void registrarPresenca(int id, int registro) {
-        if (registro == 1) {
-            convitesFamilia[id - 1].getConvidadoIndividual(id).setConfirmacao(true);
-        } else if (registro == 2) {
-            convitesFamilia[id - 1].getConvidadoIndividual(id).setConfirmacao(false);
-        }
-    }
-
     public boolean atualizaNomeConviteFamilia(int id, String nomeDaFamilia) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
@@ -142,6 +134,40 @@ public class ConvidadoFamiliaDAO {
         }
     }
 
+    public boolean registrarPresenca(int id, int id2, boolean registro) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
+            if (registro != false) {
+                convitesFamilia[i].getConviteIndividualByID(id2).setConfirmacao(registro);
+                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();
+            }
+            convitesFamilia[i].setDataModificacao();
+            return true;
+        }
+        return false;
+    }
+
+    public boolean registrarPresenca(ConvidadoFamilia conviteFamilia, int id2, boolean registro) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i] != conviteFamilia || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i] == conviteFamilia) {
+            if (registro != false) {
+                convitesFamilia[i].getConviteIndividualByID(id2).setConfirmacao(registro);
+                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();
+            }
+            convitesFamilia[i].setDataModificacao();
+            return true;
+        }
+        return false;
+    }
+
     public String verConvitesFamilia() {
         String m = "";
         for (int i = 0; i < convitesFamilia.length; i++) {
@@ -160,6 +186,67 @@ public class ConvidadoFamiliaDAO {
         for (ConvidadoFamilia convitefamilia : convitesFamilia) {
             if (convitefamilia != null && convitefamilia.getAcesso().equals(acesso)) {
                 return convitefamilia;
+            }
+        }
+        return null;
+    }
+
+    public ConvidadoFamilia retornaConviteFamiliaByFamilia(ConvidadoFamilia conviteFamilia) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i] != conviteFamilia || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i] == conviteFamilia) {
+            return convitesFamilia[i];
+        }
+        return null;
+    }
+
+    public ConvidadoIndividual retornaConviteIndividualByIDifNotNull(ConvidadoFamilia conviteFamilia, int id) {
+        int i = 0;
+
+        if (id == 0){
+            return null;
+        }
+        
+        while (convitesFamilia[i] != null && convitesFamilia[i] != conviteFamilia || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i] == conviteFamilia) {
+            int y = 0;
+            while (convitesFamilia[i].getConvidadoIndividualVetor(y) != null && convitesFamilia[i].getConvidadoIndividualVetor(y).getId() != id || convitesFamilia[i].getConvidadoIndividualVetor(y) == null) {
+                y++;
+                if (y == 100) {
+                    return null;
+                }
+            }
+
+            if (convitesFamilia[i].getConvidadoIndividualVetor(y) != null && convitesFamilia[i].getConvidadoIndividualVetor(y).getId() == id) {
+                return convitesFamilia[i].getConvidadoIndividualVetor(y);
+            }
+        }
+        return null;
+    }
+
+    public ConvidadoIndividual retornaConviteIndividualByIDifNotNull(int id, int id2) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
+            int y = 0;
+            while (convitesFamilia[i].getConvidadoIndividualVetor(y) != null && convitesFamilia[i].getConvidadoIndividualVetor(y).getId() != id2 || convitesFamilia[i].getConvidadoIndividualVetor(y) == null) {
+                y++;
+                if (y == 100) {
+                    return null;
+                }
+            }
+
+            if (convitesFamilia[i].getConvidadoIndividualVetor(y) != null && convitesFamilia[i].getConvidadoIndividualVetor(y).getId() == id2) {
+                return convitesFamilia[i].getConvidadoIndividualVetor(y);
             }
         }
         return null;

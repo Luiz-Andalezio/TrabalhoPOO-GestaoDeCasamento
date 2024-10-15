@@ -217,7 +217,7 @@ public class MainController {
 
                             case 3:
                                 //ccf = Controller Convite Familia
-                                //ccf.controllerConfirmarFamiliares(gui, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
+                                ccf.controllerConfirmarFamiliares(gui, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao);
                                 break;
 
                             case 0:

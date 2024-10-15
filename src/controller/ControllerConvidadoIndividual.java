@@ -40,6 +40,7 @@ public class ControllerConvidadoIndividual {
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar a pessoa do convite abaixo?\n\n" + conviteindividualdao.verConvite(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
+                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");                            
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o nome a ser atualizado: ");
                                 String parentescoAtt = JOptionPane.showInputDialog("\nInforme o parentesco a ser atualizado: ");
                                 String telefoneAtt = JOptionPane.showInputDialog("\nInforme o telefone a ser atualizado: ");
