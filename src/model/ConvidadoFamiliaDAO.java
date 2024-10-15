@@ -143,10 +143,10 @@ public class ConvidadoFamiliaDAO {
         if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
             if (registro != false) {
                 convitesFamilia[i].getConviteIndividualByID(id2).setConfirmacao(registro);
-                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();
+                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();                
+                convitesFamilia[i].setDataModificacao();                
+                return true;
             }
-            convitesFamilia[i].setDataModificacao();
-            return true;
         }
         return false;
     }

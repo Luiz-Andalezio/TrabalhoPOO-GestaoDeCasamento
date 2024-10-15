@@ -14,6 +14,7 @@ public class Presentes {
     private LocalDate dataCriacao;
     private LocalDate dataModificacao;    
     private static long incrementaId = 0;
+    //final assegura que essa referência não será alterada durante a execução do programa
     private static final Locale localeBR = new Locale("pt", "BR");
     private static final NumberFormat formatador = NumberFormat.getCurrencyInstance(localeBR);
 
@@ -116,7 +117,7 @@ public class Presentes {
     @Override
     public String toString() {
         String m = "";
-        m += "Presente de Codigo: " + this.id;
+        m += "Presente de Código: " + this.id;
         m += "\nNome: " + this.nome;
         m += "\nTipo: " + this.tipo;
         m += "\nValor: " + formatador.format(this.valor);

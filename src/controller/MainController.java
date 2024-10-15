@@ -8,6 +8,8 @@ import model.ConvidadoIndividual;
 import model.ConvidadoIndividualDAO;
 import model.Evento;
 import model.EventoDAO;
+import model.Fornecedor;
+import model.FornecedorDAO;
 import model.Mensagens;
 import model.MensagensDAO;
 import model.Pessoa;
@@ -27,6 +29,7 @@ public class MainController {
     ControllerPesentes cp = new ControllerPesentes();
     ControllerMensagens cm = new ControllerMensagens();
     ControllerUsuario cu = new ControllerUsuario();
+    ControllerFornecedor cf = new ControllerFornecedor();
 
     //model
     Pessoa pessoa = new Pessoa();
@@ -35,6 +38,8 @@ public class MainController {
     Usuario usuarioLogado = null;
     EventoDAO eventodao = new EventoDAO(pessoadao);
     Evento evento = eventodao.retornaEvento();
+    Fornecedor fornecedor = new Fornecedor();
+    FornecedorDAO fornecedordao = new FornecedorDAO();
     Mensagens mensagens = new Mensagens();
     MensagensDAO mensagensdao = new MensagensDAO();
     Presentes presentes = new Presentes();
@@ -89,8 +94,8 @@ public class MainController {
                                     break;
 
                                 case 5:
-                                    //cp = Controller Pagamentos
-                                    //cp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cf = Controller Fornecedor
+                                    cf.controllerVerPagamentos(fornecedordao);
                                     break;
 
                                 case 6:
@@ -141,8 +146,8 @@ public class MainController {
                                     break;
 
                                 case 6:
-                                    //cp = Controller Pagamentos
-                                    //cp.controllerVerPagamentos(gui, usuarioLogado);
+                                    //cf = Controller Fornecedores
+                                    cf.controllerCrudFornecedores(gui, usuarioLogado, fornecedor, fornecedordao);
                                     break;
 
                                 case 7:

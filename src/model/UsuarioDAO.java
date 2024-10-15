@@ -139,7 +139,7 @@ public class UsuarioDAO {
         return null;
     }
 
-    public Usuario retornaUsuario(int i, String login, String senha) {
+    public Usuario retornaUsuario(int i) {
         return usuarios[i];
     }
 }

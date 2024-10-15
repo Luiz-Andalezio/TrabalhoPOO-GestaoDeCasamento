@@ -17,9 +17,10 @@ public class GUI {
 
         StringBuilder m = new StringBuilder("");
 
-        m.append("---- Boas Vindas ao Software de Casamento de ").append(evento.getPessoaNoivo().getNome()).append(" e ").append(evento.getPessoaNoiva().getNome()).append(" ----");
-        m.append("\n\n1- Logar.");
-        m.append("\n2- Entrar como convidado.");
+        m.append(evento)
+        .append("\n\n1- Entrar como Administrador.")
+        .append("\n2- Entrar como Convidado.");
+        //m.append("\n3- Informações.");
         m.append("\n\n0 - Sair.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -201,26 +202,12 @@ public class GUI {
         return opc;
     }
 
-    public int enviaMensagem(ConvidadoFamilia convitefamilia, Evento evento) {
-        int opc;
-
-        StringBuilder m = new StringBuilder();
-
-        m.append("----- Menu de Mensagens -----");
-        m.append("\n\n1- Envie uma mensagem para ")
-            .append(evento.getPessoaNoivo().getNome())
-            .append(" e ")
-            .append(evento.getPessoaNoiva().getNome());
-        m.append("\n\n0- Voltar.");
-        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
-
-        return opc;
-    }
-
     public int crudMensagem(Usuario usuarioLogado, Evento evento) {
         int opc;
 
         StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
 
         m.append("----- CRUD Mensagens -----");
         m.append("\n\n1- Exibir mensagens enviadas aos noivos.");
@@ -253,6 +240,8 @@ public class GUI {
 
         StringBuilder m = new StringBuilder();
 
+        m.append(headerAdmin(usuarioLogado));
+
         m.append("----- Presentes -----");
         m.append("\n\n1- Ver presentes disponíveis.");
         m.append("\n2- Ver presentes comprados.");  
@@ -267,12 +256,32 @@ public class GUI {
 
         StringBuilder m = new StringBuilder();
 
+        m.append(headerAdmin(usuarioLogado));
+
         m.append("----- CRUD Presentes -----");
         m.append("\n\n1- Registrar presente.");
         m.append("\n2- Editar presentes.");
         m.append("\n3- Exibir presentes disponíveis.");        
         m.append("\n4- Exibir presentes comprados aos noivos.");
         m.append("\n5- Excluir presentes.");     
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
+    public int crudFornecedorAdmin(Usuario usuarioLogado) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado));
+
+        m.append("----- CRUD Fornecedores -----");
+        m.append("\n\n1- Registrar fornecedor.");
+        m.append("\n2- Editar fornecedores.");
+        m.append("\n3- Exibir fornecedores.");  
+        m.append("\n4- Excluir fornecedores.");     
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -291,18 +300,19 @@ public class GUI {
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
-    }
-    
-    public int crudPagamento(Usuario usuarioLogado) {
+    }    
+
+    public int enviaMensagem(ConvidadoFamilia convitefamilia, Evento evento) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
-
-        m.append("---- Pagamentos ----");
-        m.append("\n1- Visualisar pagamentos.");
-
+        m.append("----- Menu de Mensagens -----");
+        m.append("\n\n1- Envie uma mensagem para ")
+            .append(evento.getPessoaNoivo().getNome())
+            .append(" e ")
+            .append(evento.getPessoaNoiva().getNome());
+        m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;

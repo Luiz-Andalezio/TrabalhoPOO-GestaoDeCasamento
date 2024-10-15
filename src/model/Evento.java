@@ -23,8 +23,17 @@ public class Evento {
         this.id = id;
     }
 
-    public LocalDate getData() {
-        return data;
+    public String getData() {
+        String alteraDia = "";
+        if (this.data.getDayOfMonth() < 10) {
+            alteraDia += "0";
+        }
+        alteraDia += this.data.getDayOfMonth() + "/";
+        if (this.data.getMonthValue() < 10) {
+            alteraDia += "0";
+        }
+        alteraDia += this.data.getMonthValue() + "/" + this.data.getYear();
+        return alteraDia;
     }
 
     public void setData(String data) {        
@@ -119,10 +128,8 @@ public class Evento {
     public String toString(){
         String m = "";
 
-        m += "------ Boas Vindas ao Casamento de " + this.pessoaNoivo.getNome() + " e " + this.pessoaNoiva.getNome() + "------";
-        m += "\n\n1- Entrar como Administrador.";
-        m += "\n2- Entrar como membro de Familia.";
-        m += "\n\n0 - Sair.";
+        m += "------ Boas Vindas ao Casamento de " + this.pessoaNoivo.getNome() + " e " + this.pessoaNoiva.getNome() + " ------";
+        m += "\n------------------------   Data: " + this.getData() + "   ------------------------";
 
         return m;
     }
