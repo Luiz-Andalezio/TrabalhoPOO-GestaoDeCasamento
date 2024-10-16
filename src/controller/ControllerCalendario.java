@@ -1,6 +1,6 @@
 package controller;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import model.CalendarioDAO;
 import model.Usuario;
@@ -8,7 +8,7 @@ import view.GUI;
 
 public class ControllerCalendario {
 
-    public void controllerCrudIncrementaData(GUI gui, Usuario usuarioLogado, LocalDate calendario, CalendarioDAO calendarioDAO) {
+    public LocalDateTime controllerCrudIncrementaData(GUI gui, Usuario usuarioLogado, CalendarioDAO calendarioDAO, LocalDateTime calendario) {
         int menuCalendarioOpc = 0;
 
         while (menuCalendarioOpc != -1) {
@@ -50,5 +50,6 @@ public class ControllerCalendario {
                     break;
             }
         }
+        return calendario;
     }
 }

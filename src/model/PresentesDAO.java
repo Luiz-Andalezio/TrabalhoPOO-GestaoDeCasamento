@@ -1,34 +1,36 @@
 package model;
 
+import java.time.LocalDateTime;
+
 public class PresentesDAO {
 
     Presentes[] presentes = new Presentes[10];
 
-    public PresentesDAO() {
+    public PresentesDAO(LocalDateTime calendario) {
 
         Presentes presente1 = new Presentes();
         presente1.setNome("Geladeira");
         presente1.setTipo("Eletrodoméstico");
         presente1.setValor(1500);
-        presente1.setDataCriacao();
+        presente1.setDataCriacao(calendario);
 
         Presentes presente2 = new Presentes();
         presente2.setNome("Máquina de Lavar");
         presente2.setTipo("Eletrodoméstico");
         presente2.setValor(1200);
-        presente2.setDataCriacao();
+        presente2.setDataCriacao(calendario);
 
         Presentes presente3 = new Presentes();
         presente3.setNome("Micro-ondas");
         presente3.setTipo("Eletrodoméstico");
         presente3.setValor(600);
-        presente3.setDataCriacao();
+        presente3.setDataCriacao(calendario);
 
         Presentes presente4 = new Presentes();
         presente4.setNome("Conjunto de Panelas");
         presente4.setTipo("Cozinha");
         presente4.setValor(300);
-        presente4.setDataCriacao();
+        presente4.setDataCriacao(calendario);
 
         /*
         Presentes presente5 = new Presentes();
@@ -80,12 +82,12 @@ public class PresentesDAO {
         presentes[9] = presente10;*/
     }
 
-    public Presentes registrarPresente(String nome, String tipo, double valor) {
+    public Presentes registrarPresente(LocalDateTime calendario, String nome, String tipo, double valor) {
         Presentes p = new Presentes();
         p.setNome(nome);
         p.setTipo(tipo);
         p.setValor(valor);
-        p.setDataCriacao();
+        p.setDataCriacao(calendario);
 
         for (int v = 0; v < presentes.length; v++) {
             if (presentes[v] == null) {
@@ -96,7 +98,7 @@ public class PresentesDAO {
         return null;
     }
 
-    public boolean atualizaPresente(String nomeAtt, String tipoAtt, double valorAtt, int id) {
+    public boolean atualizaPresente(LocalDateTime calendario, String nomeAtt, String tipoAtt, double valorAtt, int id) {
         int i = 0;
         while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
             i++;
@@ -110,7 +112,7 @@ public class PresentesDAO {
                 presentes[i].setTipo(tipoAtt);
             }
             presentes[i].setValor(valorAtt);
-            presentes[i].setDataModificacao();
+            presentes[i].setDataModificacao(calendario);
             return true;
         }
         return false;
@@ -141,7 +143,7 @@ public class PresentesDAO {
         return false;
     }
 
-    public boolean compraPresente(String nomeComprador, int id) {
+    public boolean compraPresente(LocalDateTime calendario, String nomeComprador, int id) {
         int i = 0;
         while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
             i++;
@@ -149,7 +151,7 @@ public class PresentesDAO {
 
         if (presentes[i] != null && presentes[i].getId() == id) {
             presentes[i].setNomeComprador(nomeComprador);
-            presentes[i].setDataModificacao();
+            presentes[i].setDataModificacao(calendario);
             return true;
         }
         return false;
@@ -165,49 +167,26 @@ public class PresentesDAO {
         return m;
     }
 
-    /*
-    String m = "";
-        m += "--- Convite Família de ID: " + this.id + " ---\n";
-        m += "Nome da família: " + this.nomeDaFamilia + "\n";
-        m += "Codigo de confirmação: " + this.acesso + "\n\n";
-        int existe = 0;
-        for (int i = 0; i < convitesIndividuais.length; ++i) {
-            if (convitesIndividuais[i] != null) {
-                ++existe;
-            }
-        }
-        if (existe == 0) {
-            m += "Não há convidados nesta família.\n";
-        } else {
-            m += "Convidados:";
-            for (ConvidadoIndividual convites : convitesIndividuais) {
-                if (convites != null) {
-                    m += "\nID do convite individual: " + convites.getId();
-                    m += "\nNome: " + convites.getPessoa().getNome();
-                    m += "\nTelefone: " + convites.getPessoa().getTelefone();
-                    m += "\nPresença: ";
-                    if (convites.isConfirmacao() == true) {
-                        m += "Confirmada";
-                    } else {
-                        m += "Não confirmada";
-                    }
-                    m += "\n";
-                }
-            }
-        }
-     */
-    public String verPresentesConvidado(/*Usuario usuarioLogado*/) {
+    public String verPresentesConvidado() {
         String m = "";
         for (int i = 0; i < presentes.length; i++) {
             if (presentes[i] != null) {
-                m += presentes[i].toString(/*usuarioLogado*/) + "\n";
+                m += presentes[i].toString() + "\n";
             }
         }
         return m;
     }
 
-    public Presentes verPresentesConvidado(int id) {
-        return presentes[id - 1];
+    public Presentes retornaPresenteByID(int id) {
+        int i = 0;
+        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
+            i++;
+        }
+
+        if (presentes[i] != null && presentes[i].getId() == id) {
+            return presentes[i];
+        }
+        return null;
     }
 
     public String verPresentesAdmin(Usuario usuarioLogado) {

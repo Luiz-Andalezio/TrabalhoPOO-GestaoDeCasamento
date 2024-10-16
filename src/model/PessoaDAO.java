@@ -1,64 +1,66 @@
 package model;
 
+import java.time.LocalDateTime;
+
 public class PessoaDAO {
 
     Pessoa[] pessoas = new Pessoa[100];
 
-    public PessoaDAO() {
+    public PessoaDAO(LocalDateTime calendario) {
         Pessoa p1 = new Pessoa();
         p1.setNome("João");
         p1.setTelefone("+55 (71) ####-####");
         p1.setNascimento("23/02/2000");
-        p1.setDataCriacao();
+        p1.setDataCriacao(calendario);
         pessoas[0] = p1;
 
         Pessoa p2 = new Pessoa();
         p2.setNome("Maria");
         p2.setTelefone("+55 (68) ####-####");
         p2.setNascimento("01/12/2003");
-        p2.setDataCriacao();
+        p2.setDataCriacao(calendario);
         pessoas[1] = p2;
 
         Pessoa p3 = new Pessoa();
         p3.setNome("Rodolfo");
         p3.setTelefone("+55 (34) ####-####");
         p3.setNascimento("02/12/1993");
-        p3.setDataCriacao();
+        p3.setDataCriacao(calendario);
         pessoas[2] = p3;
 
         Pessoa p4 = new Pessoa();
         p4.setNome("Luiz");
         p4.setTelefone("+55 (34) 99713-6908");
         p4.setNascimento("19/04/2004");
-        p4.setDataCriacao();
+        p4.setDataCriacao(calendario);
         pessoas[3] = p4;
 
         Pessoa p5 = new Pessoa();
         p5.setNome("Gabriel");
         p5.setTelefone("+55 (34) ####-####");
         p5.setNascimento("10/11/2004");
-        p5.setDataCriacao();
+        p5.setDataCriacao(calendario);
         pessoas[4] = p5;
 
         Pessoa p6 = new Pessoa();
         p6.setNome("Ana");
         p6.setTelefone("+55 (71) ####-####");
         p6.setNascimento("22/09/2005");
-        p6.setDataCriacao();
+        p6.setDataCriacao(calendario);
         pessoas[5] = p6;
 
         Pessoa p7 = new Pessoa();
         p7.setNome("Dario");
         p7.setTelefone("+55 (21) ####-####");
         p7.setNascimento("13/06/1966");
-        p7.setDataCriacao();
+        p7.setDataCriacao(calendario);
         pessoas[6] = p7;
 
         Pessoa p8 = new Pessoa();
         p8.setNome("Eustáquio");
         p8.setTelefone("+55 (71) ####-####");
         p8.setNascimento("07/01/1949");
-        p8.setDataCriacao();
+        p8.setDataCriacao(calendario);
         pessoas[7] = p8;
         /*
         p1.setId(1);
@@ -66,18 +68,17 @@ public class PessoaDAO {
         p1.setIdade(20);
         p1.setTelefone("+55 34 99713-6908");
         p1.setNascimento("19/04/2004");
-        p1.setDataCriacao(null);
-        p1.setDataModificacao(null);
+        p1.setDataCriacao(calendario);
         pessoa[0] = p1;*/
     }
 
-    public PessoaDAO(String n, String m, String t) {
+    public PessoaDAO(String n, String m, String t, LocalDateTime calendario) {
         Pessoa p = new Pessoa();
         p.setNome(n);
         p.setTelefone(m);
         p.setNascimento(t);
-        p.setDataCriacao();
-        p.setDataModificacao();
+        p.setDataCriacao(calendario);
+        p.setDataModificacao(calendario);
         for (int v = 0; v < pessoas.length; v++) {
             if (pessoas[v] == null) {
                 pessoas[v] = p;
@@ -85,12 +86,12 @@ public class PessoaDAO {
         }
     }
 
-    public Pessoa criarPessoa(String nome, String telefone, String nascimento) {
+    public Pessoa criarPessoa(String nome, String telefone, String nascimento, LocalDateTime calendario) {
         Pessoa p = new Pessoa();
         p.setNome(nome);
         p.setTelefone(telefone);
         p.setNascimento(nascimento);
-        p.setDataCriacao();
+        p.setDataCriacao(calendario);
 
         for (int v = 0; v < pessoas.length; v++) {
             if (pessoas[v] == null) {
@@ -101,7 +102,7 @@ public class PessoaDAO {
         return null;
     }
 
-    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, int id) {
+    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, int id, LocalDateTime calendario) {
         int i = 0;
         while (pessoas[i] != null && pessoas[i].getId() != id || pessoas[i] == null) {
             i++;
@@ -117,7 +118,7 @@ public class PessoaDAO {
             if (!nascimento.equals("")) {
                 pessoas[i].setNascimento(nascimento);
             }
-            pessoas[i].setDataModificacao();
+            pessoas[i].setDataModificacao(calendario);
             return true;
         }
         return false;

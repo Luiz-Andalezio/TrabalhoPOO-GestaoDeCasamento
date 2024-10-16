@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import model.Fornecedor;
 import model.FornecedorDAO;
@@ -8,12 +9,12 @@ import view.GUI;
 
 public class ControllerFornecedor {
 
-    public void controllerCrudFornecedores(GUI gui, Usuario usuarioLogado, Fornecedor fornecedor, FornecedorDAO fornecedordao) {
+    public void controllerCrudFornecedores(GUI gui, Usuario usuarioLogado, Fornecedor fornecedor, FornecedorDAO fornecedordao, LocalDateTime calendario) {
         StringBuilder m;
         int menuFornecedorOpc = 0;
 
         while (menuFornecedorOpc != -1) {
-            menuFornecedorOpc = gui.crudFornecedorAdmin(usuarioLogado);
+            menuFornecedorOpc = gui.crudFornecedorAdmin(usuarioLogado, calendario);
             switch (menuFornecedorOpc) {
                 case 1:
                     //Gerar fornecedor
@@ -25,7 +26,7 @@ public class ControllerFornecedor {
                     int parcelas = Integer.parseInt(JOptionPane.showInputDialog("\nInforme a parcela para o valor de R$ " + valorAPagar + " do fornecedor: " + nome));
 
                     if (!"".equals(nome) || !"".equals(cnpj) || !"".equals(telefone)) {
-                        fornecedordao.registraFornecedor(nome, cnpj, telefone, valorAPagar, parcelas);
+                        fornecedordao.registraFornecedor(nome, cnpj, telefone, valorAPagar, parcelas, calendario);
                         JOptionPane.showMessageDialog(null, fornecedordao.verFornecedores());
                     } else {
                         JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
@@ -38,20 +39,22 @@ public class ControllerFornecedor {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do fornecedor que deseja editar: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o fornecedor abaixo?\n\n" + fornecedordao.verFornecedor(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o fornecedor abaixo?\n\n" + fornecedordao.recebeFornecedorByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
-                                String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado do fornecedor: " + fornecedordao.verFornecedor(id).getNome());
-                                JOptionPane.showMessageDialog(null, "Nome atualizado parcialmente até o fim dos procedimentos.\n\nAntes: " + fornecedordao.verFornecedor(id).getNome() + "\n\nDepois: " + nomeAtt);
+                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");                                
+                                String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado do fornecedor: " + fornecedordao.recebeFornecedorByID(id).getNome());
+                                if (!"".equals(nomeAtt)) {
+                                JOptionPane.showMessageDialog(null, "Nome atualizado parcialmente até o fim dos procedimentos.\n\nAntes: " + fornecedordao.recebeFornecedorByID(id).getNome() + "\n\nDepois: " + nomeAtt);
+                                }
                                 String cnpjAtt = JOptionPane.showInputDialog("\nInforme o novo cnpj a ser atualizado do fornecedor: " + nomeAtt);
                                 String telefoneAtt = JOptionPane.showInputDialog("\nInforme o novo telefone a ser atualizado do fornecedor: " + nomeAtt);
                                 double valorAPagarAtt = Integer.parseInt(JOptionPane.showInputDialog("\nInforme o novo valor a ser atualizado do fornecedor: " + nomeAtt));
                                 int parcelasAtt = Integer.parseInt(JOptionPane.showInputDialog("\nInforme a nova parcela a ser atualizada do fornecedor: " + nomeAtt));
 
                                 if (!"".equals(nomeAtt) || !"".equals(cnpjAtt) || !"".equals(telefoneAtt)) {
-                                    m = new StringBuilder("Fornecedor atualizado com sucesso!\n\nAntes: \n" + fornecedordao.verFornecedor(id));
-                                    fornecedordao.atualizaFornecedor(nomeAtt, cnpjAtt, telefoneAtt, valorAPagarAtt, parcelasAtt, id);
-                                    m.append("\nAgora: \n").append(fornecedordao.verFornecedor(id));
+                                    m = new StringBuilder("Fornecedor atualizado com sucesso!\n\nAntes: \n" + fornecedordao.recebeFornecedorByID(id));
+                                    fornecedordao.atualizaFornecedor(nomeAtt, cnpjAtt, telefoneAtt, valorAPagarAtt, parcelasAtt, id, calendario);
+                                    m.append("\nAgora: \n").append(fornecedordao.recebeFornecedorByID(id));
                                     JOptionPane.showMessageDialog(null, m);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
@@ -80,9 +83,9 @@ public class ControllerFornecedor {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do fornecedor a ser excluído: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este fornecedor abaixo?\n\n" + fornecedordao.verFornecedor(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este fornecedor abaixo?\n\n" + fornecedordao.recebeFornecedorByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Fornecedor excluido com sucesso!\n\n" + fornecedordao.verFornecedor(id));
+                                JOptionPane.showMessageDialog(null, "Fornecedor excluido com sucesso!\n\n" + fornecedordao.recebeFornecedorByID(id));
                                 fornecedordao.excluirFornecedor(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");

@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import model.Pessoa;
 import model.PessoaDAO;
@@ -9,12 +10,12 @@ import view.GUI;
 
 public class ControllerUsuario {
 
-    public void controllerCrudUsuarios(GUI gui, Usuario usuarioLogado, UsuarioDAO usuariodao, PessoaDAO pessoadao, Pessoa pessoa) {
+    public void controllerCrudUsuarios(GUI gui, Usuario usuarioLogado, UsuarioDAO usuariodao, PessoaDAO pessoadao, Pessoa pessoa, LocalDateTime calendario) {
         StringBuilder m;
         int menuUsuarioOpc = 0;
 
         while (menuUsuarioOpc != -1) {
-            menuUsuarioOpc = gui.crudUsuario(usuarioLogado);
+            menuUsuarioOpc = gui.crudUsuario(usuarioLogado, calendario);
             switch (menuUsuarioOpc) {
                 case 1:
                     //Gerar usuario
@@ -26,8 +27,8 @@ public class ControllerUsuario {
                     String novaSenha = JOptionPane.showInputDialog("\nInforme a senha de usuario de " + novoNome);
 
                     if (!"".equals(novoNome) || !"".equals(novoTelefone) || !"".equals(novoNascimento) || !"".equals(novoTipo) || !"".equals(novoLogin) || !"".equals(novaSenha)) {
-                        pessoa = pessoadao.criarPessoa(novoNome, novoTelefone, novoNascimento);
-                        usuariodao.recebePessoa(pessoa, novoTipo, novoLogin, novaSenha);
+                        pessoa = pessoadao.criarPessoa(novoNome, novoTelefone, novoNascimento, calendario);
+                        usuariodao.recebePessoa(calendario, pessoa, novoTipo, novoLogin, novaSenha);
                         JOptionPane.showMessageDialog(null, usuariodao.verUsuarios());
                     } else {
                         JOptionPane.showMessageDialog(null, "Nenhum dado enviado: usuario não criado...");
@@ -40,7 +41,7 @@ public class ControllerUsuario {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario que deseja editar: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o usuario abaixo?\n\n" + usuariodao.verUsuario(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
                                 JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado: ");
@@ -51,10 +52,10 @@ public class ControllerUsuario {
                                 String senhaAtt = JOptionPane.showInputDialog("\nInforme a nova senha de usuario a ser atualizada: ");
 
                                 if (!"".equals(nomeAtt) || !"".equals(telefoneAtt) || !"".equals(nascimentoAtt) || !"".equals(tipoAtt) || !"".equals(loginAtt) || !"".equals(senhaAtt)) {
-                                    m = new StringBuilder("Convite atualizado com sucesso!\n\nAntes: \n" + usuariodao.verUsuario(id));
-                                    usuariodao.atualizaPessoaUsuario(nomeAtt, telefoneAtt, nascimentoAtt, id);
-                                    usuariodao.atualizaUsuario(tipoAtt, loginAtt, senhaAtt, id);
-                                    m.append("\nAgora: \n").append(usuariodao.verUsuario(id));
+                                    m = new StringBuilder("Convite atualizado com sucesso!\n\nAntes: \n" + usuariodao.retornaUsuarioByID(id));
+                                    usuariodao.atualizaPessoaUsuario(calendario, nomeAtt, telefoneAtt, nascimentoAtt, id);
+                                    usuariodao.atualizaUsuario(calendario, tipoAtt, loginAtt, senhaAtt, id);
+                                    m.append("\nAgora: \n").append(usuariodao.retornaUsuarioByID(id));
                                     JOptionPane.showMessageDialog(null, m);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
@@ -83,9 +84,9 @@ public class ControllerUsuario {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario a ser desfeito: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este usuario abaixo?\n\n" + usuariodao.verUsuario(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!\n\n" + usuariodao.verUsuario(id));
+                                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!\n\n" + usuariodao.retornaUsuarioByID(id));
                                 usuariodao.excluirUsuario(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");

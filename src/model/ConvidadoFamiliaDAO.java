@@ -1,33 +1,33 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class ConvidadoFamiliaDAO {
 
     ConvidadoFamilia[] convitesFamilia = new ConvidadoFamilia[100];
 
-    public ConvidadoFamiliaDAO(ConvidadoIndividualDAO conviteindividualdao, Evento evento) {
+    public ConvidadoFamiliaDAO(ConvidadoIndividualDAO conviteindividualdao, Evento evento, LocalDateTime calendario) {
         ConvidadoFamilia cf1 = new ConvidadoFamilia();
         cf1.setNomeDaFamilia("Dantas");
         cf1.setConvidadoIndividualVetor(0, conviteindividualdao.retornaConviteIndividualVetor(0));
         cf1.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(2));
         cf1.setAcesso(/*gerarAcesso(evento)*/"123");
-        cf1.setDataCriacao();
+        cf1.setDataCriacao(calendario);
         convitesFamilia[0] = cf1;
 
         ConvidadoFamilia cf2 = new ConvidadoFamilia();
         cf2.setNomeDaFamilia("Ribeiro");
-        cf2.setAcesso(gerarAcesso(evento));
-        cf2.setDataCriacao();
+        cf2.setAcesso(gerarAcesso(evento, calendario));
+        cf2.setDataCriacao(calendario);
         convitesFamilia[1] = cf2;
     }
 
-    public ConvidadoFamilia convidaFamilia(String novoNomeDaFamilia, Evento evento) {
+    public ConvidadoFamilia convidaFamilia(String novoNomeDaFamilia, Evento evento, LocalDateTime calendario) {
         ConvidadoFamilia cf = new ConvidadoFamilia();
         cf.setNomeDaFamilia(novoNomeDaFamilia);
-        cf.setAcesso(gerarAcesso(evento));
-        cf.setDataCriacao();
+        cf.setAcesso(gerarAcesso(evento, calendario));
+        cf.setDataCriacao(calendario);
 
         for (int i = 0; i < convitesFamilia.length; i++) {
             if (convitesFamilia[i] == null) {
@@ -38,10 +38,10 @@ public class ConvidadoFamiliaDAO {
         return null;
     }
 
-    public String atualizaAcesso(int id, Evento evento, ConvidadoFamilia conviteFamilia) {
+    public String atualizaAcesso(int id, Evento evento, ConvidadoFamilia conviteFamilia, LocalDateTime calendario) {
         conviteFamilia = convitesFamilia[id - 1];
-        conviteFamilia.setAcesso(gerarAcesso(evento));
-        conviteFamilia.setDataModificacao();
+        conviteFamilia.setAcesso(gerarAcesso(evento, calendario));
+        conviteFamilia.setDataModificacao(calendario);
         return conviteFamilia.getAcesso();
     }
 
@@ -49,8 +49,8 @@ public class ConvidadoFamiliaDAO {
         convitesFamilia[id - 1].setConvidadoIndividual(id2, novoConviteIndividual);
     }
 
-    private String gerarAcesso(Evento evento) {
-        String diamesano = LocalDate.now().format(DateTimeFormatter.ofPattern("ddMMyyyy"));
+    private String gerarAcesso(Evento evento, LocalDateTime calendario) {
+        String diamesano = calendario.format(DateTimeFormatter.ofPattern("ddMMyyyy"));
         String caracteres = "abcdefghijklmnopqrstuvwxyz";
         StringBuilder letrasAleatorias = new StringBuilder();
 
@@ -66,7 +66,7 @@ public class ConvidadoFamiliaDAO {
         return primeiroNomeNoivo + primeiroNomeNoiva + diamesano + letrasAleatorias.toString();
     }
 
-    public boolean atualizaNomeConviteFamilia(int id, String nomeDaFamilia) {
+    public boolean atualizaNomeConviteFamilia(int id, String nomeDaFamilia, LocalDateTime calendario) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
@@ -76,13 +76,13 @@ public class ConvidadoFamiliaDAO {
             if (!nomeDaFamilia.equals("")) {
                 convitesFamilia[i].setNomeDaFamilia(nomeDaFamilia);
             }
-            convitesFamilia[i].setDataModificacao();
+            convitesFamilia[i].setDataModificacao(calendario);
             return true;
         }
         return false;
     }
 
-    public boolean atualizaPessoasConviteFamilia(int id, int id2, String nome, String telefone, String nascimento, String parentesco) {
+    public boolean atualizaPessoasConviteFamilia(int id, int id2, String nome, String telefone, String nascimento, String parentesco, LocalDateTime calendario) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
@@ -101,15 +101,15 @@ public class ConvidadoFamiliaDAO {
             if (!nascimento.equals("")) {
                 convitesFamilia[i].getConviteIndividualByID(id2).getPessoa().setNascimento(nascimento);
             }
-            convitesFamilia[i].getConviteIndividualByID(id2).getPessoa().setDataModificacao();
-            convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();
-            convitesFamilia[i].setDataModificacao();
+            convitesFamilia[i].getConviteIndividualByID(id2).getPessoa().setDataModificacao(calendario);
+            convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao(calendario);
+            convitesFamilia[i].setDataModificacao(calendario);
             return true;
         }
         return false;
     }
 
-    public boolean excluirConviteIndividualConviteFamilia(int id, int id2) {
+    public boolean excluirConviteIndividualConviteFamilia(int id, int id2, LocalDateTime calendario) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
@@ -117,7 +117,7 @@ public class ConvidadoFamiliaDAO {
 
         if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
             convitesFamilia[i].setConvidadoIndividualByID(id2, null);
-            convitesFamilia[i].setDataModificacao();
+            convitesFamilia[i].setDataModificacao(calendario);
             return true;
         }
         return false;
@@ -134,7 +134,7 @@ public class ConvidadoFamiliaDAO {
         }
     }
 
-    public boolean registrarPresenca(int id, int id2, boolean registro) {
+    public boolean registrarPresenca(int id, int id2, boolean registro, LocalDateTime calendario) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
@@ -143,15 +143,15 @@ public class ConvidadoFamiliaDAO {
         if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
             if (registro != false) {
                 convitesFamilia[i].getConviteIndividualByID(id2).setConfirmacao(registro);
-                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();                
-                convitesFamilia[i].setDataModificacao();                
+                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao(calendario);                
+                convitesFamilia[i].setDataModificacao(calendario);                
                 return true;
             }
         }
         return false;
     }
 
-    public boolean registrarPresenca(ConvidadoFamilia conviteFamilia, int id2, boolean registro) {
+    public boolean registrarPresenca(ConvidadoFamilia conviteFamilia, int id2, boolean registro, LocalDateTime calendario) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i] != conviteFamilia || convitesFamilia[i] == null) {
             i++;
@@ -160,9 +160,9 @@ public class ConvidadoFamiliaDAO {
         if (convitesFamilia[i] != null && convitesFamilia[i] == conviteFamilia) {
             if (registro != false) {
                 convitesFamilia[i].getConviteIndividualByID(id2).setConfirmacao(registro);
-                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao();
+                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao(calendario);
             }
-            convitesFamilia[i].setDataModificacao();
+            convitesFamilia[i].setDataModificacao(calendario);
             return true;
         }
         return false;
@@ -198,6 +198,18 @@ public class ConvidadoFamiliaDAO {
         }
 
         if (convitesFamilia[i] != null && convitesFamilia[i] == conviteFamilia) {
+            return convitesFamilia[i];
+        }
+        return null;
+    }
+
+    public ConvidadoFamilia retornaConviteFamiliaByID(int id) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
             return convitesFamilia[i];
         }
         return null;
@@ -250,9 +262,5 @@ public class ConvidadoFamiliaDAO {
             }
         }
         return null;
-    }
-
-    public ConvidadoFamilia retornaConviteFamilia(int id) {
-        return convitesFamilia[id - 1];
     }
 }

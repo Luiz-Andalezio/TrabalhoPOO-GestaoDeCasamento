@@ -1,12 +1,12 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class FornecedorDAO {
 
     private Fornecedor[] fornecedores = new Fornecedor[100];
 
-    public FornecedorDAO() {
+    public FornecedorDAO(LocalDateTime calendario) {
         Fornecedor fornecedor1 = new Fornecedor();
         fornecedor1.setNome("Buffet Margaux");
         fornecedor1.setCnpj("12.345.678/0001-99");
@@ -14,7 +14,7 @@ public class FornecedorDAO {
         fornecedor1.setValorAPagar(25000.00); 
         fornecedor1.setParcelas(5); 
         fornecedor1.setEstado(false); 
-        fornecedor1.setDataCriacao(); 
+        fornecedor1.setDataCriacao(calendario); 
 
         Fornecedor fornecedor2 = new Fornecedor();
         fornecedor2.setId(2);
@@ -24,7 +24,7 @@ public class FornecedorDAO {
         fornecedor2.setValorAPagar(8000.00);
         fornecedor2.setParcelas(4);
         fornecedor2.setEstado(false);
-        fornecedor2.setDataCriacao();
+        fornecedor2.setDataCriacao(calendario);
 
         Fornecedor fornecedor3 = new Fornecedor();
         fornecedor3.setId(3);
@@ -34,14 +34,14 @@ public class FornecedorDAO {
         fornecedor3.setValorAPagar(680000.00);
         fornecedor3.setParcelas(34);
         fornecedor3.setEstado(false);
-        fornecedor3.setDataCriacao();
+        fornecedor3.setDataCriacao(calendario);
 
         fornecedores[0] = fornecedor1;
         fornecedores[1] = fornecedor2;
         fornecedores[2] = fornecedor3;
     }
 
-    public boolean registraFornecedor(String nome, String cnpj, String telefone, double valorAPagar, int parcelas) {
+    public boolean registraFornecedor(String nome, String cnpj, String telefone, double valorAPagar, int parcelas, LocalDateTime calendario) {
         for (int i = 0; i < fornecedores.length; i++) {
             if (fornecedores[i] == null) {
                 fornecedores[i] = new Fornecedor();
@@ -50,14 +50,14 @@ public class FornecedorDAO {
                 fornecedores[i].setTelefone(telefone);
                 fornecedores[i].setValorAPagar(valorAPagar);
                 fornecedores[i].setParcelas(parcelas);
-                fornecedores[i].setDataCriacao();
+                fornecedores[i].setDataCriacao(calendario);
                 return true;
             }
         }
         return false;
     }
 
-    public boolean atualizaFornecedor(String nome, String cnpj, String telefone, double valorAPagar, int parcelas, int id) {
+    public boolean atualizaFornecedor(String nome, String cnpj, String telefone, double valorAPagar, int parcelas, int id, LocalDateTime calendario) {
         int i = 0;
         while (fornecedores[i] != null && fornecedores[i].getId() != id || fornecedores[i] == null) {
             i++;
@@ -75,7 +75,7 @@ public class FornecedorDAO {
             }
             fornecedores[i].setValorAPagar(valorAPagar);
             fornecedores[i].setParcelas(parcelas);
-            fornecedores[i].setDataModificacao();
+            fornecedores[i].setDataModificacao(calendario);
             return true;
         }
         return false;
@@ -92,7 +92,7 @@ public class FornecedorDAO {
         }
     }
 
-    public boolean pagarFornecedor(int id, boolean registro, LocalDate calendario) {
+    public boolean pagarFornecedor(int id, boolean registro, LocalDateTime calendario) {
         int i = 0;
         while (fornecedores[i] != null && fornecedores[i].getId() != id || fornecedores[i] == null) {
             i++;
@@ -101,7 +101,7 @@ public class FornecedorDAO {
         if (fornecedores[i] != null && fornecedores[i].getId() == id) {
             if (registro != false) {
                 fornecedores[i].setEstado(registro);
-                fornecedores[i].setDataModificacao();
+                fornecedores[i].setDataModificacao(calendario);
             }
             return true;
         }
@@ -118,8 +118,16 @@ public class FornecedorDAO {
         return m;
     }
 
-    public Fornecedor verFornecedor(int id) {
-        return fornecedores[id - 1];
+    public Fornecedor recebeFornecedorByID(int id) {
+        int i = 0;
+        while (fornecedores[i] != null && fornecedores[i].getId() != id || fornecedores[i] == null) {
+            i++;
+        }
+
+        if (fornecedores[i] != null && fornecedores[i].getId() == id) {
+            return fornecedores[i];
+        }
+        return null;
     }
 
     public Fornecedor retornaFornecedorVetor(int i) {

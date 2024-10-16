@@ -1,6 +1,6 @@
 package view;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import model.ConvidadoFamilia;
 import model.ConvidadoFamiliaDAO;
@@ -18,15 +18,15 @@ public class GUI {
         StringBuilder m = new StringBuilder("");
 
         m.append(evento)
-        .append("\n\n1- Entrar como Administrador.")
-        .append("\n2- Entrar como Convidado.");
+                .append("\n\n1- Entrar como Administrador.")
+                .append("\n2- Entrar como Convidado.");
         //m.append("\n3- Informações.");
         m.append("\n\n0 - Sair.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
-    }    
+    }
 
     //LOGINS
     public Usuario login(UsuarioDAO usuariodao) {
@@ -36,7 +36,7 @@ public class GUI {
         while (usuario == null) {
             loginAtt = JOptionPane.showInputDialog("Informe seu login: ");
             senhaAtt = JOptionPane.showInputDialog("Informe sua senha: ");
-            
+
             usuario = usuariodao.retornaUsuario(loginAtt, senhaAtt);
 
             if (usuario == null) {
@@ -52,7 +52,7 @@ public class GUI {
 
         while (convitefamilia == null) {
             acesso = JOptionPane.showInputDialog("Informe o acesso do seu Convite Família: ");
-            
+
             convitefamilia = convitefamiliadao.retornaAcessoConviteFamilia(acesso);
 
             if (convitefamilia == null) {
@@ -63,19 +63,19 @@ public class GUI {
     }
 
     //MENUS
-    public int menuNoivos(Usuario usuarioLogado) {
+    public int menuNoivos(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- Menu dos Noivos -----");
         m.append("\n\n1- Crud de famílias.");
         m.append("\n2- Crud de convites individuais.");
-        m.append("\n3- Visualizar mensagens recebidas.");  
+        m.append("\n3- Visualizar mensagens recebidas.");
         m.append("\n4- Visualizar presentes.");
-        m.append("\n5- Pagamentos.");
+        m.append("\n5- Visualizar pagamentos à fornecedores.");
         m.append("\n6- Incrementar dias.");
         m.append("\n7- Relatórios.");
         m.append("\n\n0- Voltar.");
@@ -85,22 +85,22 @@ public class GUI {
         return opc;
     }
 
-    public int menuAdmin(Usuario usuarioLogado) {
+    public int menuAdmin(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- Menu do Administrador -----");
-        m.append("\n\n1- CRUD de famílias.");
-        m.append("\n2- CRUD convites individuais.");
-        m.append("\n3- CRUD usuários.");        
-        m.append("\n4- CRUD mensagens.");
-        m.append("\n5- CRUD presentes.");
-        m.append("\n6- Visualizar pagamentos.");
-        m.append("\n7- Incrementar dias.");
-        m.append("\n8- Relatórios.");
+        m.append("\n\n1- CRUD Convites Família.");
+        m.append("\n2- CRUD Convites Individuais.");
+        m.append("\n3- CRUD Usuários.");
+        m.append("\n4- CRUD Mensagens.");
+        m.append("\n5- CRUD Presentes.");
+        m.append("\n6- CRUD Fornecedores.");
+        m.append("\n7- CRUD Calendário.");
+        m.append("\n8- CRUD Relatórios.");
         m.append("\n\n0- Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
@@ -108,12 +108,12 @@ public class GUI {
         return opc;
     }
 
-    public int menuCerimonial(Usuario usuarioLogado) {
+    public int menuCerimonial(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- Menu do Cerimonial -----");
         m.append("\n\n1- Ver Convites Família.");
@@ -131,7 +131,7 @@ public class GUI {
         int opc;
 
         StringBuilder m = new StringBuilder();
-        
+
         m.append("----- Menu de Convidados -----");
         m.append("\n\n1- Enviar mensagem para os noivos.");
         m.append("\n2- Comprar presentes para os noivos.");
@@ -144,15 +144,17 @@ public class GUI {
     }
 
     //CRUDS
-    public int crudConvFamilia(Usuario usuarioLogado) {
+    public int crudConvFamilia(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
+        m.append(headerAdmin(usuarioLogado, calendario));
+
         m.append("----- Menu de Convites Famílias -----");
-        m.append("\n\n1- Gerar Convite Família.");        
+        m.append("\n\n1- Gerar Convite Família.");
         m.append("\n2- Gerar novos codigos de acesso para Convites Família.");
-        m.append("\n3- Adicionar pessoas em Convites Família.");        
+        m.append("\n3- Adicionar pessoas em Convites Família.");
         m.append("\n4- Excluir pessoas em Convites Família.");
         m.append("\n5- Editar Convites Família.");
         m.append("\n6- Exibir Convites Família.");
@@ -164,12 +166,12 @@ public class GUI {
         return opc;
     }
 
-    public int crudConvIndividual(Usuario usuarioLogado) {
+    public int crudConvIndividual(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
-        
-        m.append(headerAdmin(usuarioLogado));
+
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- Menu de Convidados Individuais -----");
         m.append("\n\n1- Gerar convites.");
@@ -183,12 +185,12 @@ public class GUI {
         return opc;
     }
 
-    public int crudUsuario(Usuario usuarioLogado) {
+    public int crudUsuario(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
-        
-        m.append(headerAdmin(usuarioLogado));
+
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- CRUD Usuários -----");
         m.append("\n\n1- Cadastrar usuários.");
@@ -202,12 +204,12 @@ public class GUI {
         return opc;
     }
 
-    public int crudMensagem(Usuario usuarioLogado, Evento evento) {
+    public int crudMensagem(Usuario usuarioLogado, Evento evento, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- CRUD Mensagens -----");
         m.append("\n\n1- Exibir mensagens enviadas aos noivos.");
@@ -233,55 +235,54 @@ public class GUI {
 
         return opc;
     }
-    */
-
-    public int crudPresentesNoivos(Usuario usuarioLogado) {
+     */
+    public int crudPresentesNoivos(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- Presentes -----");
         m.append("\n\n1- Ver presentes disponíveis.");
-        m.append("\n2- Ver presentes comprados.");  
+        m.append("\n2- Ver presentes comprados.");
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
     }
 
-    public int crudPresentesAdmin(Usuario usuarioLogado) {
+    public int crudPresentesAdmin(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- CRUD Presentes -----");
         m.append("\n\n1- Registrar presente.");
         m.append("\n2- Editar presentes.");
-        m.append("\n3- Exibir presentes disponíveis.");        
+        m.append("\n3- Exibir presentes disponíveis.");
         m.append("\n4- Exibir presentes comprados aos noivos.");
-        m.append("\n5- Excluir presentes.");     
+        m.append("\n5- Excluir presentes.");
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
     }
 
-    public int crudFornecedorAdmin(Usuario usuarioLogado) {
+    public int crudFornecedorAdmin(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- CRUD Fornecedores -----");
         m.append("\n\n1- Registrar fornecedor.");
         m.append("\n2- Editar fornecedores.");
-        m.append("\n3- Exibir fornecedores.");  
-        m.append("\n4- Excluir fornecedores.");     
+        m.append("\n3- Exibir fornecedores.");
+        m.append("\n4- Excluir fornecedores.");
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
@@ -300,7 +301,7 @@ public class GUI {
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
-    }    
+    }
 
     public int enviaMensagem(ConvidadoFamilia convitefamilia, Evento evento) {
         int opc;
@@ -309,23 +310,21 @@ public class GUI {
 
         m.append("----- Menu de Mensagens -----");
         m.append("\n\n1- Envie uma mensagem para ")
-            .append(evento.getPessoaNoivo().getNome())
-            .append(" e ")
-            .append(evento.getPessoaNoiva().getNome());
+                .append(evento.getPessoaNoivo().getNome())
+                .append(" e ")
+                .append(evento.getPessoaNoiva().getNome());
         m.append("\n\n0- Voltar.");
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));
 
         return opc;
     }
 
-    public int crudData(Usuario usuarioLogado, LocalDate calendario) {
+    public int crudData(Usuario usuarioLogado, LocalDateTime calendario) {
         int opc;
 
         StringBuilder m = new StringBuilder();
 
-        m.append(headerAdmin(usuarioLogado));
-
-        m.append(calendarioFormatado(calendario));
+        m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("\n\n----- Menu de Calendario -----");
         m.append("\n\n1- Adicionar dias ");
@@ -337,12 +336,31 @@ public class GUI {
         return opc;
     }
 
-    public StringBuilder headerAdmin(Usuario usuarioLogado) {
-        //Aqui aparecerá o dia do calendário.
-        StringBuilder m = new StringBuilder("-------------------------------------------------------------------");
+    public int crudRelatorios(Usuario usuarioLogado, LocalDateTime calendario) {
+        int opc;
+
+        StringBuilder m = new StringBuilder();
+
+        m.append(headerAdmin(usuarioLogado, calendario));
+
+        m.append("----- Relatórios -----");
+        m.append("\n\n1- Ver recados recebidos.");
+        m.append("\n2- Imprima um Convite Família.");
+        m.append("\n3- Imprima um Convite Individual.");
+        m.append("\n4- Exibir o total de pagamentos à fornecedores.");
+        m.append("\n5- Exibir a lista total de convidados.");
+        m.append("\n\n0- Voltar.");
+        opc = Integer.parseInt(JOptionPane.showInputDialog(m));
+
+        return opc;
+    }
+
+    public StringBuilder headerAdmin(Usuario usuarioLogado, LocalDateTime calendario) {
+        StringBuilder m = new StringBuilder("----------------------------------------------------------------------");
         m.append("\nUsuário: ").append(usuarioLogado.getPessoa().getNome());
         m.append("\nTipo: ").append(usuarioLogado.getTipo());
-        m.append("\n-------------------------------------------------------------------\n\n");
+        m.append(String.format("%60s",calendarioFormatado(calendario)));
+        m.append("\n----------------------------------------------------------------------\n\n");
 
         return m;
     }
@@ -356,13 +374,13 @@ public class GUI {
         return m;
     }
 
-    public String calendarioFormatado(LocalDate calendario){        
+    public String calendarioFormatado(LocalDateTime calendario) {
         String alteraDia = "";
-        if (calendario.getDayOfMonth() < 10){
+        if (calendario.getDayOfMonth() < 10) {
             alteraDia += "0";
         }
         alteraDia += calendario.getDayOfMonth() + "/";
-        if (calendario.getMonthValue() < 10){
+        if (calendario.getMonthValue() < 10) {
             alteraDia += "0";
         }
         alteraDia += calendario.getMonthValue() + "/" + calendario.getYear();

@@ -1,47 +1,39 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Evento {
-    private int id;
-    private LocalDate data;
+    private long id;
+    private String data;
     private Cerimonial cerimonial;
     private Igreja igreja;
     private Cartorio cartorio;
     private Pessoa pessoaNoivo;
     private Pessoa pessoaNoiva;
-    private LocalDate dataCriacao;
-    private LocalDate dataModificacao;
+    private String dataCriacao;
+    private String dataModificacao;
+    private static long incrementaId = 0;
 
     //GETTERS E SETTERS
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
     public String getData() {
-        String alteraDia = "";
-        if (this.data.getDayOfMonth() < 10) {
-            alteraDia += "0";
-        }
-        alteraDia += this.data.getDayOfMonth() + "/";
-        if (this.data.getMonthValue() < 10) {
-            alteraDia += "0";
-        }
-        alteraDia += this.data.getMonthValue() + "/" + this.data.getYear();
-        return alteraDia;
+        return this.data;
     }
 
     public void setData(String data) {        
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         if(data == null){
-        this.data = LocalDate.now();
-        }else{
-            this.data = LocalDate.parse(data, dtf);
+        this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        } else {
+            this.data = data;
         }
     }
 
@@ -86,42 +78,85 @@ public class Evento {
     }
       
     public String getDataCriacao() {
-        String alteraDia = "";
-        if (this.dataCriacao.getDayOfMonth() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
-        if (this.dataCriacao.getMonthValue() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
-        return alteraDia;
+        return this.dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = LocalDate.now();
-        this.dataModificacao = LocalDate.now();
+    public void setDataCriacao(LocalDateTime calendario) {
+        String concatenaDataHorario = "";
+
+        if (calendario != null) {
+            if (calendario.getDayOfMonth() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getDayOfMonth() + "/";
+
+            if (calendario.getMonthValue() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getMonthValue() + "/";
+
+            concatenaDataHorario += calendario.getYear() + " ";
+
+            LocalDateTime horarioAtualizado = calendario.with(LocalTime.now());
+
+            if (horarioAtualizado.getHour() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getHour() + ":";
+
+            if (horarioAtualizado.getMinute() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getMinute() + ":";
+
+            if (horarioAtualizado.getSecond() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getSecond();
+        }        
+        this.dataCriacao = concatenaDataHorario;
+        this.id = ++Evento.incrementaId;
     }
 
     public String getDataModificacao() {
-        String alteraDia = "";
-        if (this.dataModificacao == null) {
-
-        } else {
-            if (this.dataModificacao.getDayOfMonth() < 10) {
-                alteraDia += "0";
-            }
-            alteraDia += this.dataModificacao.getDayOfMonth() + "/";
-            if (this.dataModificacao.getMonthValue() < 10) {
-                alteraDia += "0";
-            }
-            alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
-        }
-        return alteraDia;
+        return this.dataModificacao;
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
-        this.dataModificacao = LocalDate.now();
+    public void setDataModificacao(LocalDateTime calendario) {
+        String concatenaDataHorario = "";
+
+        if (calendario != null) {
+            if (calendario.getDayOfMonth() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getDayOfMonth() + "/";
+
+            if (calendario.getMonthValue() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getMonthValue() + "/";
+
+            concatenaDataHorario += calendario.getYear() + " ";
+
+            LocalDateTime horarioAtualizado = calendario.with(LocalTime.now());
+
+            if (horarioAtualizado.getHour() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getHour() + ":";
+
+            if (horarioAtualizado.getMinute() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getMinute() + ":";
+
+            if (horarioAtualizado.getSecond() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getSecond();
+        }
+
+        this.dataModificacao = concatenaDataHorario;
     }
     
     @Override

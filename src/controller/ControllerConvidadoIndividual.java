@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import model.ConvidadoIndividualDAO;
 import model.Pessoa;
@@ -9,12 +10,12 @@ import view.GUI;
 
 public class ControllerConvidadoIndividual {
 
-    public void controllerCrudConvidado(GUI gui, Usuario usuarioLogado, PessoaDAO pessoadao, Pessoa pessoa, ConvidadoIndividualDAO conviteindividualdao) {
+    public void controllerCrudConvidado(GUI gui, Usuario usuarioLogado, PessoaDAO pessoadao, Pessoa pessoa, ConvidadoIndividualDAO conviteindividualdao, LocalDateTime calendario) {
         StringBuilder m;
         int menuPessoaOpc = 0;
 
         while (menuPessoaOpc != -1) {
-            menuPessoaOpc = gui.crudConvIndividual(usuarioLogado);
+            menuPessoaOpc = gui.crudConvIndividual(usuarioLogado, calendario);
             switch (menuPessoaOpc) {
                 case 1:
                     //Gerar convites
@@ -24,8 +25,8 @@ public class ControllerConvidadoIndividual {
                     String novoNascimento = JOptionPane.showInputDialog("\nInforme a data de nascimento de " + novoNome);
 
                     if (!"".equals(novoNome) || !"".equals(novoParentesco) || !"".equals(novoTelefone) || !"".equals(novoNascimento)) {
-                        pessoa = pessoadao.criarPessoa(novoNome, novoTelefone, novoNascimento);
-                        conviteindividualdao.recebePessoa(pessoa, novoParentesco);
+                        pessoa = pessoadao.criarPessoa(novoNome, novoTelefone, novoNascimento, calendario);
+                        conviteindividualdao.recebePessoa(pessoa, novoParentesco, calendario);
                         JOptionPane.showMessageDialog(null, conviteindividualdao.verConvidados());
                     } else {
                         JOptionPane.showMessageDialog(null, "Nenhum dado enviado: convite não gerado...");
@@ -38,7 +39,7 @@ public class ControllerConvidadoIndividual {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do convite da pessoa que deseja editar: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar a pessoa do convite abaixo?\n\n" + conviteindividualdao.verConvite(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar a pessoa do convite abaixo?\n\n" + conviteindividualdao.verConviteIndividualByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
                                 JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");                            
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o nome a ser atualizado: ");
@@ -47,9 +48,9 @@ public class ControllerConvidadoIndividual {
                                 String nascimentoAtt = JOptionPane.showInputDialog("\nInforme a data de nascimento a ser atualizada: ");
 
                                 if (!"".equals(nomeAtt) || !"".equals(parentescoAtt) || !"".equals(telefoneAtt) || !"".equals(nascimentoAtt)) {
-                                    m = new StringBuilder("Convite atualizado com sucesso!\n\nAntes: \n" + conviteindividualdao.verConvite(id));
-                                    conviteindividualdao.atualizaConviteIndividual(nomeAtt, telefoneAtt, nascimentoAtt, parentescoAtt, id);
-                                    m.append("\nAgora: \n").append(conviteindividualdao.verConvite(id));
+                                    m = new StringBuilder("Convite atualizado com sucesso!\n\nAntes: \n" + conviteindividualdao.verConviteIndividualByID(id));
+                                    conviteindividualdao.atualizaConviteIndividual(nomeAtt, telefoneAtt, nascimentoAtt, parentescoAtt, id, calendario);
+                                    m.append("\nAgora: \n").append(conviteindividualdao.verConviteIndividualByID(id));
                                     JOptionPane.showMessageDialog(null, m);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
@@ -78,9 +79,9 @@ public class ControllerConvidadoIndividual {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do convite a ser desfeito: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo desconvidar a pessoa do convite abaixo?\n\n" + conviteindividualdao.verConvite(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo desconvidar a pessoa do convite abaixo?\n\n" + conviteindividualdao.verConviteIndividualByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Convite desfeito com sucesso!\n\n" + conviteindividualdao.verConvite(id));
+                                JOptionPane.showMessageDialog(null, "Convite desfeito com sucesso!\n\n" + conviteindividualdao.verConviteIndividualByID(id));
                                 conviteindividualdao.desfazerConviteIndividual(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");

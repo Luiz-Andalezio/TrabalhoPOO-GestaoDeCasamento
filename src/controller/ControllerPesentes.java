@@ -1,5 +1,6 @@
 package controller;
 
+import java.time.LocalDateTime;
 import javax.swing.JOptionPane;
 import model.Presentes;
 import model.PresentesDAO;
@@ -8,12 +9,12 @@ import view.GUI;
 
 public class ControllerPesentes {
 
-    public void controllerCrudPresentes(GUI gui, Usuario usuarioLogado, Presentes presente, PresentesDAO presentesdao) {
+    public void controllerCrudPresentes(GUI gui, Usuario usuarioLogado, Presentes presente, PresentesDAO presentesdao, LocalDateTime calendario) {
         StringBuilder m;
         int menuPresentesOpc = 0;
 
         while (menuPresentesOpc != -1) {
-            menuPresentesOpc = gui.crudPresentesAdmin(usuarioLogado);
+            menuPresentesOpc = gui.crudPresentesAdmin(usuarioLogado, calendario);
             switch (menuPresentesOpc) {
                 case 1:
                     //Registrar presente
@@ -22,7 +23,7 @@ public class ControllerPesentes {
                     double novoValor = Integer.parseInt(JOptionPane.showInputDialog("\nInforme o valor em reais do presente: " + novoNome));
 
                     if (!"".equals(novoNome) || !"".equals(novoTipo) || !"".equals(novoValor)) {
-                        presentesdao.registrarPresente(novoNome, novoTipo, novoValor);
+                        presentesdao.registrarPresente(calendario, novoNome, novoTipo, novoValor);
                         JOptionPane.showMessageDialog(null, presentesdao.verPresentesConvidado());
                     } else {
                         JOptionPane.showMessageDialog(null, "Nenhum dado enviado: presente não registrado...");
@@ -35,7 +36,7 @@ public class ControllerPesentes {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do presente que deseja editar: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o presente abaixo?\n\n" + presentesdao.verPresentesConvidado(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o presente abaixo?\n\n" + presentesdao.retornaPresenteByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
                                 JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado: ");
@@ -43,9 +44,9 @@ public class ControllerPesentes {
                                 double valorAtt = Integer.parseInt(JOptionPane.showInputDialog("\nInforme o novo valor em reais a ser atualizado: "));
 
                                 if (!"".equals(nomeAtt) || !"".equals(tipoAtt)) {
-                                    m = new StringBuilder("Presente atualizado com sucesso!\n\nAntes: \n" + presentesdao.verPresentesConvidado(id));
-                                    presentesdao.atualizaPresente(nomeAtt, tipoAtt, valorAtt, id);
-                                    m.append("\nAgora: \n").append(presentesdao.verPresentesConvidado(id));
+                                    m = new StringBuilder("Presente atualizado com sucesso!\n\nAntes: \n" + presentesdao.retornaPresenteByID(id));
+                                    presentesdao.atualizaPresente(calendario, nomeAtt, tipoAtt, valorAtt, id);
+                                    m.append("\nAgora: \n").append(presentesdao.retornaPresenteByID(id));
                                     JOptionPane.showMessageDialog(null, m);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
@@ -61,7 +62,7 @@ public class ControllerPesentes {
 
                 case 3:
                     //Exibir presentes disponíveis
-                    s = presentesdao.verPresentesConvidado();
+                    s = presentesdao.verPresentesAdmin(usuarioLogado);
                     if ("".equals(s)) {
                         s = "Ainda não há presentes cadastrados.";
                     }
@@ -84,9 +85,9 @@ public class ControllerPesentes {
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do presente a ser desfeito: \n\n0- Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este presente abaixo?\n\n" + presentesdao.verPresentesConvidado(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este presente abaixo?\n\n" + presentesdao.retornaPresenteByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Presente excluido com sucesso!\n\n" + presentesdao.verPresentesConvidado(id));
+                                JOptionPane.showMessageDialog(null, "Presente excluido com sucesso!\n\n" + presentesdao.retornaPresenteByID(id));
                                 presentesdao.excluirPresente(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");
@@ -109,11 +110,11 @@ public class ControllerPesentes {
         }
     }
 
-    public void controllerVerPresentes(GUI gui, Usuario usuarioLogado, PresentesDAO presentesdao) {
+    public void controllerVerPresentes(GUI gui, Usuario usuarioLogado, PresentesDAO presentesdao, LocalDateTime calendario) {
         int menuPresentesOpc = 0;
 
         while (menuPresentesOpc != -1) {
-            menuPresentesOpc = gui.crudPresentesNoivos(usuarioLogado);
+            menuPresentesOpc = gui.crudPresentesNoivos(usuarioLogado, calendario);
             switch (menuPresentesOpc) {
                 case 1:
                     String s = presentesdao.verPresentesAdmin(usuarioLogado);
@@ -136,7 +137,7 @@ public class ControllerPesentes {
         }
     }
 
-    public void controllerDarPresentes(GUI gui, PresentesDAO presentesdao) {
+    public void controllerDarPresentes(GUI gui, PresentesDAO presentesdao, LocalDateTime calendario) {
         int menuDarPresentes = 0;
 
         while (menuDarPresentes != -1) {
@@ -150,7 +151,7 @@ public class ControllerPesentes {
                     if (verifica == true) {
                         JOptionPane.showMessageDialog(null, "Presente já comprado! Escolha outro.");
                     } else {
-                        int veredito = JOptionPane.showConfirmDialog(null, "Deseja iniciar a compra do presente abaixo?\n\n" + presentesdao.verPresentesConvidado(id), "Confirmar Compra", JOptionPane.YES_NO_OPTION);
+                        int veredito = JOptionPane.showConfirmDialog(null, "Deseja iniciar a compra do presente abaixo?\n\n" + presentesdao.retornaPresenteByID(id), "Confirmar Compra", JOptionPane.YES_NO_OPTION);
 
                         if (veredito == JOptionPane.YES_OPTION) {
                             String nomeComprador = JOptionPane.showInputDialog("Insira o seu nome completo: ");
@@ -158,9 +159,9 @@ public class ControllerPesentes {
                             String numeroCartao = JOptionPane.showInputDialog("Insira o número informado no seu cartão de crédito: ");
                             String dataVencimento = JOptionPane.showInputDialog("Insira a data de vencimento informada no seu cartão de crédito (formato MM/YY): ");
                             String cvv = JOptionPane.showInputDialog("Insira o CVV informado no seu cartão de crédito: ");
-                            presentesdao.compraPresente(nomeComprador, id);
+                            presentesdao.compraPresente(calendario, nomeComprador, id);
 
-                            veredito = JOptionPane.showConfirmDialog(null, "Deseja finalizar a compra do presente abaixo?\n\n" + presentesdao.verPresentesConvidado(id), "Confirmar Compra", JOptionPane.YES_NO_OPTION);
+                            veredito = JOptionPane.showConfirmDialog(null, "Deseja finalizar a compra do presente abaixo?\n\n" + presentesdao.retornaPresenteByID(id), "Confirmar Compra", JOptionPane.YES_NO_OPTION);
 
                             if (veredito == JOptionPane.YES_OPTION) {
                                 JOptionPane.showMessageDialog(null, "Compra finalizada!");

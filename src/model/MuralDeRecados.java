@@ -1,20 +1,21 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class MuralDeRecados {
-    private int id;
+    private long id;
     private Pessoa pessoa;
     private String comentario;
-    private LocalDate dataCriacao;
-    private LocalDate dataModificacao;
-    
-    //GETTERS E SETTERS
-    public int getId() {
+    private String dataCriacao;
+    private String dataModificacao;
+    private static long incrementaId = 0;
+
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -35,41 +36,84 @@ public class MuralDeRecados {
     }
         
     public String getDataCriacao() {
-        String alteraDia = "";
-        if (this.dataCriacao.getDayOfMonth() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataCriacao.getDayOfMonth() + "/";
-        if (this.dataCriacao.getMonthValue() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.dataCriacao.getMonthValue() + "/" + this.dataCriacao.getYear();
-        return alteraDia;
+        return this.dataCriacao;
     }
 
-    public void setDataCriacao(LocalDate dataCriacao) {
-        this.dataCriacao = LocalDate.now();
-        this.dataModificacao = LocalDate.now();
+    public void setDataCriacao(LocalDateTime calendario) {
+        String concatenaDataHorario = "";
+
+        if (calendario != null) {
+            if (calendario.getDayOfMonth() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getDayOfMonth() + "/";
+
+            if (calendario.getMonthValue() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getMonthValue() + "/";
+
+            concatenaDataHorario += calendario.getYear() + " ";
+
+            LocalDateTime horarioAtualizado = calendario.with(LocalTime.now());
+
+            if (horarioAtualizado.getHour() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getHour() + ":";
+
+            if (horarioAtualizado.getMinute() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getMinute() + ":";
+
+            if (horarioAtualizado.getSecond() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getSecond();
+        }        
+        this.dataCriacao = concatenaDataHorario;
+        this.id = ++MuralDeRecados.incrementaId;
     }
 
     public String getDataModificacao() {
-        String alteraDia = "";
-        if (this.dataModificacao == null) {
-
-        } else {
-            if (this.dataModificacao.getDayOfMonth() < 10) {
-                alteraDia += "0";
-            }
-            alteraDia += this.dataModificacao.getDayOfMonth() + "/";
-            if (this.dataModificacao.getMonthValue() < 10) {
-                alteraDia += "0";
-            }
-            alteraDia += this.dataModificacao.getMonthValue() + "/" + this.dataModificacao.getYear();
-        }
-        return alteraDia;
+        return this.dataModificacao;
     }
 
-    public void setDataModificacao(LocalDate dataModificacao) {
-        this.dataModificacao = LocalDate.now();
-    }  
+    public void setDataModificacao(LocalDateTime calendario) {
+        String concatenaDataHorario = "";
+
+        if (calendario != null) {
+            if (calendario.getDayOfMonth() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getDayOfMonth() + "/";
+
+            if (calendario.getMonthValue() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += calendario.getMonthValue() + "/";
+
+            concatenaDataHorario += calendario.getYear() + " ";
+
+            LocalDateTime horarioAtualizado = calendario.with(LocalTime.now());
+
+            if (horarioAtualizado.getHour() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getHour() + ":";
+
+            if (horarioAtualizado.getMinute() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getMinute() + ":";
+
+            if (horarioAtualizado.getSecond() < 10) {
+                concatenaDataHorario += "0";
+            }
+            concatenaDataHorario += horarioAtualizado.getSecond();
+        }
+
+        this.dataModificacao = concatenaDataHorario;
+    }
 }

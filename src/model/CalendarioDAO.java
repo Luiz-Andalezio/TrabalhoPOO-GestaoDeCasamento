@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 public class CalendarioDAO {
 
@@ -8,17 +8,17 @@ public class CalendarioDAO {
 
     }
 
-    public LocalDate adicionaDia(LocalDate calendario, int dias) {
+    public LocalDateTime adicionaDia(LocalDateTime calendario, int dias) {
         calendario = calendario.plusDays(dias);
         return calendario;
     }
 
-    public LocalDate adicionaMeses(LocalDate calendario, int meses) {
+    public LocalDateTime adicionaMeses(LocalDateTime calendario, int meses) {
         calendario = calendario.plusMonths(meses);
         return calendario;
     }
 
-    public LocalDate adicionaAnos(LocalDate calendario, int anos) {
+    public LocalDateTime adicionaAnos(LocalDateTime calendario, int anos) {
         calendario = calendario.plusYears(anos);
         return calendario;
     }
