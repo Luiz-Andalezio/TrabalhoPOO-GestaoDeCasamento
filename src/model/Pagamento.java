@@ -6,15 +6,19 @@ import java.time.LocalTime;
 import java.util.Locale;
 
 public class Pagamento {
+
     private long id;
-    private Pessoa pessoa;
+    //private String data;
+    //private Pessoa pessoa;
     private String descricao;
     private Fornecedor fornecedor;
-    private double valor;
-    private String parcela;    
+    //private double valor;
+    private Parcela[] parcelas = new Parcela[100];
+    //private int parcela;
+    //private boolean estadoPagamento;    
     private String dataCriacao;
     private String dataModificacao;
-    private static long incrementaId = 0;   
+    private static long incrementaId = 0;
     //final assegura que essa referência não será alterada durante a execução do programa
     private static final Locale localeBR = new Locale("pt", "BR");
     private static final NumberFormat formatador = NumberFormat.getCurrencyInstance(localeBR);
@@ -28,14 +32,26 @@ public class Pagamento {
         this.id = id;
     }
 
+    /* 
+    public String getData() {
+        return this.data;
+    }
+
+    public void setData(String data) {        
+        if(data == null){
+        this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        } else {
+            this.data = data;
+        }
+    }
+
     public Pessoa getPessoa() {
         return pessoa;
     }
 
     public void setPessoa(Pessoa pessoa) {
         this.pessoa = pessoa;
-    }
-
+    }*/
     public String getDescricao() {
         return descricao;
     }
@@ -52,6 +68,7 @@ public class Pagamento {
         this.fornecedor = fornecedor;
     }
 
+    /* 
     public double getValor() {
         return valor;
     }
@@ -60,14 +77,117 @@ public class Pagamento {
         this.valor = valor;
     }
 
-    public String getParcela() {
+    public int getParcela() {
         return parcela;
     }
 
-    public void setParcela(String parcela) {
+    public void setParcela(int parcela) {
         this.parcela = parcela;
     }
-    
+
+    public boolean getEstadoPagamento() {
+        return this.estadoPagamento;
+    }
+
+    public void setEstadoPagamento(boolean estadoPagamento) {
+        this.estadoPagamento = estadoPagamento;
+    }*/
+    public Parcela getParcelaVetor(int i) {
+        return parcelas[i];
+    }
+
+    public Parcela getParcelaByID(int id) {
+        int i = 0;
+        while (parcelas[i] != null && parcelas[i].getId() != id || parcelas[i] == null) {
+            i++;
+        }
+
+        if (parcelas[i] != null && parcelas[i].getId() == id) {
+            return parcelas[i];
+        }
+        return null;
+    }
+
+    public Parcela getParcelaByNmr(int parcela) {
+        int i = 0;
+        while (parcelas[i] != null && parcelas[i].getParcela() != parcela || parcelas[i] == null) {
+            i++;
+        }
+
+        if (parcelas[i] != null && parcelas[i].getParcela() == parcela) {
+            return parcelas[i];
+        }
+        return null;
+    }
+
+    public String getParcelas() {
+        String m = "";
+        for (int i = 0; i < parcelas.length; i++) {
+            if (parcelas[i] != null) {
+                m += parcelas[i].toString() + "\n";
+            }
+        }
+        return m;
+    }
+
+    public int getQtdParcelas() {
+        int existe = 0;
+        for (int i = 0; i < parcelas.length; ++i) {
+            if (parcelas[i] != null) {
+                ++existe;
+            }
+        }
+        return existe;
+    }
+
+    public int getTamanhoVetorParcelas() {
+        int i;
+        for (i = 0; i < parcelas.length; ++i) {
+        }
+        return i;
+    }
+
+    public boolean getVetorParcelas() {
+        int existe = 0;
+        for (int i = 0; i < parcelas.length; ++i) {
+            if (parcelas[i] != null) {
+                ++existe;
+            }
+        }
+        if (existe != 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean setParcela(Parcela parcela) {
+        for (int i = 0; i < parcelas.length; i++) {
+            if (parcelas[i] == null) {
+                this.parcelas[i] = parcela;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean setParcelaByID(int id, Parcela parcela) {
+        int i = 0;
+        while (parcelas[i] != null && parcelas[i].getId() != id || parcelas[i] == null) {
+            i++;
+        }
+
+        if (parcelas[i] != null && parcelas[i].getId() == id) {
+            this.parcelas[i] = parcela;
+            return true;
+        }
+        return false;
+    }
+
+    public void setParcelasVetor(int i, Parcela parcela) {
+        this.parcelas[i] = parcela;
+    }
+
     public String getDataCriacao() {
         return this.dataCriacao;
     }
@@ -104,7 +224,7 @@ public class Pagamento {
                 concatenaDataHorario += "0";
             }
             concatenaDataHorario += horarioAtualizado.getSecond();
-        }        
+        }
         this.dataCriacao = concatenaDataHorario;
         this.id = ++Pagamento.incrementaId;
     }
@@ -149,6 +269,7 @@ public class Pagamento {
 
         this.dataModificacao = concatenaDataHorario;
     }
+
     /* 
     @Override
     public String toString() {
@@ -171,4 +292,92 @@ public class Pagamento {
         m += "\n------------------------------------------------------------------\n";
         return m;
     }*/
+    @Override
+    public String toString() {
+        String m = "";
+        m += "--------------- Pagamento de ID: " + this.id + " ---------------";
+
+        m += "\nDescrição: " + this.descricao;
+
+        if (this.fornecedor != null) {
+            m += "\n\nDados do Fornecedor:";
+            m += "\nNome: " + this.fornecedor.getNome();
+            m += "\nCnpj: " + this.fornecedor.getCnpj();
+            m += "\nTelefone: " + this.fornecedor.getTelefone();
+            m += "\nValor total: " + formatador.format(this.fornecedor.getValorAPagar());
+            m += "\nEstado: ";
+            if (this.fornecedor.getEstado() == true) {
+                m += "Todas as parcelas pagas!";
+            } else {
+                m += "Faltam parcelas à pagar.";
+            }
+
+            int existe = 0;
+            for (int i = 0; i < parcelas.length; ++i) {
+                if (parcelas[i] != null) {
+                    ++existe;
+                }
+            }
+            if (existe == 0) {
+                m += "\n\nAinda não há parcelas.\n\n";
+            }
+            if (existe == 1) {
+                for (int i = 0; i < parcelas.length; ++i) {
+                    if (parcelas[i] != null) {
+                        m += parcelas[i].toStringParcelaUnica();
+                        m += "\n";
+                    }
+                }
+            }
+            if (existe > 1) {
+                m += "\n\nParcelas:\n";
+                for (int i = 0; i < parcelas.length; ++i) {
+                    if (parcelas[i] != null) {
+                        m += parcelas[i].toString();
+                        m += "\n";
+                    }
+                }
+            }
+        } else {
+            double valorTotal = 0;
+            for (int i = 0; i < parcelas.length; ++i) {
+                if (parcelas[i] != null) {
+                    valorTotal = valorTotal + parcelas[i].getValorDaParcela();
+                }
+            }
+            m += "\nValor total: " + formatador.format(valorTotal) + "\n";
+            int existe = 0;
+            for (int i = 0; i < parcelas.length; ++i) {
+                if (parcelas[i] != null) {
+                    ++existe;
+                }
+            }
+            if (existe == 0) {
+                m += "\nAinda não há parcelas.\n\n";
+            }
+            if (existe == 1) {
+                for (int i = 0; i < parcelas.length; ++i) {
+                    if (parcelas[i] != null) {
+                        m += parcelas[i].toStringParcelaUnica();
+                        m += "\n";
+                    }
+                }
+            }
+            if (existe > 1) {
+                m += "\nParcelas:\n";
+                for (int i = 0; i < parcelas.length; ++i) {
+                    if (parcelas[i] != null) {
+                        m += parcelas[i].toString();
+                        m += "\n";
+                    }
+                }
+            }
+        }
+        m += "Registrado no dia: " + this.getDataCriacao();
+        if (this.getDataModificacao() != null) {
+            m += " e modificado no dia: " + this.getDataModificacao();
+        }
+        m += "\n------------------------------------------------------------------\n";
+        return m;
+    }
 }

@@ -18,7 +18,6 @@ public class ControllerFornecedor {
             switch (menuFornecedorOpc) {
                 case 1:
                     //Gerar fornecedor
-                    JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
                     String nome = JOptionPane.showInputDialog("Informe o nome do novo fornecedor: ");
                     String cnpj = JOptionPane.showInputDialog("\nInforme o cnpj do fornecedor: " + nome);
                     String telefone = JOptionPane.showInputDialog("\nInforme o telefone do fornecedor: " + nome);
@@ -37,14 +36,14 @@ public class ControllerFornecedor {
                     //Editar fornecedores
                     String s = fornecedordao.verFornecedores();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do fornecedor que deseja editar: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do fornecedor que deseja editar: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o fornecedor abaixo?\n\n" + fornecedordao.recebeFornecedorByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");                                
+                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado do fornecedor: " + fornecedordao.recebeFornecedorByID(id).getNome());
                                 if (!"".equals(nomeAtt)) {
-                                JOptionPane.showMessageDialog(null, "Nome atualizado parcialmente até o fim dos procedimentos.\n\nAntes: " + fornecedordao.recebeFornecedorByID(id).getNome() + "\n\nDepois: " + nomeAtt);
+                                    JOptionPane.showMessageDialog(null, "Nome atualizado parcialmente até o fim dos procedimentos.\n\nAntes: " + fornecedordao.recebeFornecedorByID(id).getNome() + "\n\nDepois: " + nomeAtt);
                                 }
                                 String cnpjAtt = JOptionPane.showInputDialog("\nInforme o novo cnpj a ser atualizado do fornecedor: " + nomeAtt);
                                 String telefoneAtt = JOptionPane.showInputDialog("\nInforme o novo telefone a ser atualizado do fornecedor: " + nomeAtt);
@@ -78,10 +77,10 @@ public class ControllerFornecedor {
                     break;
 
                 case 4:
-                    //Desfazer convites
+                    //Excluir fornecedores
                     s = fornecedordao.verFornecedores();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do fornecedor a ser excluído: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do fornecedor a ser excluído: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este fornecedor abaixo?\n\n" + fornecedordao.recebeFornecedorByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
@@ -105,15 +104,6 @@ public class ControllerFornecedor {
                     menuFornecedorOpc = -1;
                     break;
             }
-        }
-    }
-
-    public void controllerVerPagamentos(FornecedorDAO fornecedordao) {
-        String s = fornecedordao.verFornecedores();
-        if ("".equals(s)) {
-            JOptionPane.showMessageDialog(null, "Ainda não há fornecedores registrados.");
-        } else {
-            JOptionPane.showMessageDialog(null, s);
         }
     }
 }

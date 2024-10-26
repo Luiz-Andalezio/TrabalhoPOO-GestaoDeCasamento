@@ -1,6 +1,8 @@
 package model;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public class ConvidadoFamiliaDAO {
@@ -8,17 +10,16 @@ public class ConvidadoFamiliaDAO {
     ConvidadoFamilia[] convitesFamilia = new ConvidadoFamilia[100];
 
     public ConvidadoFamiliaDAO(ConvidadoIndividualDAO conviteindividualdao, Evento evento, LocalDateTime calendario) {
-        ConvidadoFamilia cf1 = new ConvidadoFamilia();
-        cf1.setNomeDaFamilia("Dantas");
-        cf1.setConvidadoIndividualVetor(0, conviteindividualdao.retornaConviteIndividualVetor(0));
-        cf1.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(2));
-        cf1.setAcesso(/*gerarAcesso(evento)*/"123");
+        ConvidadoFamilia cf1 = new ConvidadoFamilia();     
+        cf1.setNomeDaFamilia("Fornecedores");           
         cf1.setDataCriacao(calendario);
         convitesFamilia[0] = cf1;
 
         ConvidadoFamilia cf2 = new ConvidadoFamilia();
-        cf2.setNomeDaFamilia("Ribeiro");
-        cf2.setAcesso(gerarAcesso(evento, calendario));
+        cf2.setNomeDaFamilia("Dantas");
+        cf2.setAcesso(/*gerarAcesso(evento, calendario)*/"123");
+        cf2.setConvidadoIndividualVetor(0, conviteindividualdao.retornaConviteIndividualVetor(0));
+        cf2.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(2));
         cf2.setDataCriacao(calendario);
         convitesFamilia[1] = cf2;
     }
@@ -38,6 +39,65 @@ public class ConvidadoFamiliaDAO {
         return null;
     }
 
+    /*
+    =>Exiba um relatório formatado com a lista total de convidados confirmados.
+    Some o total de pessoas/pontos.
+    Esta lista pode ser usada na portaria da festa para o controle dos convidados permitidos.
+    Siga os critérios a seguir:
+    1 - Crianças até 8 anos não contam.
+    2 - Crianças de 9 a 13 anos contam como 50% do valor do adulto.
+    3 – Pessoas com 14 anos ou mais contam como adulto.
+    4 - Fornecedores contam como 50% do valor do adulto.
+     */
+    public boolean verificaListaConfirmados() {
+        int i = 0;
+        while (i < convitesFamilia.length) {
+            if (convitesFamilia[i] != null) {
+                int j = 0;
+                while (j < convitesFamilia[i].getTamanhoVetorConvidadoIndividual()) {
+                    if (convitesFamilia[i].getConvidadoIndividualVetor(j) != null && convitesFamilia[i].getConvidadoIndividualVetor(j).getConfirmacao() != false) {
+                        return true;
+                    }
+                    j++;
+                }
+            }
+            i++;
+        }
+        return false;
+    }
+
+    public int listaPontos(LocalDateTime calendario) {
+        int pontos = 0;
+
+        int i = 0;
+        while (i < convitesFamilia.length) {
+            if (convitesFamilia[i] != null) {
+                int j = 0;
+                while (j < convitesFamilia[i].getTamanhoVetorConvidadoIndividual()) {
+                    if (convitesFamilia[i].getConvidadoIndividualVetor(j) != null && convitesFamilia[i].getConvidadoIndividualVetor(j).getConfirmacao() != false) {
+                        int ponto = 10;
+                        if ("Fornecedores".equals(convitesFamilia[i].getNomeDaFamilia())) {
+                            ponto = ponto / 2;
+                        } else {
+                            DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                            int idade = Period.between(LocalDate.parse(convitesFamilia[i].getConvidadoIndividualVetor(j).getPessoa().getNascimento(), formatador), calendario.toLocalDate()).getYears();
+                            if (idade <= 8) {
+                            } else if (idade >= 9 && idade <= 13) {
+                                ponto = ponto / 2;
+                                pontos = pontos + ponto;
+                            } else if (idade >= 14) {
+                                pontos = pontos + ponto;
+                            }
+                        }
+                    }
+                    j++;
+                }
+            }
+            i++;
+        }
+        return pontos;
+    }
+
     public String atualizaAcesso(int id, Evento evento, ConvidadoFamilia conviteFamilia, LocalDateTime calendario) {
         conviteFamilia = convitesFamilia[id - 1];
         conviteFamilia.setAcesso(gerarAcesso(evento, calendario));
@@ -45,8 +105,17 @@ public class ConvidadoFamiliaDAO {
         return conviteFamilia.getAcesso();
     }
 
-    public void recebeConviteIndividual(int id, int id2, ConvidadoIndividual novoConviteIndividual) {
-        convitesFamilia[id - 1].setConvidadoIndividual(id2, novoConviteIndividual);
+    public boolean recebeConviteIndividual(int id, int id2, ConvidadoIndividual novoConviteIndividual) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
+                convitesFamilia[i].setConvidadoIndividualByID(id2, novoConviteIndividual);
+                return true;
+        }
+        return false;
     }
 
     private String gerarAcesso(Evento evento, LocalDateTime calendario) {
@@ -143,8 +212,8 @@ public class ConvidadoFamiliaDAO {
         if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
             if (registro != false) {
                 convitesFamilia[i].getConviteIndividualByID(id2).setConfirmacao(registro);
-                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao(calendario);                
-                convitesFamilia[i].setDataModificacao(calendario);                
+                convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao(calendario);
+                convitesFamilia[i].setDataModificacao(calendario);
                 return true;
             }
         }
@@ -168,7 +237,7 @@ public class ConvidadoFamiliaDAO {
         return false;
     }
 
-    public String verConvitesFamilia() {
+    public String verConvitesFamiliaEFornecedor() {
         String m = "";
         for (int i = 0; i < convitesFamilia.length; i++) {
             if (convitesFamilia[i] != null) {
@@ -178,8 +247,16 @@ public class ConvidadoFamiliaDAO {
         return m;
     }
 
-    public String verConviteFamilia(int id) {
-        return convitesFamilia[id - 1].toString();
+    public String verConvitesFamilia() {
+        String m = "";
+        for (int i = 0; i < convitesFamilia.length; i++) {
+            if (convitesFamilia[i] != null) {
+                if (!"Fornecedores".equals(convitesFamilia[i].getNomeDaFamilia())) {
+                    m += convitesFamilia[i] + "\n";
+                }
+            }
+        }
+        return m;
     }
 
     public ConvidadoFamilia retornaAcessoConviteFamilia(String acesso) {
@@ -203,7 +280,7 @@ public class ConvidadoFamiliaDAO {
         return null;
     }
 
-    public ConvidadoFamilia retornaConviteFamiliaByID(int id) {
+    public ConvidadoFamilia retornaConviteByID(int id) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
@@ -218,10 +295,10 @@ public class ConvidadoFamiliaDAO {
     public ConvidadoIndividual retornaConviteIndividualByIDifNotNull(ConvidadoFamilia conviteFamilia, int id) {
         int i = 0;
 
-        if (id == 0){
+        if (id == 0) {
             return null;
         }
-        
+
         while (convitesFamilia[i] != null && convitesFamilia[i] != conviteFamilia || convitesFamilia[i] == null) {
             i++;
         }

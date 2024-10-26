@@ -41,11 +41,11 @@ public class Pessoa {
 
     public String getNascimento() {
         String alteraDia = "";
-        if (this.nascimento.getDayOfMonth() < 10){
+        if (this.nascimento.getDayOfMonth() < 10) {
             alteraDia += "0";
         }
         alteraDia += this.nascimento.getDayOfMonth() + "/";
-        if (this.nascimento.getMonthValue() < 10){
+        if (this.nascimento.getMonthValue() < 10) {
             alteraDia += "0";
         }
         alteraDia += this.nascimento.getMonthValue() + "/" + this.nascimento.getYear();
@@ -53,11 +53,13 @@ public class Pessoa {
     }
 
     public void setNascimento(String nascimento) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        if ("".equals(nascimento)) {
-            this.nascimento = LocalDate.now();
-        } else {
-            this.nascimento = LocalDate.parse(nascimento, dtf);
+        if (nascimento != null) {
+            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            if ("".equals(nascimento)) {
+                this.nascimento = LocalDate.now();
+            } else {
+                this.nascimento = LocalDate.parse(nascimento, dtf);
+            }
         }
     }
 
@@ -97,7 +99,7 @@ public class Pessoa {
                 concatenaDataHorario += "0";
             }
             concatenaDataHorario += horarioAtualizado.getSecond();
-        }        
+        }
         this.dataCriacao = concatenaDataHorario;
         this.id = ++Pessoa.incrementaId;
     }

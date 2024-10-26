@@ -1,32 +1,32 @@
 package model;
 
 public class Igreja {
-    private int id;
     private String nome;
     private String endereço;
+    private String CEP;
 
     //GETTERS E SETTERS
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public void setNome(String nome) {
         this.nome = nome;
     }
 
-    public String getEndereço() {
-        return endereço;
+    public String getEndereco() {
+        return this.endereço;
     }
 
-    public void setEndereço(String endereço) {
+    public void setEndereco(String endereço) {
         this.endereço = endereço;
+    }
+
+    public String getCEP() {
+        return this.CEP;
+    }
+
+    public void setCEP(String CEP) {
+        this.CEP = CEP;
     }
 }

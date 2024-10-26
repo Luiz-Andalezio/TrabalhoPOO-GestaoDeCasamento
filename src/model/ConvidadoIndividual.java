@@ -38,7 +38,7 @@ public class ConvidadoIndividual {
         this.parentesco = parentesco;
     }
 
-    public boolean isConfirmacao() {
+    public boolean getConfirmacao() {
         return confirmacao;
     }
 
@@ -82,7 +82,7 @@ public class ConvidadoIndividual {
                 concatenaDataHorario += "0";
             }
             concatenaDataHorario += horarioAtualizado.getSecond();
-        }        
+        }
         this.dataCriacao = concatenaDataHorario;
         this.id = ++ConvidadoIndividual.incrementaId;
     }
@@ -132,12 +132,17 @@ public class ConvidadoIndividual {
     public String toString() {
         String m = "";
         m += "--- Convite Individual de ID " + this.id + " ---\n";
-        m += "Informações da pessoa: \n";
-        //m += "ID: " + this.pessoa.getId()+ "\n";     
+        if (this.parentesco != null) {
+            m += "Informações da pessoa: \n";
+        } else {
+            m += "Informações do(a) fornecedor(a): \n";
+        }
         m += "Nome: " + this.pessoa.getNome() + "\n";
-        m += "Parentesco: " + this.parentesco + "\n";
         m += "Telefone: " + this.pessoa.getTelefone() + "\n";
-        m += "Data de nascimento: " + this.pessoa.getNascimento() + "\n";
+        if (this.parentesco != null) {
+            m += "Parentesco: " + this.parentesco + "\n";
+            m += "Data de nascimento: " + this.pessoa.getNascimento() + "\n";
+        }
         m += "Convite feito no dia: " + this.getDataCriacao();
         if (this.getDataModificacao() != null) {
             m += " e modificado no dia: " + this.getDataModificacao();

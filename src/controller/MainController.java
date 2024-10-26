@@ -10,8 +10,13 @@ import model.Evento;
 import model.EventoDAO;
 import model.Fornecedor;
 import model.FornecedorDAO;
+import model.IgrejaDAO;
+import model.CartorioDAO;
 import model.Mensagens;
 import model.MensagensDAO;
+import model.Pagamento;
+import model.PagamentoDAO;
+import model.ParcelaDAO;
 import model.Pessoa;
 import model.PessoaDAO;
 import model.Presentes;
@@ -30,27 +35,34 @@ public class MainController {
     ControllerCalendario cc = new ControllerCalendario();
     ControllerConviteFamilia ccf = new ControllerConviteFamilia();
     ControllerConvidadoIndividual cci = new ControllerConvidadoIndividual();
-    ControllerPesentes cp = new ControllerPesentes();
+    ControllerPresentes cp = new ControllerPresentes();
     ControllerMensagens cm = new ControllerMensagens();
     ControllerUsuario cu = new ControllerUsuario();
     ControllerFornecedor cf = new ControllerFornecedor();
+    ControllerPagamento cpm = new ControllerPagamento();
     ControllerRelatorios cr = new ControllerRelatorios();
+    ControllerEvento ce = new ControllerEvento();
 
     //model
     Pessoa pessoa = new Pessoa();
     PessoaDAO pessoadao = new PessoaDAO(calendario);
     UsuarioDAO usuariodao = new UsuarioDAO(pessoadao, calendario);
     Usuario usuarioLogado = null;
-    EventoDAO eventodao = new EventoDAO(pessoadao, calendario);
+    IgrejaDAO igrejadao = new IgrejaDAO();
+    CartorioDAO cartoriodao = new CartorioDAO();
+    EventoDAO eventodao = new EventoDAO(pessoadao, igrejadao, cartoriodao, calendario);
     Evento evento = eventodao.retornaEvento();
     Fornecedor fornecedor = new Fornecedor();
     FornecedorDAO fornecedordao = new FornecedorDAO(calendario);
+    ParcelaDAO parceladao = new ParcelaDAO(pessoadao, fornecedordao, calendario);
+    Pagamento pagamento = new Pagamento();
+    PagamentoDAO pagamentodao = new PagamentoDAO(pessoadao, fornecedordao, parceladao, calendario);
     Mensagens mensagens = new Mensagens();
     MensagensDAO mensagensdao = new MensagensDAO(calendario);
     Presentes presentes = new Presentes();
     PresentesDAO presentesdao = new PresentesDAO(calendario);
     ConvidadoIndividual conviteindividual = new ConvidadoIndividual();
-    ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao, calendario);    
+    ConvidadoIndividualDAO conviteindividualdao = new ConvidadoIndividualDAO(pessoadao, calendario);
     ConvidadoFamilia convitefamilia = new ConvidadoFamilia();
     ConvidadoFamiliaDAO convitefamiliadao = new ConvidadoFamiliaDAO(conviteindividualdao, evento, calendario);
 
@@ -66,27 +78,29 @@ public class MainController {
             mainOpc = gui.menuBoasVindas(evento);
 
             switch (mainOpc) {
+                //Entrar como Administrador
                 case 1:
                     usuarioLogado = gui.login(usuariodao);
 
                     int opc = 0;
                     while (opc != -1) {
+                        //Login Noiva
                         if (usuarioLogado.getTipo().equals("Noivo") || usuarioLogado.getTipo().equals("Noiva")) {
                             opc = gui.menuNoivos(usuarioLogado, calendario);
                             switch (opc) {
                                 case 1:
+                                    //ce = Controller Evento
+                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, igrejadao, cartoriodao, calendario);
+                                    break;
+
+                                case 2:
                                     //ccf = Controller Convite Familia
                                     ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao, calendario);
                                     break;
 
-                                case 2:
+                                case 3:
                                     //cci = Controller Convidado Individual
                                     cci.controllerCrudConvidado(gui, usuarioLogado, pessoadao, pessoa, conviteindividualdao, calendario);
-                                    break;
-
-                                case 3:
-                                    //cm = Controller Mensagens
-                                    cm.controllerVerMensagens(mensagensdao);
                                     break;
 
                                 case 4:
@@ -95,18 +109,23 @@ public class MainController {
                                     break;
 
                                 case 5:
-                                    //cf = Controller Fornecedor
-                                    cf.controllerVerPagamentos(fornecedordao);
+                                    //cm = Controller Mensagens
+                                    cm.controllerVerMensagens(mensagensdao);
                                     break;
 
                                 case 6:
-                                    //cc = Controller Calendario
-                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, calendarioDAO, calendario);
+                                    //cpm = Controller Pagamentos
+                                    cpm.controllerCrudPagamentos(gui, usuarioLogado, eventodao, fornecedordao, pagamento, pagamentodao, parceladao, calendario);
                                     break;
 
                                 case 7:
+                                    //cc = Controller Calendario
+                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, fornecedordao, pagamentodao, calendarioDAO, parceladao, calendario);
+                                    break;
+
+                                case 8:
                                     //cr = Controller Relatorios
-                                    cr.controllerRelatorios(gui, usuarioLogado, fornecedordao, mensagensdao, conviteindividualdao, convitefamiliadao, calendario);
+                                    cr.controllerRelatorios(gui, usuarioLogado, fornecedordao, mensagensdao, conviteindividualdao, convitefamiliadao, pagamentodao, calendario);
                                     break;
 
                                 case 0:
@@ -119,27 +138,28 @@ public class MainController {
                                     break;
                             }
                         }
+                        //Login Administrador
                         if (usuarioLogado.getTipo().equals("Admin")) {
                             opc = gui.menuAdmin(usuarioLogado, calendario);
                             switch (opc) {
                                 case 1:
+                                    //ce = Controller Evento
+                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, igrejadao, cartoriodao, calendario);
+                                    break;
+
+                                case 2:
                                     //ccf = Controller Convite Familia
                                     ccf.controllerCrudFamilia(gui, usuarioLogado, pessoadao, pessoa, evento, conviteindividual, conviteindividualdao, convitefamilia, convitefamiliadao, calendario);
                                     break;
 
-                                case 2:
+                                case 3:
                                     //cci = Controller Convidado Individual
                                     cci.controllerCrudConvidado(gui, usuarioLogado, pessoadao, pessoa, conviteindividualdao, calendario);
                                     break;
 
-                                case 3:
+                                case 4:
                                     //cu = Controller Usuarios
                                     cu.controllerCrudUsuarios(gui, usuarioLogado, usuariodao, pessoadao, pessoa, calendario);
-                                    break;
-
-                                case 4:
-                                    //cm = Controller Mensagens
-                                    cm.controllerCrudMensagens(gui, usuarioLogado, usuariodao, pessoadao, pessoa, evento, mensagens, mensagensdao, calendario);
                                     break;
 
                                 case 5:
@@ -148,20 +168,30 @@ public class MainController {
                                     break;
 
                                 case 6:
+                                    //cm = Controller Mensagens
+                                    cm.controllerCrudMensagens(gui, usuarioLogado, usuariodao, pessoadao, pessoa, evento, mensagens, mensagensdao, calendario);
+                                    break;
+
+                                case 7:
                                     //cf = Controller Fornecedores
                                     cf.controllerCrudFornecedores(gui, usuarioLogado, fornecedor, fornecedordao, calendario);
                                     break;
 
-                                case 7:
-                                    //cc = Controller Calendario
-                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, calendarioDAO, calendario);
+                                case 8:
+                                    //cpm = Controller Pagamentos
+                                    cpm.controllerCrudPagamentos(gui, usuarioLogado, eventodao, fornecedordao, pagamento, pagamentodao, parceladao, calendario);
                                     break;
 
-                                case 8:
-                                    //cr = Controller Relatorios
-                                    cr.controllerRelatorios(gui, usuarioLogado, fornecedordao, mensagensdao, conviteindividualdao, convitefamiliadao, calendario);
+                                case 9:
+                                    //cc = Controller Calendario
+                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, fornecedordao, pagamentodao, calendarioDAO, parceladao, calendario);
                                     break;
-                                    
+
+                                case 10:
+                                    //cr = Controller Relatorios
+                                    cr.controllerRelatorios(gui, usuarioLogado, fornecedordao, mensagensdao, conviteindividualdao, convitefamiliadao, pagamentodao, calendario);
+                                    break;
+
                                 case 0:
                                     //Voltar
                                     opc = -1;
@@ -172,12 +202,13 @@ public class MainController {
                                     break;
                             }
                         }
+                        //Login Cerimonial
                         if (usuarioLogado.getTipo().equals("Cerimonial")) {
                             opc = gui.menuCerimonial(usuarioLogado, calendario);
                             switch (opc) {
                                 case 1:
                                     //Ver Convites Família
-                                    ccf.controllerVerConvitesFamilia(convitefamiliadao);
+                                    ccf.controllerVerConvitesFamiliaEFornecedor(convitefamiliadao);
                                     break;
 
                                 case 2:
@@ -185,14 +216,14 @@ public class MainController {
                                     cm.controllerEnviarMensagens(evento, mensagens, mensagensdao, calendario);
                                     break;
 
-                                case 3:                                    
+                                case 3:
                                     //cp = Controller Presentes
                                     cp.controllerDarPresentes(gui, presentesdao, calendario);
                                     break;
 
                                 case 4:
                                     //cr = Controller Relatorios
-                                    cr.controllerRelatorios(gui, usuarioLogado, fornecedordao, mensagensdao, conviteindividualdao, convitefamiliadao, calendario);
+                                    cr.controllerRelatorios(gui, usuarioLogado, fornecedordao, mensagensdao, conviteindividualdao, convitefamiliadao, pagamentodao, calendario);
                                     break;
 
                                 case 0:
@@ -209,8 +240,9 @@ public class MainController {
                     break;
 
                 case 2:
+                    //Entrar como Convidado
                     opc = 0;
-                    while (opc != -1) {                        
+                    while (opc != -1) {
                         opc = gui.menuConvidado();
                         switch (opc) {
                             case 1:
@@ -218,9 +250,9 @@ public class MainController {
                                 cm.controllerEnviarMensagens(evento, mensagens, mensagensdao, calendario);
                                 break;
 
-                            case 2:                            
+                            case 2:
                                 //cp = Controller Presentes
-                                cp.controllerDarPresentes(gui, presentesdao, calendario);                                    
+                                cp.controllerDarPresentes(gui, presentesdao, calendario);
                                 break;
 
                             case 3:
@@ -239,7 +271,14 @@ public class MainController {
                         }
                     }
                     break;
+                
+                //Informações do Evento
+                case 3:
+                    //ce = Controller Evento
+                    ce.controllerInfoEvento(eventodao);
+                    break;
 
+                //Sair
                 case 0:
                     mainOpc = -1;
                     break;

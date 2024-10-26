@@ -39,11 +39,11 @@ public class ControllerUsuario {
                     //Editar convites individuais
                     String s = usuariodao.verUsuarios();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario que deseja editar: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario que deseja editar: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
+                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado: ");
                                 String telefoneAtt = JOptionPane.showInputDialog("\nInforme o novo telefone a ser atualizado: ");
                                 String nascimentoAtt = JOptionPane.showInputDialog("\nInforme a nova data de nascimento a ser atualizada: ");
@@ -82,7 +82,7 @@ public class ControllerUsuario {
                     //Desfazer convites
                     s = usuariodao.verUsuarios();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario a ser desfeito: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario a ser desfeito: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {

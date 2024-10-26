@@ -1,19 +1,12 @@
 package model;
 
 public class Cartorio {
-    private int id;
     private String nome;
     private String endereco;
+    private String telefone;
+    private String cep;
 
     //GETTERS E SETTERS
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public String getNome() {
         return nome;
     }
@@ -28,5 +21,21 @@ public class Cartorio {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
+    }
+
+    public String getTelefone() {
+        return this.telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
+    public String getCEP() {
+        return this.cep;
+    }
+
+    public void setCep(String cep) {
+        this.cep = cep;
     }
 }

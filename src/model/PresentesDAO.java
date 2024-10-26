@@ -167,6 +167,16 @@ public class PresentesDAO {
         return m;
     }
 
+    public String verPresentesCompradosAdmin(Usuario usuarioLogado) {
+        String m = "";
+        for (int i = 0; i < presentes.length; i++) {
+            if (presentes[i] != null && presentes[i].getNomeComprador() != null) {
+                m += presentes[i].toString(usuarioLogado) + "\n";
+            }
+        }
+        return m;
+    }
+
     public String verPresentesConvidado() {
         String m = "";
         for (int i = 0; i < presentes.length; i++) {

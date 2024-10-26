@@ -14,6 +14,7 @@ public class Fornecedor {
     private double valorAPagar;
     private int parcelas;
     private boolean estado;
+    //private Pagamento[] pagamentos = new Pagamento[100];
     private String dataCriacao;
     private String dataModificacao;     
     private static long incrementaId = 0;   
@@ -68,15 +69,68 @@ public class Fornecedor {
 
     public void setParcelas(int parcelas) {
         this.parcelas = parcelas;
-    }
+    }   
 
-    public boolean isEstado() {
+    public boolean getEstado() {
         return estado;
     }
 
     public void setEstado(boolean estado) {
         this.estado = estado;
     }
+    /* 
+    public Pagamento getPagamento(int id) {
+        return pagamentos[id - 1];
+    }
+
+    public Pagamento getPagamentosVetor(int i) {
+        return pagamentos[i];
+    }
+
+    public Pagamento getPagamentoByID(int id) {
+        int i = 0;
+        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
+            i++;
+        }
+
+        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
+            return pagamentos[i];
+        }
+        return null;
+    }
+
+    public boolean getVetorPagamentos() {
+        int existe = 0;
+        for (int i = 0; i < pagamentos.length; ++i) {
+            if (pagamentos[i] != null) {
+                ++existe;
+            }
+        }
+        if (existe != 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public void setPagamento(int id, Pagamento pagamento) {
+        this.pagamentos[id - 1] = pagamento;
+    }
+
+    public void setPagamentoByID(int id, Pagamento pagamento) {
+        int i = 0;
+        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
+            i++;
+        }
+
+        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
+            this.pagamentos[i] = pagamento;
+        }
+    }
+
+    public void setPagamentosVetor(int i, Pagamento pagamento) {
+        this.pagamentos[i] = pagamento;
+    }*/
 
     public String getDataCriacao() {
         return this.dataCriacao;
@@ -163,7 +217,7 @@ public class Fornecedor {
     @Override
     public String toString() {
         String m = "";
-        m += "--------------- Fornecedor de Código: " + this.id + " ---------------";
+        m += "--------------- Fornecedor de ID: " + this.id + " ---------------";
         m += "\nFornecedor: " + this.nome;
         m += "\nCnpj: " + this.cnpj;
         m += "\nTelefone: " + this.telefone;

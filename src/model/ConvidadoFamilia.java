@@ -30,8 +30,11 @@ public class ConvidadoFamilia {
         this.nomeDaFamilia = nomeDaFamilia;
     }
 
-    public ConvidadoIndividual getConvidadoIndividual(int id) {
-        return convitesIndividuais[id - 1];
+    public int getTamanhoVetorConvidadoIndividual() {
+        int i;
+        for (i = 0; i < convitesIndividuais.length; ++i) {
+        }
+        return i;
     }
 
     public ConvidadoIndividual getConvidadoIndividualVetor(int i) {
@@ -62,10 +65,6 @@ public class ConvidadoFamilia {
         } else {
             return false;
         }
-    }
-
-    public void setConvidadoIndividual(int id, ConvidadoIndividual conviteIndividual) {
-        this.convitesIndividuais[id - 1] = conviteIndividual;
     }
 
     public void setConvidadoIndividualByID(int id, ConvidadoIndividual conviteIndividual) {
@@ -127,7 +126,7 @@ public class ConvidadoFamilia {
                 concatenaDataHorario += "0";
             }
             concatenaDataHorario += horarioAtualizado.getSecond();
-        }        
+        }
         this.dataCriacao = concatenaDataHorario;
         this.id = ++ConvidadoFamilia.incrementaId;
     }
@@ -176,9 +175,13 @@ public class ConvidadoFamilia {
     @Override
     public String toString() {
         String m = "";
-        m += "-------------- Convite Família de ID: " + this.id + " --------------\n";
-        m += "Nome da família: " + this.nomeDaFamilia + "\n";
-        m += "Codigo de confirmação: " + this.acesso + "\n\n";
+        if (!"Fornecedores".equals(this.nomeDaFamilia)) {
+            m += "------------------ Convite Família de ID: " + this.id + " ------------------\n";
+            m += "Nome da família: " + this.nomeDaFamilia + "\n";
+            m += "Codigo de confirmação: " + this.acesso + "\n\n";
+        } else {
+            m += "---------------- Convite Fornecedor de ID: " + this.id + " ----------------\n";
+        }
         int existe = 0;
         for (int i = 0; i < convitesIndividuais.length; ++i) {
             if (convitesIndividuais[i] != null) {
@@ -186,29 +189,46 @@ public class ConvidadoFamilia {
             }
         }
         if (existe == 0) {
-            m += "Não há convidados nesta família.\n";
+            if (!"Fornecedores".equals(this.nomeDaFamilia)) {
+                m += "Ainda não há convidados nesta família.";
+            } else {
+                m += "\nAinda não há fornecedores neste convite.";
+            }
         } else {
             m += "Convidados:";
             for (ConvidadoIndividual convites : convitesIndividuais) {
                 if (convites != null) {
                     m += "\nID do convite individual: " + convites.getId();
-                    m += "\nNome: " + convites.getPessoa().getNome();
-                    m += "\nTelefone: " + convites.getPessoa().getTelefone();
-                    m += "\nPresença: ";
-                    if (convites.isConfirmacao() == true) {
-                        m += "Confirmada";
+                    if (!"Fornecedores".equals(nomeDaFamilia)) {
+                        m += "\nNome: " + convites.getPessoa().getNome() + " " + this.nomeDaFamilia;
                     } else {
-                        m += "Não confirmada";
+                        m += "\nNome: " + convites.getPessoa().getNome();
                     }
-                    m += "\n";
+                    m += "\nTelefone: " + convites.getPessoa().getTelefone();
+                    if (!"Fornecedores".equals(nomeDaFamilia)) {
+                        m += "\nPresença: ";
+                        if (convites.getConfirmacao() == true) {
+                            m += "Confirmada";
+                        } else {
+                            m += "Não confirmada";
+                        }
+                    }
                 }
             }
         }
-        m += "\nConvite Família feito no dia: " + this.getDataCriacao();
+        if (!"Fornecedores".equals(nomeDaFamilia)) {
+            m += "\n\nConvite Família feito no dia: " + this.getDataCriacao();
+        } else {
+            m += "\n\nConvite Fornecedor feito no dia: " + this.getDataCriacao();
+        }
         if (this.getDataModificacao() != null) {
             m += " e modificado no dia: " + this.getDataModificacao();
         }
-        m += "\n----------------------------------------------------------------\n\n";
+        if (!"Fornecedores".equals(this.nomeDaFamilia)) {
+            m += "\n------------------------------------------------------------------------\n";
+        } else {
+            m += "\n------------------------------------------------------------------------\n";
+        }
         return m;
     }
 }

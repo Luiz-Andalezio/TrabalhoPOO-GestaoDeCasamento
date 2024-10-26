@@ -7,7 +7,7 @@ import model.PresentesDAO;
 import model.Usuario;
 import view.GUI;
 
-public class ControllerPesentes {
+public class ControllerPresentes {
 
     public void controllerCrudPresentes(GUI gui, Usuario usuarioLogado, Presentes presente, PresentesDAO presentesdao, LocalDateTime calendario) {
         StringBuilder m;
@@ -34,11 +34,11 @@ public class ControllerPesentes {
                     //Editar presentes
                     String s = presentesdao.verPresentesConvidado();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do presente que deseja editar: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do presente que deseja editar: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o presente abaixo?\n\n" + presentesdao.retornaPresenteByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione enter.");
+                                JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado: ");
                                 String tipoAtt = JOptionPane.showInputDialog("\nInforme o novo tipo de presente a ser atualizado: ");
                                 double valorAtt = Integer.parseInt(JOptionPane.showInputDialog("\nInforme o novo valor em reais a ser atualizado: "));
@@ -83,7 +83,7 @@ public class ControllerPesentes {
                     //Desfazer presentes
                     s = presentesdao.verPresentesConvidado();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do presente a ser desfeito: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do presente a ser desfeito: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este presente abaixo?\n\n" + presentesdao.retornaPresenteByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
@@ -126,12 +126,21 @@ public class ControllerPesentes {
                     break;
 
                 case 2:
-                    s = presentesdao.verPresentesComprados();
+                    s = presentesdao.verPresentesCompradosAdmin(usuarioLogado);
                     if ("".equals(s)) {
                         JOptionPane.showMessageDialog(null, "Ainda não há presentes comprados.");
                     } else {
                         JOptionPane.showMessageDialog(null, s);
                     }
+                    break;
+
+                case 0:
+                    //Voltar
+                    menuPresentesOpc = -1;
+                    break;
+
+                default:
+                    menuPresentesOpc = -1;
                     break;
             }
         }

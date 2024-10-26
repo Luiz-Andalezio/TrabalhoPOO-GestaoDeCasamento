@@ -24,7 +24,7 @@ public class ControllerMensagens {
                     /*
                     String s = mensagensdao.verMensagens();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID da mensagem a ser editada: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID da mensagem a ser editada: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar a mensagem do convite abaixo?\n\n" + mensagensdao.retornaMensagemByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
@@ -63,7 +63,7 @@ public class ControllerMensagens {
                     //Excluir mensagens
                     s = mensagensdao.verMensagens();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID da mensagem a ser excluida: \n\n0- Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID da mensagem a ser excluida: \n\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir a mensagem abaixo?\n\n" + mensagensdao.retornaMensagemByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {

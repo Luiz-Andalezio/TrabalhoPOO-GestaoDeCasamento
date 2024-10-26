@@ -1,21 +1,25 @@
 package model;
 
-import com.sun.jdi.event.ThreadStartEvent;
+import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
-public class Evento {
-    private long id;
-    private String data;
-    private Cerimonial cerimonial;
-    private Igreja igreja;
-    private Cartorio cartorio;
-    private Pessoa pessoaNoivo;
-    private Pessoa pessoaNoiva;
+public class Parcela {
+    private long id;    
+    private int parcela;
+    private LocalDate data;
+    private Pessoa pagante;
+    private double valorDaParcela;
+    private boolean estadoPagamento;    
     private String dataCriacao;
     private String dataModificacao;
-    private static long incrementaId = 0;
+    private static long incrementaId = 0;   
+    //final assegura que essa referência não será alterada durante a execução do programa
+    private static final Locale localeBR = new Locale("pt", "BR");
+    private static final NumberFormat formatador = NumberFormat.getCurrencyInstance(localeBR);
 
     //GETTERS E SETTERS
     public long getId() {
@@ -24,60 +28,71 @@ public class Evento {
 
     public void setId(long id) {
         this.id = id;
+    }    
+
+    public int getParcela() {
+        return parcela;
     }
 
+    public void setParcela(int parcela) {
+        this.parcela = parcela;
+    }
+    
     public String getData() {
-        return this.data;
+        String alteraDia = "";
+        if (this.data.getDayOfMonth() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.data.getDayOfMonth() + "/";
+        if (this.data.getMonthValue() < 10){
+            alteraDia += "0";
+        }
+        alteraDia += this.data.getMonthValue() + "/" + this.data.getYear();
+        return alteraDia;
     }
 
-    public void setData(String data) {        
-        if(data == null){
-        this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    public void setData(String data) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if ("".equals(data)) {
+            this.data = LocalDate.now();
         } else {
-            this.data = data;
+            this.data = LocalDate.parse(data, dtf);
         }
     }
 
-    public Cerimonial getCerimonial() {
-        return cerimonial;
+    public void setDataByFunction(String data) {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        if ("".equals(data)) {
+            this.data = LocalDate.now();
+        } else {
+            this.data = LocalDate.parse(data, dtf);
+        }
     }
 
-    public void setCerimonial(Cerimonial cerimonial) {
-        this.cerimonial = cerimonial;
+    public Pessoa getPagante() {
+        return pagante;
     }
 
-    public Igreja getIgreja() {
-        return igreja;
+    public void setPagante(Pessoa pessoa) {
+        this.pagante = pessoa;
     }
 
-    public void setIgreja(Igreja igreja) {
-        this.igreja = igreja;
+    public double getValorDaParcela() {
+        return valorDaParcela;
     }
 
-    public Cartorio getCartorio() {
-        return cartorio;
+    public void setValorDaParcela(double valor) {
+        this.valorDaParcela = valor;
     }
 
-    public void setCartorio(Cartorio cartorio) {
-        this.cartorio = cartorio;
+    public boolean getEstadoPagamento() {
+        return this.estadoPagamento;
     }
 
-    public Pessoa getPessoaNoivo() {
-        return pessoaNoivo;
+    public void setEstadoPagamento(boolean estadoPagamento) {
+        this.estadoPagamento = estadoPagamento;
     }
-
-    public void setPessoaNoivo(Pessoa pessoaNoivo) {
-        this.pessoaNoivo = pessoaNoivo;
-    }
-
-    public Pessoa getPessoaNoiva() {
-        return pessoaNoiva;
-    }
-
-    public void setPessoaNoiva(Pessoa pessoaNoiva) {
-        this.pessoaNoiva = pessoaNoiva;
-    }
-      
+    
     public String getDataCriacao() {
         return this.dataCriacao;
     }
@@ -116,7 +131,7 @@ public class Evento {
             concatenaDataHorario += horarioAtualizado.getSecond();
         }        
         this.dataCriacao = concatenaDataHorario;
-        this.id = ++Evento.incrementaId;
+        this.id = ++Parcela.incrementaId;
     }
 
     public String getDataModificacao() {
@@ -160,34 +175,35 @@ public class Evento {
         this.dataModificacao = concatenaDataHorario;
     }
 
-    public String eventoInfos() {
+    public String toStringParcelaUnica() {
         String m = "";
-
-        m += "-------------------------- Informações do Casamento --------------------------";
-        m += "\nNoivo: " + this.pessoaNoivo.getNome();
-        m += "\nNoiva: " + this.pessoaNoiva.getNome();
-        m += "\n\nData e Horário: " + this.getData();
-        m += "\n\n--- Informações da igreja do evento ---";
-        m += "\nNome: " + this.igreja.getNome();
-        m += "\nEndereço: " + this.igreja.getEndereco();
-        m += "\nCEP: " + this.igreja.getCEP();
-        m += "\n\n--- Informações do cartório responsável ---";
-        m += "\nNome: " + this.cartorio.getNome();
-        m += "\nEndereço: " + this.cartorio.getEndereco();
-        m += "\nCEP: " + this.cartorio.getCEP();
-        m += "\nTelefone: " + this.cartorio.getTelefone();        
-        m += "\n---------------------------------------------------------------------------------------------";
-
+        m += "Data de pagamento: " + this.getData();
+        m += "\nPagante: " + this.pagante.getNome();
+        if (this.estadoPagamento == true) {
+            m += "\nPago!\n";
+        } else {
+            m += "\nAinda não pago.\n";
+        }
         return m;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         String m = "";
-
-        m += "---------- Boas Vindas ao Casamento de " + this.pessoaNoivo.getNome() + " e " + this.pessoaNoiva.getNome() + " ----------";
-        m += "\n------------------------   Data: " + this.getData() + "   -----------------------";
-
+        m += "-- Dados da " + this.getParcela() + "° parcela: --";
+        //m += "ID: " + this.id;
+        m += "\nData de pagamento: " + this.getData();
+        m += "\nPagante: " + this.pagante.getNome();
+        m += "\nValor a pagar: " + formatador.format(this.valorDaParcela);
+        if (this.estadoPagamento == true) {
+            m += "\nPaga!\n";
+        } else {
+            m += "\nAinda não paga.\n";
+        }
+        /*m += "\nRegistrada no dia: " + this.getDataCriacao();
+        if (this.getDataModificacao() != null) {
+            m += " e modificada no dia: " + this.getDataModificacao();
+        }*/
         return m;
     }
 }

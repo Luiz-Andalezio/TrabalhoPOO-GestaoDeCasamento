@@ -1,4 +1,3 @@
-
 package model;
 
 import java.time.LocalDateTime;
@@ -36,7 +35,11 @@ public class ConvidadoIndividualDAO {
                 convidados[i] = new ConvidadoIndividual();
                 convidados[i].setPessoa(novaPessoa);
                 convidados[i].setParentesco(parentesco);
-                convidados[i].setConfirmacao(false);
+                if (parentesco != null) {
+                    convidados[i].setConfirmacao(false);
+                } else {
+                    convidados[i].setConfirmacao(true);
+                }
                 convidados[i].setDataCriacao(calendario);
                 return true;
             }
@@ -80,6 +83,26 @@ public class ConvidadoIndividualDAO {
         return m;
     }
 
+    public String verParentesConvidados() {
+        String m = "";
+        for (int i = 0; i < convidados.length; i++) {
+            if (convidados[i] != null && convidados[i].getParentesco() != null) {
+                m += convidados[i].toString() + "\n";
+            }
+        }
+        return m;
+    }
+
+    public String verFornecedoresConvidados() {
+        String m = "";
+        for (int i = 0; i < convidados.length; i++) {
+            if (convidados[i] != null && convidados[i].getParentesco() == null) {
+                m += convidados[i].toString() + "\n";
+            }
+        }
+        return m;
+    }
+
     public void desfazerConviteIndividual(int id) {
         int i = 0;
         while (convidados[i] != null && convidados[i].getId() != id || convidados[i] == null) {
@@ -102,8 +125,8 @@ public class ConvidadoIndividualDAO {
         }
         return null;
     }
-    
-    public ConvidadoIndividual verConviteIndividualByID(int id) {
+
+    public ConvidadoIndividual retornaConviteIndividualByID(int id) {
         int i = 0;
         while (convidados[i] != null && convidados[i].getId() != id || convidados[i] == null) {
             i++;
