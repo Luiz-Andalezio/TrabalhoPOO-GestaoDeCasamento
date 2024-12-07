@@ -45,14 +45,14 @@ public class PessoaDAO {
         Pessoa p6 = new Pessoa();
         p6.setNome("Ana");
         p6.setTelefone("+55 (71) ####-####");
-        p6.setNascimento("22/09/2005");
+        p6.setNascimento("22/09/2013");
         p6.setDataCriacao(calendario);
         pessoas[5] = p6;
 
         Pessoa p7 = new Pessoa();
         p7.setNome("Dario");
         p7.setTelefone("+55 (21) ####-####");
-        p7.setNascimento("13/06/1966");
+        p7.setNascimento("13/06/1992");
         p7.setDataCriacao(calendario);
         pessoas[6] = p7;
 
@@ -124,13 +124,13 @@ public class PessoaDAO {
         return false;
     }
 
-    public void excluirPessoa(int id) {
+    public void excluirPessoa(Pessoa pessoa) {
         int i = 0;
-        while (pessoas[i] != null && pessoas[i].getId() != id || pessoas[i] == null) {
+        while (pessoas[i] != null && pessoas[i] != pessoa || pessoas[i] == null) {
             i++;
         }
 
-        if (pessoas[i] != null && pessoas[i].getId() == id) {
+        if (pessoas[i] != null && pessoas[i] == pessoa) {
             pessoas[i] = null;
         }
     }
@@ -168,10 +168,6 @@ public class PessoaDAO {
             }
         }
         return m;
-    }
-
-    public Pessoa verPessoa(int id) {
-        return pessoas[id - 1];
     }
 
     public Pessoa retornaPessoa(int i) {

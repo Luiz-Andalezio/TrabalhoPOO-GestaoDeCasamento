@@ -39,7 +39,7 @@ public class ControllerUsuario {
                     //Editar convites individuais
                     String s = usuariodao.verUsuarios();
                     if (!"".equals(s)) {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario que deseja editar: \n\n0 - Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog("Informe o ID do usuario abaixo que deseja editar: \n\n" + s + "\n0 - Voltar"));
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
@@ -86,7 +86,8 @@ public class ControllerUsuario {
                         if (id != 0) {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!\n\n" + usuariodao.retornaUsuarioByID(id));
+                                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!\n\n" + usuariodao.retornaUsuarioByID(id));                                
+                                pessoadao.excluirPessoa(usuariodao.retornaUsuarioByID(id).getPessoa());
                                 usuariodao.excluirUsuario(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");

@@ -117,6 +117,7 @@ public class ControllerConvidadoIndividual {
                             int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo desconvidar a pessoa do convite abaixo?\n\n" + conviteindividualdao.retornaConviteIndividualByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
                                 JOptionPane.showMessageDialog(null, "Convite desfeito com sucesso!\n\n" + conviteindividualdao.retornaConviteIndividualByID(id));
+                                pessoadao.excluirPessoa(conviteindividualdao.retornaConviteIndividualByID(id).getPessoa());
                                 conviteindividualdao.desfazerConviteIndividual(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");

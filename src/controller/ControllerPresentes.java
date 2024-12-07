@@ -110,7 +110,7 @@ public class ControllerPresentes {
         }
     }
 
-    public void controllerVerPresentes(GUI gui, Usuario usuarioLogado, PresentesDAO presentesdao, LocalDateTime calendario) {
+    public void controllerVerPresentesNoivos(GUI gui, Usuario usuarioLogado, PresentesDAO presentesdao, LocalDateTime calendario) {
         int menuPresentesOpc = 0;
 
         while (menuPresentesOpc != -1) {

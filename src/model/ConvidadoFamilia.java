@@ -208,16 +208,16 @@ public class ConvidadoFamilia {
                     if (!"Fornecedores".equals(nomeDaFamilia)) {
                         m += "\nPresença: ";
                         if (convites.getConfirmacao() == true) {
-                            m += "Confirmada";
+                            m += "Confirmada\n";
                         } else {
-                            m += "Não confirmada";
+                            m += "Não confirmada\n";
                         }
                     }
                 }
             }
         }
         if (!"Fornecedores".equals(nomeDaFamilia)) {
-            m += "\n\nConvite Família feito no dia: " + this.getDataCriacao();
+            m += "\nConvite Família feito no dia: " + this.getDataCriacao();
         } else {
             m += "\n\nConvite Fornecedor feito no dia: " + this.getDataCriacao();
         }

@@ -4,15 +4,16 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import javax.swing.JOptionPane;
+import model.CartorioDAO;
+import model.CerimonialDAO;
 import model.EventoDAO;
 import model.IgrejaDAO;
-import model.CartorioDAO;
 import model.Usuario;
 import view.GUI;
 
 public class ControllerEvento {
 
-    public void controllerCrudEvento(GUI gui, Usuario usuarioLogado, EventoDAO eventodao, IgrejaDAO igrejadao, CartorioDAO cartoriodao, LocalDateTime calendario) {
+    public void controllerCrudEvento(GUI gui, Usuario usuarioLogado, EventoDAO eventodao, CerimonialDAO cerimonialdao, IgrejaDAO igrejadao, CartorioDAO cartoriodao, LocalDateTime calendario) {
         StringBuilder m;
         int menuEventoOpc = 0;
 
@@ -20,8 +21,7 @@ public class ControllerEvento {
             menuEventoOpc = gui.crudEvento(usuarioLogado, calendario);
             switch (menuEventoOpc) {
                 case 1:
-                    //Editar nome dos noivos
-                    JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
+                    //Alterar nome dos noivos
                     String novoNomeNoivo = JOptionPane.showInputDialog("Informe o novo nome do noivo: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
                     String novoNomeNoiva = JOptionPane.showInputDialog("Informe o novo nome da noiva: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
                     if (!"".equals(novoNomeNoivo) || !"".equals(novoNomeNoiva)) {
@@ -40,7 +40,7 @@ public class ControllerEvento {
                     break;
 
                 case 2:
-                    //Editar data e horario do evento
+                    //Alterar data e horario do evento
                     JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
 
                     String dataAtt = JOptionPane.showInputDialog("\nInforme a nova data e horario do evento (##/##/#### ##:##): ");
@@ -60,7 +60,97 @@ public class ControllerEvento {
                     break;
 
                 case 3:
-                    //Editar Igreja
+                    int menuCerimonialOpc = 0;
+
+                    while (menuCerimonialOpc != -1) {
+                        menuCerimonialOpc = gui.crudCerimonial(usuarioLogado, calendario);
+                        switch (menuCerimonialOpc) {
+                            case 1:
+                                //Registrar Cerimonial
+                                novoNomeNoivo = JOptionPane.showInputDialog("Informe o novo nome do noivo: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                novoNomeNoiva = JOptionPane.showInputDialog("Informe o novo nome da noiva: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                if (!"".equals(novoNomeNoivo) || !"".equals(novoNomeNoiva)) {
+                                    if (!"".equals(novoNomeNoivo) && !"".equals(novoNomeNoiva)) {
+                                        JOptionPane.showMessageDialog(null, "Nomes atualizados com sucesso!\n\nNovo nome do noivo: " + novoNomeNoivo + "\nNovo nome da noiva: " + novoNomeNoiva);
+                                    } else if (!"".equals(novoNomeNoivo)) {
+                                        eventodao.atualizaNomeNoivo(novoNomeNoivo, calendario);
+                                        JOptionPane.showMessageDialog(null, "Nome do noivo atualizado com sucesso!");
+                                    } else if (!"".equals(novoNomeNoiva)) {
+                                        eventodao.atualizaNomeNoiva(novoNomeNoiva, calendario);
+                                        JOptionPane.showMessageDialog(null, "Nome da noiva atualizado com sucesso!");
+                                    } else {
+                                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                                    }
+                                }
+                                break;
+
+                            case 2:
+                                //Editar Cerimonial
+                                String s = cerimonialdao.verCerimoniaisAdmin();
+                                if ("".equals(s)) {
+                                    JOptionPane.showMessageDialog(null, "Ainda não há cerimoniais registrados.");
+                                } else {
+                                    int id = Integer.parseInt(JOptionPane.showInputDialog("Informe o ID do cerimonial a ser atualizado: \n" + s + "\n0 - Voltar"));
+                                    if (id != 0) {
+                                        int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o cerimonial abaixo?\n\n" + cerimonialdao.retornaCerimonialByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+                                        if (veredito == JOptionPane.YES_OPTION) {
+                                            JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
+                                            String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome do cerimonial abaixo:\n\n)" + cerimonialdao.retornaCerimonialByID(id) + "\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                            String funcaoAtt = JOptionPane.showInputDialog("Informe a nova função do cerimonial abaixo:\n\n)" + cerimonialdao.retornaCerimonialByID(id) + "\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                            if (!"".equals(nomeAtt) || !"".equals(funcaoAtt)) {
+                                                cerimonialdao.atualizaCerimonial(id, nomeAtt, funcaoAtt, calendario);
+                                                JOptionPane.showMessageDialog(null, "Igreja atualizada com sucesso!");
+                                            } else {
+                                                JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Edição não sucedida...");
+                                        }
+                                    }
+                                }
+                                break;
+
+                            case 3:
+                                //Exibir Cerimoniais
+                                s = cerimonialdao.verCerimoniaisAdmin();
+                                if ("".equals(s)) {
+                                    s = "Ainda não há cerimoniais registrados.";
+                                }
+                                JOptionPane.showMessageDialog(null, s);
+                                break;
+
+                            case 4:
+                                //Excluir Cerimoniais
+                                s = cerimonialdao.verCerimoniaisAdmin();
+                                if (!"".equals(s)) {
+                                    int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do cerimonial a ser desfeito: \n\n0 - Voltar"));
+                                    if (id != 0) {
+                                        int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este cerimonial abaixo?\n\n" + cerimonialdao.retornaCerimonialByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                                        if (veredito == JOptionPane.YES_OPTION) {
+                                            JOptionPane.showMessageDialog(null, "Cerimonial excluido com sucesso!\n\n" + cerimonialdao.retornaCerimonialByID(id));
+                                            cerimonialdao.excluirCerimonial(id);
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");
+                                        }
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Ainda não há cerimoniais registrados.");
+                                }
+                                break;
+
+                            case 0:
+                                //Voltar
+                                menuCerimonialOpc = -1;
+                                break;
+
+                            default:
+                                menuCerimonialOpc = -1;
+                                break;
+                        }
+                    }
+
+                case 4:
+                    //Alterar Igreja
                     JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
                     String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome da igreja: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
                     String enderecoAtt = JOptionPane.showInputDialog("Informe o novo endereço da igreja: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
@@ -73,8 +163,8 @@ public class ControllerEvento {
                     }
                     break;
 
-                case 4:
-                    //Editar Cartório
+                case 5:
+                    //Alterar Cartório
                     JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
                     nomeAtt = JOptionPane.showInputDialog("Informe o novo nome do cartório: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
                     enderecoAtt = JOptionPane.showInputDialog("Informe o novo endereço do cartório: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");

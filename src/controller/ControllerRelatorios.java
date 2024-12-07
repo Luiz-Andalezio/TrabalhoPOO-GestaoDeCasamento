@@ -1,7 +1,10 @@
 package controller;
 
 import java.text.NumberFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 import javax.swing.JOptionPane;
 import model.ConvidadoFamiliaDAO;
@@ -105,10 +108,54 @@ public class ControllerRelatorios {
                     3 – Pessoas com 14 anos ou mais contam como adulto.
                     4 - Fornecedores contam como 50% do valor do adulto.
                      */
+
                     s = convidadoFamiliaDAO.verConvitesFamiliaEFornecedor();
                     if (!"".equals(s)) {
                         if (convidadoFamiliaDAO.verificaListaConfirmados() != false) {
-                            JOptionPane.showMessageDialog(null, "Pontuação total de convidados: " + convidadoFamiliaDAO.listaPontos(calendario) + "\n\n" + convidadoFamiliaDAO.verConvitesFamiliaEFornecedor());
+                            int i = 0;
+                            String lista = "------------------ LISTA TOTAL DE CONVIDADOS CONFIRMADOS ------------------";
+                            lista += "\nPontuação total de convidados: " + convidadoFamiliaDAO.listaPontosTotais(calendario) + "\n\n";
+                            while (i < convidadoFamiliaDAO.retornaTamanhoVetorConvidadoFamilia()) {
+                                if (convidadoFamiliaDAO.retornaConviteFamiliaVetor(i) != null) {
+                                    int j = 0;
+                                    while (j < convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getTamanhoVetorConvidadoIndividual()) {
+                                        if (convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j) != null && convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getConfirmacao() != false) {                                            
+                                            int ponto = 10;
+                                            if ("Fornecedores".equals(convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getNomeDaFamilia())) {
+                                                ponto = ponto / 2;
+                                                lista += " - Fornecedor";                                                
+                                                lista += "\nNome: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getPessoa().getNome();
+                                                lista += "\nPeso de pontuação: " + ponto + "\n\n";
+                                            } else {
+                                                DateTimeFormatter formatador = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+                                                int idade = Period.between(LocalDate.parse(convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getPessoa().getNascimento(), formatador), calendario.toLocalDate()).getYears();
+                                                if (idade <= 8) {
+                                                    ponto = 0;
+                                                    lista += "Nome: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getPessoa().getNome() + " " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getNomeDaFamilia();
+                                                    lista += "\nParentesco: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getParentesco();                                         
+                                                    lista += "\nIdade: " + idade; 
+                                                    lista += "\nPeso de pontuação: " + ponto + "\n\n";
+                                                } else if (idade >= 9 && idade <= 13) {
+                                                    ponto = ponto / 2;
+                                                    lista += "Nome: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getPessoa().getNome() + " " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getNomeDaFamilia();
+                                                    lista += "\nParentesco: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getParentesco();                                         
+                                                    lista += "\nIdade: " + idade; 
+                                                    lista += "\nPeso de pontuação: " + ponto + "\n\n";
+                                                } else if (idade >= 14) {
+                                                    lista += "Nome: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getPessoa().getNome() + " " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getNomeDaFamilia();
+                                                    lista += "\nParentesco: " + convidadoFamiliaDAO.retornaConviteFamiliaVetor(i).getConvidadoIndividualVetor(j).getParentesco();                                         
+                                                    lista += "\nIdade: " + idade; 
+                                                    lista += "\nPeso de pontuação: " + ponto + "\n\n";
+                                                }
+                                            }
+                                        }
+                                        j++;
+                                    }
+                                }
+                                i++;
+                            }
+                            lista += "------------------------------------------------------";
+                            JOptionPane.showMessageDialog(null, lista);
                         } else {
                             JOptionPane.showMessageDialog(null, "Ainda não há convidados confirmados.");
                         }

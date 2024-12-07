@@ -2,6 +2,8 @@ package controller;
 
 import java.time.LocalDateTime;
 import model.CalendarioDAO;
+import model.CartorioDAO;
+import model.CerimonialDAO;
 import model.ConvidadoFamilia;
 import model.ConvidadoFamiliaDAO;
 import model.ConvidadoIndividual;
@@ -11,7 +13,6 @@ import model.EventoDAO;
 import model.Fornecedor;
 import model.FornecedorDAO;
 import model.IgrejaDAO;
-import model.CartorioDAO;
 import model.Mensagens;
 import model.MensagensDAO;
 import model.Pagamento;
@@ -48,6 +49,7 @@ public class MainController {
     PessoaDAO pessoadao = new PessoaDAO(calendario);
     UsuarioDAO usuariodao = new UsuarioDAO(pessoadao, calendario);
     Usuario usuarioLogado = null;
+    CerimonialDAO cerimonialdao = new CerimonialDAO(calendario);
     IgrejaDAO igrejadao = new IgrejaDAO();
     CartorioDAO cartoriodao = new CartorioDAO();
     EventoDAO eventodao = new EventoDAO(pessoadao, igrejadao, cartoriodao, calendario);
@@ -90,7 +92,7 @@ public class MainController {
                             switch (opc) {
                                 case 1:
                                     //ce = Controller Evento
-                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, igrejadao, cartoriodao, calendario);
+                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, cerimonialdao, igrejadao, cartoriodao, calendario);
                                     break;
 
                                 case 2:
@@ -105,7 +107,7 @@ public class MainController {
 
                                 case 4:
                                     //cp = Controller Presentes
-                                    cp.controllerVerPresentes(gui, usuarioLogado, presentesdao, calendario);
+                                    cp.controllerVerPresentesNoivos(gui, usuarioLogado, presentesdao, calendario);
                                     break;
 
                                 case 5:
@@ -144,7 +146,7 @@ public class MainController {
                             switch (opc) {
                                 case 1:
                                     //ce = Controller Evento
-                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, igrejadao, cartoriodao, calendario);
+                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, cerimonialdao, igrejadao, cartoriodao, calendario);
                                     break;
 
                                 case 2:

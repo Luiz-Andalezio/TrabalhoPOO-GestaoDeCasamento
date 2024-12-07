@@ -9,15 +9,15 @@ public class ConvidadoIndividualDAO {
     public ConvidadoIndividualDAO(PessoaDAO pessoadao, LocalDateTime dataInicial) {
         ConvidadoIndividual ci1 = new ConvidadoIndividual();
         ci1.setPessoa(pessoadao.retornaPessoa(5));
-        ci1.setParentesco("Tia");
-        ci1.setConfirmacao(false);
+        ci1.setParentesco("Sobrinha");
+        ci1.setConfirmacao(true);
         ci1.setDataCriacao(dataInicial);
         convidados[0] = ci1;
 
         ConvidadoIndividual ci2 = new ConvidadoIndividual();
         ci2.setPessoa(pessoadao.retornaPessoa(6));
-        ci2.setParentesco("Avô");
-        ci2.setConfirmacao(false);
+        ci2.setParentesco("Irmão");
+        ci2.setConfirmacao(true);
         ci2.setDataCriacao(dataInicial);
         convidados[1] = ci2;
 

@@ -319,10 +319,11 @@ public class GUI {
         m.append(headerAdmin(usuarioLogado, calendario));
 
         m.append("----- CRUD Evento -----");
-        m.append("\n\n1- Editar nome dos noivos.");
-        m.append("\n2- Editar data do evento.");
-        m.append("\n3- Editar Igreja.");
-        m.append("\n4- Editar Cartório.");
+        m.append("\n\n1- Alterar nome dos noivos.");
+        m.append("\n2- Alterar data do evento.");
+        m.append("\n3- Alterar Cerimoniais.");
+        m.append("\n4- Alterar Igreja.");
+        m.append("\n5- Alterar Cartório.");
         m.append("\n\n0 - Voltar.");
 
         opc = Integer.parseInt(JOptionPane.showInputDialog(m));

@@ -19,7 +19,7 @@ public class ConvidadoFamiliaDAO {
         cf2.setNomeDaFamilia("Dantas");
         cf2.setAcesso(/*gerarAcesso(evento, calendario)*/"123");
         cf2.setConvidadoIndividualVetor(0, conviteindividualdao.retornaConviteIndividualVetor(0));
-        cf2.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(2));
+        cf2.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(1));
         cf2.setDataCriacao(calendario);
         convitesFamilia[1] = cf2;
     }
@@ -66,7 +66,7 @@ public class ConvidadoFamiliaDAO {
         return false;
     }
 
-    public int listaPontos(LocalDateTime calendario) {
+    public int listaPontosTotais(LocalDateTime calendario) {
         int pontos = 0;
 
         int i = 0;
@@ -339,5 +339,14 @@ public class ConvidadoFamiliaDAO {
             }
         }
         return null;
+    }
+
+    public ConvidadoFamilia retornaConviteFamiliaVetor(int i) {
+        return convitesFamilia[i];
+    }
+
+    public int retornaTamanhoVetorConvidadoFamilia() {
+        int i = convitesFamilia.length;
+        return i;
     }
 }
