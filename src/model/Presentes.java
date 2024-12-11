@@ -14,7 +14,7 @@ public class Presentes {
     private String nomeComprador;
     private String dataCriacao;
     private String dataModificacao;    
-    private static long incrementaId = 0;
+    //private static long incrementaId = 0;
     //final assegura que essa referência não será alterada durante a execução do programa
     private static final Locale localeBR = new Locale("pt", "BR");
     private static final NumberFormat formatador = NumberFormat.getCurrencyInstance(localeBR);
@@ -98,7 +98,7 @@ public class Presentes {
             concatenaDataHorario += horarioAtualizado.getSecond();
         }        
         this.dataCriacao = concatenaDataHorario;
-        this.id = ++Presentes.incrementaId;
+        //this.id = ++Presentes.incrementaId;
     }
 
     public String getDataModificacao() {
@@ -142,6 +142,14 @@ public class Presentes {
         this.dataModificacao = concatenaDataHorario;
     }
 
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
     //toStrings
     public String toString(Usuario usuario) {
         String m = "";
@@ -158,6 +166,7 @@ public class Presentes {
                 m += " e modificado no dia: " + this.getDataModificacao();
             }
         }
+        m += "\n\n";
         return m;
     }
 
@@ -174,6 +183,7 @@ public class Presentes {
         } else {
             m += "À venda!\n";
         }
+        m += "\n\n";
         return m;
     }
 }

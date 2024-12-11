@@ -110,12 +110,12 @@ public class ControllerConviteFamilia {
                                 if (!"Fornecedores".equals(convidadoFamiliaDAO.retornaConviteByID(id).getNomeDaFamilia())) {
                                     m = new StringBuilder("Informe o ID do Convite Individual a entrar no convite da família: ")
                                             .append(convidadoFamiliaDAO.retornaConviteByID(id).getNomeDaFamilia())
-                                            .append("\n\n-- CONVITES INDIVIDUAIS --\n\n")
+                                            .append("\n\n-- CONVITES INDIVIDUAIS DE PARENTES --\n\n")
                                             .append(conviteIndividualDAO.verParentesConvidados())
                                             .append("\n0 - Voltar");
                                 } else {
                                     m = new StringBuilder("Informe o ID do Convite Individual a entrar no Convite Fornecedor: ")
-                                            .append("\n\n-- CONVITES INDIVIDUAIS --\n\n")
+                                            .append("\n\n-- CONVITES INDIVIDUAIS DE FORNECEDORES --\n\n")
                                             .append(conviteIndividualDAO.verFornecedoresConvidados())
                                             .append("\n0 - Voltar");
                                 }
@@ -137,7 +137,7 @@ public class ControllerConviteFamilia {
                                         }
                                         if (veredito == JOptionPane.YES_OPTION) {
                                             conviteIndividual = conviteIndividualDAO.retornaConviteIndividualByID(id2);
-                                            convidadoFamiliaDAO.recebeConviteIndividual(id, id2, conviteIndividual);
+                                            convidadoFamiliaDAO.recebeConviteIndividual(id, conviteIndividual);
 
                                             if (!"Fornecedores".equals(convidadoFamiliaDAO.retornaConviteByID(id).getNomeDaFamilia())) {
                                                 m = new StringBuilder("Convite Individual de: ")
@@ -154,7 +154,7 @@ public class ControllerConviteFamilia {
                                                         .append(convidadoFamiliaDAO.retornaConviteByID(id));
                                             }
 
-                                            JOptionPane.showMessageDialog(null, m); 
+                                            JOptionPane.showMessageDialog(null, m);
                                         } else {
                                             if (!"Fornecedores".equals(convidadoFamiliaDAO.retornaConviteByID(id).getNomeDaFamilia())) {
                                                 m = new StringBuilder("Adição de pessoas no convite da família '")
@@ -185,7 +185,6 @@ public class ControllerConviteFamilia {
                     } else {
                         int continuarAtt = 0;
                         int id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família ou Convite Fornecedor a ter Convites Individuais excluídos.\n\n" + s + "\n0 - Voltar"));
-
                         if (id == 0) {
                         } else if (convidadoFamiliaDAO.retornaConviteByID(id) == null || !convidadoFamiliaDAO.retornaConviteByID(id).getVetorConvidadosIndividuais()) {
                             if (!"Fornecedores".equals(convidadoFamiliaDAO.retornaConviteByID(id).getNomeDaFamilia())) {
@@ -195,11 +194,12 @@ public class ControllerConviteFamilia {
                             }
                         } else {
                             while (continuarAtt != -1) {
-                                m = new StringBuilder("Deseja continuar para excluir convidados deste Convite Família?\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
+                                convidadoFamilia = convidadoFamiliaDAO.retornaConviteByID(id);
+                                m = new StringBuilder("Deseja continuar para excluir convidados deste Convite Família?\n\n" + convidadoFamilia);
                                 int continuar = JOptionPane.showConfirmDialog(null, m.toString(), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
 
                                 if (continuar == JOptionPane.YES_OPTION) {
-                                    int conviteID = Integer.parseInt(JOptionPane.showInputDialog("Digite o ID do Convite Individual da pessoa a ser excluída do convite abaixo:\n\n" + convidadoFamiliaDAO.retornaConviteByID(id) + "\n\n0 - Voltar"));
+                                    int conviteID = Integer.parseInt(JOptionPane.showInputDialog("Digite o ID do Convite Individual da pessoa a ser excluída do convite abaixo:\n\n" + convidadoFamilia + "\n\n0 - Voltar"));
 
                                     if (conviteID == 0) {
                                         JOptionPane.showMessageDialog(null, "Exclusão de convidados não sucedida...");
@@ -211,7 +211,7 @@ public class ControllerConviteFamilia {
 
                                         if (veredito == JOptionPane.YES_OPTION) {
                                             JOptionPane.showMessageDialog(null, "Convidado abaixo excluído com sucesso!\n\n" + conviteIndividualDAO.retornaConviteIndividualByID(conviteID));
-                                            convidadoFamiliaDAO.excluirConviteIndividualConviteFamilia(id, conviteID, calendario);
+                                            convidadoFamiliaDAO.excluirPessoaConviteFamilia(id, conviteID);
                                         } else {
                                             JOptionPane.showMessageDialog(null, "Exclusão não realizada...");
                                         }
@@ -228,13 +228,13 @@ public class ControllerConviteFamilia {
 
                 case 5:
                     //Editar Convites Família
-                    s = convidadoFamiliaDAO.verConvitesFamilia();
+                    s = convidadoFamiliaDAO.verConvitesFamiliaEFornecedor();
 
                     if ("".equals(s)) {
-                        s = "Ainda não há Convites Família gerados.";
+                        s = "Ainda não há Convites Família e Convites Fornecedor gerados.";
                         JOptionPane.showMessageDialog(null, s);
                     } else {
-                        int id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família a ser atualizado.\n\n" + s + "\n0 - Voltar"));
+                        int id = Integer.parseInt(JOptionPane.showInputDialog("Insira o ID do Convite Família ou Convite Fornecedor a ser atualizado.\n\n" + s + "\n0 - Voltar"));
 
                         if (id == 0) {
                         } else {
@@ -262,6 +262,7 @@ public class ControllerConviteFamilia {
                                 } else if (!convidadoFamiliaDAO.retornaConviteByID(id).getVetorConvidadosIndividuais()) {
                                     JOptionPane.showMessageDialog(null, "Não há convidados neste Convite Família para serem atualizados.\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
                                 } else {
+                                    int edicoes = 0;
                                     int continuarAtt = 0;
                                     while (continuarAtt != -1) {
                                         m = new StringBuilder("Deseja continuar para atualizar os convidados deste Convite Família?\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
@@ -287,6 +288,7 @@ public class ControllerConviteFamilia {
                                                     if (!"".equals(nomeAtt) || !"".equals(parentescoAtt) || !"".equals(telefoneAtt) || !"".equals(nascimentoAtt)) {
                                                         convidadoFamiliaDAO.atualizaPessoasConviteFamilia(id, conviteID, nomeAtt, telefoneAtt, nascimentoAtt, parentescoAtt, calendario);
                                                         JOptionPane.showMessageDialog(null, "Convidado atualizado com sucesso!\n\n" + conviteIndividualDAO.retornaConviteIndividualByID(conviteID));
+                                                        edicoes++;
                                                     } else {
                                                         JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
                                                     }
@@ -299,10 +301,64 @@ public class ControllerConviteFamilia {
                                             continuarAtt = -1;
                                         }
                                     }
-                                    JOptionPane.showMessageDialog(null, "Edições finalizadas!\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
+                                    if (edicoes != 0 && "".equals(nomeDaFamiliaAtt)) {
+                                        JOptionPane.showMessageDialog(null, "Edições finalizadas!\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
+                                    } else {
+
+                                    }
                                 }
                             } else {
-                                JOptionPane.showMessageDialog(null, "ID inserido inválido.");
+                                s2 = conviteIndividualDAO.verFornecedoresConvidados();
+                                if ("".equals(s2)) {
+                                    s2 = "Não há convidados em nenhum dos Convites Fornecedor. Impossível realizar edições.\n\n" + convidadoFamiliaDAO.verConvitesFamilia();
+                                    JOptionPane.showMessageDialog(null, s2);
+                                } else if (!convidadoFamiliaDAO.retornaConviteByID(id).getVetorConvidadosIndividuais()) {
+                                    JOptionPane.showMessageDialog(null, "Não há convidados neste Convite Fornecedor para serem atualizados.\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
+                                } else {
+                                    int edicoes = 0;
+                                    int continuarAtt = 0;
+                                    while (continuarAtt != -1) {
+                                        m = new StringBuilder("Deseja continuar para atualizar os convidados deste Convite Fornecedor?\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
+                                        int continuar = JOptionPane.showConfirmDialog(null, m, "Confirmar Atualização", JOptionPane.YES_NO_OPTION);
+
+                                        if (continuar == JOptionPane.YES_OPTION) {
+                                            JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
+                                            int conviteID = Integer.parseInt(JOptionPane.showInputDialog("Digite o ID do convite individual do fornecedor a ser atualizado deste Convite Fornecedor:\n\n" + convidadoFamiliaDAO.retornaConviteByID(id) + "\n\n0 - Voltar"));
+
+                                            if (conviteID == 0) {
+                                                JOptionPane.showMessageDialog(null, "Edição de convidados não sucedida...");
+                                                continuarAtt = -1;
+                                            } else if (convidadoFamiliaDAO.retornaConviteIndividualByIDifNotNull(id, conviteID) == null) {
+                                                JOptionPane.showMessageDialog(null, "O ID de número " + conviteID + " inserido não corresponde ao de um convite individual deste Convite Família:\n\n" + convidadoFamiliaDAO.retornaConviteByID(id) + "Tente outro!");
+                                            } else {
+                                                int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o fornecedor abaixo?\n\n" + conviteIndividualDAO.retornaConviteIndividualByID(conviteID), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+
+                                                if (veredito == JOptionPane.YES_OPTION) {
+                                                    String nomeAtt = JOptionPane.showInputDialog("Informe o nome a ser atualizado: ");
+                                                    String telefoneAtt = JOptionPane.showInputDialog("\nInforme o telefone a ser atualizado: ");
+
+                                                    if (!"".equals(nomeAtt) || !"".equals(telefoneAtt)) {
+                                                        convidadoFamiliaDAO.atualizaFornecedorConviteFamilia(id, conviteID, nomeAtt, telefoneAtt, calendario);
+                                                        JOptionPane.showMessageDialog(null, "Fornecedor convidado atualizado com sucesso!\n\n" + conviteIndividualDAO.retornaConviteIndividualByID(conviteID));
+                                                        edicoes++;
+                                                    } else {
+                                                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
+                                                    }
+                                                } else {
+                                                    JOptionPane.showMessageDialog(null, "Edição do convite de " + conviteIndividualDAO.retornaConviteIndividualByID(conviteID).getPessoa().getNome() + " não sucedida...");
+                                                }
+                                            }
+                                        } else {
+                                            JOptionPane.showMessageDialog(null, "Edição de fornecedores convidados não continuada...");
+                                            continuarAtt = -1;
+                                        }
+                                    }
+                                    if (edicoes != 0) {
+                                        JOptionPane.showMessageDialog(null, "Edições finalizadas!\n\n" + convidadoFamiliaDAO.retornaConviteByID(id));
+                                    } else {
+
+                                    }
+                                }
                             }
                         }
                     }

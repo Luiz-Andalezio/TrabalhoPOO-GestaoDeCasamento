@@ -147,7 +147,7 @@ public class ConvidadoIndividual {
         if (this.getDataModificacao() != null) {
             m += " e modificado no dia: " + this.getDataModificacao();
         }
-        m += "\n";
+        m += "\n\n";
         return m;
     }
 }

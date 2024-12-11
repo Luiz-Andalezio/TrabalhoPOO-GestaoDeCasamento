@@ -1,85 +1,142 @@
 package model;
 
+import data_base_connector.ConnectionFactory;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PresentesDAO {
 
-    Presentes[] presentes = new Presentes[10];
-
     public PresentesDAO(LocalDateTime calendario) {
+    }
 
-        Presentes presente1 = new Presentes();
-        presente1.setNome("Geladeira");
-        presente1.setTipo("Eletrodoméstico");
-        presente1.setValor(1500);
-        presente1.setDataCriacao(calendario);
+    public Presentes adicionaPresenteBanco(Presentes elemento) {
 
-        Presentes presente2 = new Presentes();
-        presente2.setNome("Máquina de Lavar");
-        presente2.setTipo("Eletrodoméstico");
-        presente2.setValor(1200);
-        presente2.setDataCriacao(calendario);
+        String sql = "insert into presentes "
+                + "(nome_presente,tipo_presente,valor_presente,comprador_presente,dataCriacao)"
+                + " values (?,?,?,?,?)";
 
-        Presentes presente3 = new Presentes();
-        presente3.setNome("Micro-ondas");
-        presente3.setTipo("Eletrodoméstico");
-        presente3.setValor(600);
-        presente3.setDataCriacao(calendario);
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, elemento.getNome());
+            stmt.setString(2, elemento.getTipo());
+            stmt.setDouble(3, elemento.getValor());
+            stmt.setString(4, elemento.getNomeComprador());
+            stmt.setString(4, elemento.getDataCriacao());
 
-        Presentes presente4 = new Presentes();
-        presente4.setNome("Conjunto de Panelas");
-        presente4.setTipo("Cozinha");
-        presente4.setValor(300);
-        presente4.setDataCriacao(calendario);
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
+    }
 
-        /*
-        Presentes presente5 = new Presentes();
-        presente5.setNome("Jogo de Cama");
-        presente5.setTipo("Roupa de Cama");
-        presente5.setValor(200);
-        presente5.setDataCriacao();
+    public Presentes atualizaPresenteBanco(Presentes elemento) {
 
-        Presentes presente6 = new Presentes();
-        presente6.setNome("TV 42 polegadas");
-        presente6.setTipo("Eletrônico");
-        presente6.setValor(1800);
-        presente6.setDataCriacao();
+        String sql = "update presentes set nome_presente = ?, tipo_presente = ?, valor_presente = ?, comprador_presente = ?, dataModificacao = ? where id_presente = ?";
 
-        Presentes presente7 = new Presentes();
-        presente7.setNome("Aparelho de Jantar");
-        presente7.setTipo("Mesa");
-        presente7.setValor(400);
-        presente7.setDataCriacao();
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, elemento.getNome());
+            stmt.setString(2, elemento.getTipo());
+            stmt.setDouble(3, elemento.getValor());
+            stmt.setString(4, elemento.getNomeComprador());
+            stmt.setString(4, elemento.getDataModificacao());
+            stmt.setLong(6, elemento.getId());
 
-        Presentes presente8 = new Presentes();
-        presente8.setNome("Cafeteira");
-        presente8.setTipo("Eletrodoméstico");
-        presente8.setValor(250);
-        presente8.setDataCriacao();
+            stmt.executeUpdate();
 
-        Presentes presente9 = new Presentes();
-        presente9.setNome("Ventilador");
-        presente9.setTipo("Eletrodoméstico");
-        presente9.setValor(150);
-        presente9.setDataCriacao();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
+    }
 
-        Presentes presente10 = new Presentes();
-        presente10.setNome("Torradeira");
-        presente10.setTipo("Eletrodoméstico");
-        presente10.setValor(100);
-        presente10.setDataCriacao();
-        */
+    public boolean excluindoPresenteBanco(Long id) {
 
-        presentes[0] = presente1;
-        presentes[1] = presente2;
-        presentes[2] = presente3;
-        presentes[3] = presente4;/* 
-        presentes[4] = presente5;
-        presentes[5] = presente6;
-        presentes[6] = presente7;
-        presentes[7] = presente8;
-        presentes[8] = presente9;
-        presentes[9] = presente10;*/
+        String sql = "delete from presentes where id_presente = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return false;
+    }
+
+    public List<Presentes> buscarTodosOsPresentes() {
+
+        List<Presentes> listaPresentes = new ArrayList<>();
+        String sql = "select * from presentes";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Presentes elemento = new Presentes();
+                elemento.setId(rs.getLong("id_presente"));
+                elemento.setNome(rs.getString("nome_presente"));
+                elemento.setTipo(rs.getString("tipo_presente"));
+                elemento.setValor(rs.getDouble("valor_presente"));
+                elemento.setNomeComprador(rs.getString("comprador_presente"));
+
+                String dataCriacao = rs.getString("dataCriacao");
+                if (dataCriacao != null) {
+                    elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                }
+
+                String dataModificacao = rs.getString("dataModificacao");
+                if (dataModificacao != null) {
+                    elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                }
+
+                listaPresentes.add(elemento);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar pessoas: " + e.getMessage(), e);
+        }
+
+        return listaPresentes;
+    }
+
+    public Presentes buscarPresenteByIdBanco(Long id_presente) {
+
+        String sql = "select * from presentes where id_presente = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, id_presente);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Presentes elemento = new Presentes();
+                    elemento.setId(rs.getLong("id_presente"));
+                    elemento.setNome(rs.getString("nome_presente"));
+                    elemento.setTipo(rs.getString("tipo_presente"));
+                    elemento.setValor(rs.getDouble("valor_presente"));
+                    elemento.setNomeComprador(rs.getString("comprador_presente"));
+
+                    String dataCriacao = rs.getString("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                    }
+
+                    String dataModificacao = rs.getString("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                    }
+
+                    return elemento;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+
+        return null;
     }
 
     public Presentes registrarPresente(LocalDateTime calendario, String nome, String tipo, double valor) {
@@ -89,123 +146,106 @@ public class PresentesDAO {
         p.setValor(valor);
         p.setDataCriacao(calendario);
 
-        for (int v = 0; v < presentes.length; v++) {
-            if (presentes[v] == null) {
-                presentes[v] = p;
-                return p;
-            }
-        }
-        return null;
+        adicionaPresenteBanco(p);
+        return p;
     }
 
     public boolean atualizaPresente(LocalDateTime calendario, String nomeAtt, String tipoAtt, double valorAtt, int id) {
-        int i = 0;
-        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
-            i++;
-        }
-        //equals() with null check (temary) - Same shit of: (presentes[i].getNome() != nome)
-        if (presentes[i] != null && presentes[i].getId() == id) {
+        Long idLong = Long.valueOf(id);
+        Presentes presente = buscarPresenteByIdBanco(idLong);
+
+        if (presente != null && presente.getId() == id) {
             if (!nomeAtt.equals("")) {
-                presentes[i].setNome(nomeAtt);
+                presente.setNome(nomeAtt);
             }
             if (!tipoAtt.equals("")) {
-                presentes[i].setTipo(tipoAtt);
+                presente.setTipo(tipoAtt);
             }
-            presentes[i].setValor(valorAtt);
-            presentes[i].setDataModificacao(calendario);
+            presente.setValor(valorAtt);
+            presente.setDataModificacao(calendario);
+
+            atualizaPresenteBanco(presente);
             return true;
         }
         return false;
     }
 
     public void excluirPresente(int id) {
-        int i = 0;
-        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
-            i++;
-        }
-
-        if (presentes[i] != null && presentes[i].getId() == id) {
-            presentes[i] = null;
-        }
+        Long idLong = Long.valueOf(id);
+        excluindoPresenteBanco(idLong);
     }
 
     public boolean verificaPresente(int id) {
-        int i = 0;
-        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
-            i++;
+        Long idLong = Long.valueOf(id);
+        return buscarPresenteByIdBanco(idLong).getNomeComprador() != null;
+        /*
+        if (buscarPresenteByIdBanco(idLong).getNomeComprador() != null) {
+            return true;
+        } else {
+            return false;
         }
-
-        if (presentes[i] != null && presentes[i].getId() == id) {
-            if (presentes[i].getNomeComprador() != null) {
-                return true;
-            }
-        }
-        return false;
+         */
     }
 
-    public boolean compraPresente(LocalDateTime calendario, String nomeComprador, int id) {
-        int i = 0;
-        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
-            i++;
-        }
+    public void compraPresente(LocalDateTime calendario, String nomeComprador, int id) {
+        Long idLong = Long.valueOf(id);
+        Presentes p = buscarPresenteByIdBanco(idLong);
+        p.setNomeComprador(nomeComprador);
+        p.setDataModificacao(calendario);
 
-        if (presentes[i] != null && presentes[i].getId() == id) {
-            presentes[i].setNomeComprador(nomeComprador);
-            presentes[i].setDataModificacao(calendario);
-            return true;
-        }
-        return false;
+        atualizaPresenteBanco(p);
     }
 
     public String verPresentesComprados() {
-        String m = "";
-        for (int i = 0; i < presentes.length; i++) {
-            if (presentes[i] != null && presentes[i].getNomeComprador() != null) {
-                m += presentes[i].toString() + "\n";
+        StringBuilder m = new StringBuilder();
+        List<Presentes> presentes = buscarTodosOsPresentes();
+
+        for (Presentes presente : presentes) {
+            if (presente != null && presente.getNomeComprador() != null) {
+                m.append(presentes.toString()).append("\n");
             }
         }
-        return m;
+        return m.toString();
     }
 
     public String verPresentesCompradosAdmin(Usuario usuarioLogado) {
-        String m = "";
-        for (int i = 0; i < presentes.length; i++) {
-            if (presentes[i] != null && presentes[i].getNomeComprador() != null) {
-                m += presentes[i].toString(usuarioLogado) + "\n";
+        StringBuilder m = new StringBuilder();
+        List<Presentes> presentes = buscarTodosOsPresentes();
+
+        for (Presentes presente : presentes) {
+            if (presente != null && presente.getNomeComprador() != null) {
+                m.append(presente.toString(usuarioLogado)).append("\n");
             }
         }
-        return m;
-    }
-
-    public String verPresentesConvidado() {
-        String m = "";
-        for (int i = 0; i < presentes.length; i++) {
-            if (presentes[i] != null) {
-                m += presentes[i].toString() + "\n";
-            }
-        }
-        return m;
-    }
-
-    public Presentes retornaPresenteByID(int id) {
-        int i = 0;
-        while (presentes[i] != null && presentes[i].getId() != id || presentes[i] == null) {
-            i++;
-        }
-
-        if (presentes[i] != null && presentes[i].getId() == id) {
-            return presentes[i];
-        }
-        return null;
+        return m.toString();
     }
 
     public String verPresentesAdmin(Usuario usuarioLogado) {
-        String m = "";
-        for (int i = 0; i < presentes.length; i++) {
-            if (presentes[i] != null) {
-                m += presentes[i].toString(usuarioLogado) + "\n";
+        StringBuilder m = new StringBuilder();
+        List<Presentes> presentes = buscarTodosOsPresentes();
+
+        for (Presentes presente : presentes) {
+            if (presente != null) {
+                m.append(presente.toString(usuarioLogado)).append("\n");
             }
         }
-        return m;
+        return m.toString();
+    }
+
+    public String verPresentesConvidado() {
+        StringBuilder m = new StringBuilder();
+        List<Presentes> presentes = buscarTodosOsPresentes();
+
+        for (Presentes presente : presentes) {
+            if (presente != null) {
+                m.append(presente.toString()).append("\n");
+            }
+        }
+        return m.toString();
+    }
+
+    public Presentes retornaPresenteByID(int id) {
+        Long idLong = Long.valueOf(id);
+        return buscarPresenteByIdBanco(idLong);
     }
 }

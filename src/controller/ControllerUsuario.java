@@ -28,8 +28,8 @@ public class ControllerUsuario {
 
                     if (!"".equals(novoNome) || !"".equals(novoTelefone) || !"".equals(novoNascimento) || !"".equals(novoTipo) || !"".equals(novoLogin) || !"".equals(novaSenha)) {
                         pessoa = pessoadao.criarPessoa(novoNome, novoTelefone, novoNascimento, calendario);
-                        usuariodao.recebePessoa(calendario, pessoa, novoTipo, novoLogin, novaSenha);
-                        JOptionPane.showMessageDialog(null, usuariodao.verUsuarios());
+                        usuariodao.recebePessoa(calendario, pessoa, novoTipo, novoLogin, novaSenha, pessoadao);
+                        JOptionPane.showMessageDialog(null, usuariodao.verUsuarios(pessoadao, calendario));
                     } else {
                         JOptionPane.showMessageDialog(null, "Nenhum dado enviado: usuario não criado...");
                     }
@@ -37,11 +37,11 @@ public class ControllerUsuario {
 
                 case 2:
                     //Editar convites individuais
-                    String s = usuariodao.verUsuarios();
+                    String s = usuariodao.verUsuarios(pessoadao, calendario);
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog("Informe o ID do usuario abaixo que deseja editar: \n\n" + s + "\n0 - Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id, pessoadao, calendario), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
                                 JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
                                 String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome a ser atualizado: ");
@@ -52,10 +52,10 @@ public class ControllerUsuario {
                                 String senhaAtt = JOptionPane.showInputDialog("\nInforme a nova senha de usuario a ser atualizada: ");
 
                                 if (!"".equals(nomeAtt) || !"".equals(telefoneAtt) || !"".equals(nascimentoAtt) || !"".equals(tipoAtt) || !"".equals(loginAtt) || !"".equals(senhaAtt)) {
-                                    m = new StringBuilder("Convite atualizado com sucesso!\n\nAntes: \n" + usuariodao.retornaUsuarioByID(id));
-                                    usuariodao.atualizaPessoaUsuario(calendario, nomeAtt, telefoneAtt, nascimentoAtt, id);
-                                    usuariodao.atualizaUsuario(calendario, tipoAtt, loginAtt, senhaAtt, id);
-                                    m.append("\nAgora: \n").append(usuariodao.retornaUsuarioByID(id));
+                                    m = new StringBuilder("Convite atualizado com sucesso!\n\nAntes: \n" + usuariodao.retornaUsuarioByID(id, pessoadao, calendario));
+                                    usuariodao.atualizaPessoaUsuario(calendario, nomeAtt, telefoneAtt, nascimentoAtt, id, pessoadao);
+                                    usuariodao.atualizaUsuario(calendario, tipoAtt, loginAtt, senhaAtt, id, pessoadao);
+                                    m.append("Agora: \n").append(usuariodao.retornaUsuarioByID(id, pessoadao, calendario));
                                     JOptionPane.showMessageDialog(null, m);
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Nenhum dado enviado: atualizações não foram realizadas...");
@@ -71,7 +71,7 @@ public class ControllerUsuario {
 
                 case 3:
                     //Exibir convites individuais
-                    s = usuariodao.verUsuarios();
+                    s = usuariodao.verUsuarios(pessoadao, calendario);
                     if ("".equals(s)) {
                         s = "Ainda não há usuarios cadastrados.";
                     }
@@ -79,16 +79,16 @@ public class ControllerUsuario {
                     break;
 
                 case 4:
-                    //Desfazer convites
-                    s = usuariodao.verUsuarios();
+                    //Desfazer usuario
+                    s = usuariodao.verUsuarios(pessoadao, calendario);
                     if (!"".equals(s)) {
                         int id = Integer.parseInt(JOptionPane.showInputDialog(s + "\nInforme o ID do usuario a ser desfeito: \n\n0 - Voltar"));
                         if (id != 0) {
-                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
+                            int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo excluir este usuario abaixo?\n\n" + usuariodao.retornaUsuarioByID(id, pessoadao, calendario), "Confirmar Exclusão", JOptionPane.YES_NO_OPTION);
                             if (veredito == JOptionPane.YES_OPTION) {
-                                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!\n\n" + usuariodao.retornaUsuarioByID(id));                                
-                                pessoadao.excluirPessoa(usuariodao.retornaUsuarioByID(id).getPessoa());
-                                usuariodao.excluirUsuario(id);
+                                JOptionPane.showMessageDialog(null, "Usuário excluido com sucesso!\n\n" + usuariodao.retornaUsuarioByID(id, pessoadao, calendario));                                
+                                pessoadao.excluirPessoaUsuarioBanco(usuariodao.retornaUsuarioByID(id, pessoadao, calendario).getId(), usuariodao.retornaUsuarioByID(id, pessoadao, calendario).getPessoa(), usuariodao);
+                                //usuariodao.excluirUsuario(id);
                             } else {
                                 JOptionPane.showMessageDialog(null, "Exclusão não sucedida...");
                             }

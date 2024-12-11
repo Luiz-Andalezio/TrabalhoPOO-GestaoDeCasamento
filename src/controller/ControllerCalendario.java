@@ -6,12 +6,13 @@ import model.CalendarioDAO;
 import model.FornecedorDAO;
 import model.PagamentoDAO;
 import model.ParcelaDAO;
+import model.PessoaDAO;
 import model.Usuario;
 import view.GUI;
 
 public class ControllerCalendario {
 
-    public LocalDateTime controllerCrudIncrementaData(GUI gui, Usuario usuarioLogado, FornecedorDAO fornecedordao, PagamentoDAO pagamentodao, CalendarioDAO calendarioDAO, ParcelaDAO parceladao, LocalDateTime calendario) {
+    public LocalDateTime controllerCrudIncrementaData(GUI gui, Usuario usuarioLogado, PessoaDAO pessoadao, FornecedorDAO fornecedordao, PagamentoDAO pagamentodao, CalendarioDAO calendarioDAO, ParcelaDAO parceladao, LocalDateTime calendario) {
         int menuCalendarioOpc = 0;
 
         while (menuCalendarioOpc != -1) {
@@ -23,8 +24,8 @@ public class ControllerCalendario {
 
                     } else {
                         calendario = calendarioDAO.adicionaDia(calendario, dias);
-                        parceladao.verificaDataPagamento(calendario);                        
-                        pagamentodao.verificaEstadoFornecedor();
+                        parceladao.verificaTodasAsParcelas(calendario, pagamentodao, fornecedordao, pessoadao);                        
+                        parceladao.verificaEstadoFornecedor(pagamentodao, fornecedordao, pessoadao);
                     }
                     break;
 
@@ -34,8 +35,8 @@ public class ControllerCalendario {
 
                     } else {
                         calendario = calendarioDAO.adicionaMeses(calendario, meses);
-                        parceladao.verificaDataPagamento(calendario);                        
-                        pagamentodao.verificaEstadoFornecedor();
+                        parceladao.verificaTodasAsParcelas(calendario, pagamentodao, fornecedordao, pessoadao);                      
+                        parceladao.verificaEstadoFornecedor(pagamentodao, fornecedordao, pessoadao);
                     }
                     break;
 
@@ -45,8 +46,8 @@ public class ControllerCalendario {
 
                     } else {
                         calendario = calendarioDAO.adicionaAnos(calendario, anos);
-                        parceladao.verificaDataPagamento(calendario);                        
-                        pagamentodao.verificaEstadoFornecedor();
+                        parceladao.verificaTodasAsParcelas(calendario, pagamentodao, fornecedordao, pessoadao);                   
+                        parceladao.verificaEstadoFornecedor(pagamentodao, fornecedordao, pessoadao);
                     }
                     break;
 

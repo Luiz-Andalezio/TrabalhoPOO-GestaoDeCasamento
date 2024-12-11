@@ -7,26 +7,6 @@ public class ConvidadoIndividualDAO {
     ConvidadoIndividual[] convidados = new ConvidadoIndividual[100];
 
     public ConvidadoIndividualDAO(PessoaDAO pessoadao, LocalDateTime dataInicial) {
-        ConvidadoIndividual ci1 = new ConvidadoIndividual();
-        ci1.setPessoa(pessoadao.retornaPessoa(5));
-        ci1.setParentesco("Sobrinha");
-        ci1.setConfirmacao(true);
-        ci1.setDataCriacao(dataInicial);
-        convidados[0] = ci1;
-
-        ConvidadoIndividual ci2 = new ConvidadoIndividual();
-        ci2.setPessoa(pessoadao.retornaPessoa(6));
-        ci2.setParentesco("Irmão");
-        ci2.setConfirmacao(true);
-        ci2.setDataCriacao(dataInicial);
-        convidados[1] = ci2;
-
-        ConvidadoIndividual ci3 = new ConvidadoIndividual();
-        ci3.setPessoa(pessoadao.retornaPessoa(7));
-        ci3.setParentesco("Bisavô");
-        ci3.setConfirmacao(false);
-        ci3.setDataCriacao(dataInicial);
-        convidados[2] = ci3;
     }
 
     public boolean recebePessoa(Pessoa novaPessoa, String parentesco, LocalDateTime calendario) {
@@ -77,7 +57,7 @@ public class ConvidadoIndividualDAO {
         String m = "";
         for (int i = 0; i < convidados.length; i++) {
             if (convidados[i] != null) {
-                m += convidados[i].toString() + "\n";
+                m += convidados[i].toString();
             }
         }
         return m;
@@ -87,7 +67,7 @@ public class ConvidadoIndividualDAO {
         String m = "";
         for (int i = 0; i < convidados.length; i++) {
             if (convidados[i] != null && convidados[i].getParentesco() != null) {
-                m += convidados[i].toString() + "\n";
+                m += convidados[i].toString();
             }
         }
         return m;
@@ -97,7 +77,7 @@ public class ConvidadoIndividualDAO {
         String m = "";
         for (int i = 0; i < convidados.length; i++) {
             if (convidados[i] != null && convidados[i].getParentesco() == null) {
-                m += convidados[i].toString() + "\n";
+                m += convidados[i].toString();
             }
         }
         return m;

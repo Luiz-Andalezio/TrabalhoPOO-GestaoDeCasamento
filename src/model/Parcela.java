@@ -1,7 +1,6 @@
 package model;
 
 import java.text.NumberFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -10,7 +9,8 @@ import java.util.Locale;
 public class Parcela {
     private long id;    
     private int parcela;
-    private LocalDate data;
+    private String data;
+    private Pagamento pagamento;
     private Pessoa pagante;
     private double valorDaParcela;
     private boolean estadoPagamento;    
@@ -39,34 +39,19 @@ public class Parcela {
     }
     
     public String getData() {
-        String alteraDia = "";
-        if (this.data.getDayOfMonth() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.data.getDayOfMonth() + "/";
-        if (this.data.getMonthValue() < 10){
-            alteraDia += "0";
-        }
-        alteraDia += this.data.getMonthValue() + "/" + this.data.getYear();
-        return alteraDia;
+        return this.data;
     }
 
     public void setData(String data) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        if ("".equals(data)) {
-            this.data = LocalDate.now();
+        if (data == null) {
+            this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
         } else {
-            this.data = LocalDate.parse(data, dtf);
+            this.data = data;
         }
     }
 
     public void setDataByFunction(String data) {
-        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        if ("".equals(data)) {
-            this.data = LocalDate.now();
-        } else {
-            this.data = LocalDate.parse(data, dtf);
-        }
+        setData(data);
     }
 
     public Pessoa getPagante() {
@@ -75,6 +60,14 @@ public class Parcela {
 
     public void setPagante(Pessoa pessoa) {
         this.pagante = pessoa;
+    }
+
+    public Pagamento getPagamento() {
+        return pagamento;
+    }
+
+    public void setPagamento(Pagamento pagamento) {
+        this.pagamento = pagamento;
     }
 
     public double getValorDaParcela() {
@@ -175,6 +168,14 @@ public class Parcela {
         this.dataModificacao = concatenaDataHorario;
     }
 
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
     public String toStringParcelaUnica() {
         String m = "";
         m += "Data de pagamento: " + this.getData();
@@ -191,7 +192,6 @@ public class Parcela {
     public String toString() {
         String m = "";
         m += "-- Dados da " + this.getParcela() + "° parcela: --";
-        //m += "ID: " + this.id;
         m += "\nData de pagamento: " + this.getData();
         m += "\nPagante: " + this.pagante.getNome();
         m += "\nValor a pagar: " + formatador.format(this.valorDaParcela);
@@ -200,10 +200,6 @@ public class Parcela {
         } else {
             m += "\nAinda não paga.\n";
         }
-        /*m += "\nRegistrada no dia: " + this.getDataCriacao();
-        if (this.getDataModificacao() != null) {
-            m += " e modificada no dia: " + this.getDataModificacao();
-        }*/
         return m;
     }
 }

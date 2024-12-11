@@ -1,291 +1,323 @@
 package model;
 
+import data_base_connector.ConnectionFactory;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PagamentoDAO {
 
-    Pagamento[] pagamentos = new Pagamento[100];
-
     public PagamentoDAO(PessoaDAO pessoadao, FornecedorDAO fornecedordao, ParcelaDAO parceladao, LocalDateTime calendario) {
-        Pagamento p1 = new Pagamento();
-        //p1.setData("01/11/2024");
-        //p1.setPessoa(pessoadao.retornaPessoa(1));
-        p1.setDescricao("Parcelas de DJ Alok.");
-        p1.setFornecedor(fornecedordao.retornaFornecedorVetor(0));
-        //p1.setValor(fornecedordao.calculaParcela(2));
-        //p1.setEstadoPagamento(false);
-        p1.setParcelasVetor(0, parceladao.retornaParcelaVetor(0));
-        p1.setParcelasVetor(1, parceladao.retornaParcelaVetor(1));
-        p1.setParcelasVetor(2, parceladao.retornaParcelaVetor(2));
-        p1.setParcelasVetor(3, parceladao.retornaParcelaVetor(3));
-        p1.setDataCriacao(calendario);
-        pagamentos[0] = p1;
+    }
 
-        Pagamento p2 = new Pagamento();
-        p2.setDescricao("Bolo do casamento.");
-        p2.setParcelasVetor(0, parceladao.retornaParcelaVetor(4));
-        p2.setDataCriacao(calendario);
-        pagamentos[1] = p2;
+    public Pagamento adicionaPagamentoBanco(Pagamento elemento) {
+
+        String sql = "insert into pagamento "
+                + "(descricao,id_fornecedor_fk,dataCriacao)"
+                + " values (?,?,?)";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, elemento.getDescricao());
+            if (elemento.getFornecedor() != null) {
+                stmt.setLong(2, elemento.getFornecedor().getId());
+            }
+            stmt.setString(3, elemento.getDataCriacao());
+
+            stmt.executeUpdate();
+
+            // Recupera o ID gerado automaticamente
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    elemento.setId(rs.getLong(1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
+    }
+
+    public Pagamento atualizaPagamentoBanco(Pagamento elemento) {
+
+        String sql = "update pagamento set descricao = ?, id_fornecedor_fk = ?, dataModificacao = ? where id_pagamento = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, elemento.getDescricao());
+            if (elemento.getFornecedor() != null) {
+                stmt.setLong(2, elemento.getFornecedor().getId());
+            }
+            stmt.setString(3, elemento.getDataModificacao());
+            stmt.setLong(4, elemento.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
+    }
+
+    public boolean excluindoPagamentoBanco(Long id) {
+
+        String sql = "delete from pagamento where id_pagamento = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, id);
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return false;
+    }
+
+    public List<Pagamento> buscarTodosOsPagamentos(FornecedorDAO fornecedordao) {
+
+        List<Pagamento> listaPagamentos = new ArrayList<>();
+        String sql = "select * from pagamento";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Pagamento elemento = new Pagamento();
+                elemento.setId(rs.getLong("id_pagamento"));
+                elemento.setDescricao(rs.getString("descricao"));
+                elemento.setFornecedor(fornecedordao.buscarFornecedorByIdBanco(rs.getLong("id_fornecedor_fk")));
+
+                String dataCriacao = rs.getString("dataCriacao");
+                if (dataCriacao != null) {
+                    elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                }
+
+                String dataModificacao = rs.getString("dataModificacao");
+                if (dataModificacao != null) {
+                    elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                }
+
+                listaPagamentos.add(elemento);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar pagamentos: " + e.getMessage(), e);
+        }
+
+        return listaPagamentos;
+    }
+
+    public Pagamento buscarPagamentoByIdBanco(Long id, FornecedorDAO fornecedordao) {
+
+        String sql = "select * from pagamento where id_pagamento = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Pagamento elemento = new Pagamento();
+                    elemento.setId(rs.getLong("id_pagamento"));
+                    elemento.setDescricao(rs.getString("descricao"));
+                    if (elemento.getFornecedor() != null) {
+                        elemento.setFornecedor(fornecedordao.buscarFornecedorByIdBanco(rs.getLong("id_fornecedor_fk")));
+                    }
+
+                    String dataCriacao = rs.getString("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                    }
+
+                    String dataModificacao = rs.getString("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                    }
+                    return elemento;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return null;
+    }
+
+    public List<Pagamento> buscarPagamentosPorFornecedor(int idPagamento, FornecedorDAO fornecedordao) {
+        List<Pagamento> listaPagamentosDoFornecedor = new ArrayList<>();
+        Long idLong = Long.valueOf(idPagamento);
+
+        String sql = "select * from pagamento where id_fornecedor_fk = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, idLong);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    Pagamento elemento = new Pagamento();
+                    elemento.setId(rs.getLong("id_pagamento"));
+                    elemento.setDescricao(rs.getString("descricao"));
+                    if (elemento.getFornecedor() != null) {
+                        elemento.setFornecedor(fornecedordao.buscarFornecedorByIdBanco(rs.getLong("id_fornecedor_fk")));
+                    }
+
+                    String dataCriacao = rs.getString("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                    }
+
+                    String dataModificacao = rs.getString("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                    }
+
+                    listaPagamentosDoFornecedor.add(elemento);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return listaPagamentosDoFornecedor;
+    }
+
+    public int contarParcelasPorPagamento(int idPagamento, FornecedorDAO fornecedordao) {
+        int quantidadeDeParcelas = 0;
+        Long idLong = Long.valueOf(idPagamento);
+
+        String sql = "select * from pagamento where id_fornecedor_fk = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, idLong);
+            try (ResultSet rs = stmt.executeQuery()) {
+                while (rs.next()) {
+                    /*
+                    Pagamento elemento = new Pagamento();
+                    elemento.setId(rs.getLong("id_pessoa"));
+                    elemento.setDescricao(rs.getString("descricao"));
+                    if (elemento.getFornecedor() != null) {
+                        elemento.setFornecedor(fornecedordao.buscarFornecedorByIdBanco(rs.getLong("id_fornecedor_fk")));
+                    }
+
+                    String dataCriacao = rs.getString("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                    }
+
+                    String dataModificacao = rs.getString("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                    }
+                     */
+
+                    quantidadeDeParcelas++;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return quantidadeDeParcelas;
     }
 
     public Pagamento registraPagamento(Fornecedor fornecedor, String descricao, LocalDateTime calendario) {
-        for (int i = 0; i < pagamentos.length; i++) {
-            if (pagamentos[i] == null) {
-                pagamentos[i] = new Pagamento();
-                pagamentos[i].setFornecedor(fornecedor);
-                pagamentos[i].setDescricao(descricao);
-                pagamentos[i].setDataCriacao(calendario);
-                return pagamentos[i];
-            }
-        }
-        return null;
+        Pagamento pagamento = new Pagamento();
+        pagamento.setFornecedor(fornecedor);
+        pagamento.setDescricao(descricao);
+        pagamento.setDataCriacao(calendario);
+
+        return adicionaPagamentoBanco(pagamento);
     }
 
     public Pagamento registraDescricaoPagamento(String descricao, LocalDateTime calendario) {
-        for (int i = 0; i < pagamentos.length; i++) {
-            if (pagamentos[i] == null) {
-                pagamentos[i] = new Pagamento();
-                pagamentos[i].setDescricao(descricao);
-                pagamentos[i].setDataCriacao(calendario);
-                return pagamentos[i];
+        Pagamento pagamento = new Pagamento();
+        pagamento.setDescricao(descricao);
+        pagamento.setDataCriacao(calendario);
+
+        return adicionaPagamentoBanco(pagamento);
+    }
+
+    public boolean atualizaFornecedorByPagamento(int id, Fornecedor fornecedor, FornecedorDAO fornecedordao, LocalDateTime calendario) {
+        Long idLong = Long.valueOf(id);
+        Pagamento pagamento = buscarPagamentoByIdBanco(idLong, fornecedordao);
+        pagamento.setFornecedor(fornecedor);
+        pagamento.setDataModificacao(calendario);
+
+        atualizaPagamentoBanco(pagamento);
+        return true;
+    }
+
+    public boolean atualizaDescricao(int id, String descricao, FornecedorDAO fornecedordao, LocalDateTime calendario) {
+        Long idLong = Long.valueOf(id);
+        Pagamento pagamento = buscarPagamentoByIdBanco(idLong, fornecedordao);
+        pagamento.setDescricao(descricao);
+        pagamento.setDataModificacao(calendario);
+
+        atualizaPagamentoBanco(pagamento);
+        return true;
+    }
+
+    public void excluirPagamento(int id, ParcelaDAO parcelaDAO, PagamentoDAO pagamentoDAO, FornecedorDAO fornecedordao, PessoaDAO pessoadao) {
+
+        List<Parcela> parcelasRelacionadas = parcelaDAO.buscarParcelasPorPagamento(id, pagamentoDAO, fornecedordao, pessoadao);
+
+        for (Parcela parcela : parcelasRelacionadas) {
+            parcelaDAO.excluindoParcelaBanco(parcela.getId());
+        }
+        Long idLong = Long.valueOf(id);
+
+        pagamentoDAO.excluindoPagamentoBanco(idLong);
+    }
+
+    public String verPagamentos(PagamentoDAO pagamentodao, FornecedorDAO fornecedordao, ParcelaDAO parceladao, PessoaDAO pessoadao) {
+        StringBuilder m = new StringBuilder();
+        List<Pagamento> pagamentos = buscarTodosOsPagamentos(fornecedordao);
+
+        for (Pagamento pagamento : pagamentos) {
+            if (pagamento != null) {
+                m.append(pagamento.toStringParameter(pagamento, pagamentodao, fornecedordao, parceladao, pessoadao));
             }
         }
+        return m.toString();
+    }
+
+    public Pagamento retornaPagamentoByID(int id, FornecedorDAO fornecedordao) {
+        Long idLong = Long.valueOf(id);
+        return buscarPagamentoByIdBanco(idLong, fornecedordao);
+    }
+
+    public Pagamento retornaPagamentoByPagamento(Pagamento pagamento, FornecedorDAO fornecedordao) {
+
+        String sql = "select * from pagamento where id_pagamento = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, pagamento.getId());
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Pagamento elemento = new Pagamento();
+                    elemento.setId(rs.getLong("id_pagamento"));
+                    elemento.setDescricao(rs.getString("descricao"));
+                    if (elemento.getFornecedor() != null) {
+                        elemento.setFornecedor(fornecedordao.buscarFornecedorByIdBanco(rs.getLong("id_fornecedor_fk")));
+                    }
+
+                    String dataCriacao = rs.getString("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                    }
+
+                    String dataModificacao = rs.getString("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                    }
+                    return elemento;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
         return null;
-    }
-
-    public boolean registraParcela(Pagamento pagamento, ParcelaDAO parceladao, int nmrParcela, String data, Pessoa pessoa, LocalDateTime calendario) {
-        for (int i = 0; i < pagamentos.length; i++) {
-            if (pagamentos[i] == pagamento) {
-                Parcela parcela = parceladao.registraParcela(calendario, data, pessoa, calculaParcelaByFornecedorDoPagamento(i), nmrParcela);
-                pagamentos[i].setParcela(parcela);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean registraParcelaSemFornecedor(Pagamento pagamento, ParcelaDAO parceladao, int nmrParcela, int qtdParcelas, String data, double valor, Pessoa pessoa, LocalDateTime calendario) {
-        for (int i = 0; i < pagamentos.length; i++) {
-            if (pagamentos[i] == pagamento) {
-                Parcela parcela = parceladao.registraParcela(calendario, data, pessoa, calculaValor(valor, qtdParcelas), nmrParcela);
-                pagamentos[i].setParcela(parcela);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean atualizaFornecedorByPagamento(int id, Fornecedor fornecedor, LocalDateTime calendario) {
-        int i = 0;
-        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
-            i++;
-        }
-
-        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
-            pagamentos[i].setFornecedor(fornecedor);
-            pagamentos[i].setDataModificacao(calendario);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean atualizaDescricao(int id, String descricao, LocalDateTime calendario) {
-        int i = 0;
-        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
-            i++;
-        }
-
-        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
-            pagamentos[i].setDescricao(descricao);
-            pagamentos[i].setDataModificacao(calendario);
-            return true;
-        }
-        return false;
-    }
-
-    public boolean atualizaParcela(int id, int parcela, String data, Pessoa pessoa, LocalDateTime calendario) {
-        int i = 0;
-        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
-            i++;
-        }
-
-        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
-            pagamentos[i].getParcelaByNmr(parcela).setValorDaParcela(calculaParcelaByFornecedorDoPagamento(id));
-            pagamentos[i].getParcelaByNmr(parcela).setData(data);
-            pagamentos[i].getParcelaByNmr(parcela).setPagante(pessoa);
-            pagamentos[i].setDataModificacao(calendario);
-            return true;
-        }
-        return false;
-    }
-
-    public double calculaParcelaByFornecedorDoPagamento(int i) {
-        double valor = pagamentos[i].getFornecedor().getValorAPagar() / pagamentos[i].getFornecedor().getParcelas();
-        return valor;
-    }
-
-    public double calculaValor(double valor, int qtdParcelas) {
-        valor = valor / qtdParcelas;
-        return valor;
-    }
-
-    public void excluirPagamento(int id) {
-        int i = 0;
-        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
-            i++;
-        }
-
-        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
-            pagamentos[i] = null;
-        }
-    }
-
-    /*
-    public boolean verificaEstadoFornecedor(int i, FornecedorDAO fornecedordao, Pagamento pagamento) {
-            int parcelasPagas = 0;
-            for (int j = 0; j < pagamentos.length; j++) {
-                if (pagamentos[j] != null && pagamentos[j].getFornecedor() == pagamentos[i].getFornecedor()) {
-                    for (int k = 0; k < 99; k++) {
-                        if (pagamentos[j].getParcelaVetor(k) != null && pagamentos[j].getParcelaVetor(k).getEstadoPagamento() == true) {
-                            parcelasPagas++;
-                        }
-                    }
-                }
-            }
-            if (parcelasPagas == pagamentos[i].getFornecedor().getParcelas()) {
-                pagamentos[i].getFornecedor().setEstado(true);
-            }
-        return false;
-    }
-
-    public boolean verificaEstadoFornecedor1(int i, FornecedorDAO fornecedordao) {
-        int parcelasPagas = 0;
-        int j = 0;
-
-        while (j < pagamentos.length) {
-            if (pagamentos[j] != null && pagamentos[j].getFornecedor() == pagamentos[i].getFornecedor() /*|| pagamentos[j] == null/) {
-                int k = 0;
-                while (k < 99) {
-                    if (pagamentos[j].getParcelaVetor(k) != null && pagamentos[j].getParcelaVetor(k).getEstadoPagamento() == true) {
-                        parcelasPagas++;
-                    }
-                    k++;
-                }
-            }
-            j++;
-        }
-
-        if (parcelasPagas == pagamentos[i].getFornecedor().getParcelas()) {
-            pagamentos[i].getFornecedor().setEstado(true);
-            return true;
-        }
-        return false;
-    }
-    public boolean verificaEstadoFornecedor2(int id, FornecedorDAO fornecedordao, Pagamento pagamento) {
-        int parcelasPagas = 0;
-        int k = 0;
-        pagamento = retornaPagamentoVetor(id);
-        while (k < pagamento.getTamanhoVetorParcelas()) {
-            if (pagamento.getParcelaVetor(k) != null && pagamento.getParcelaVetor(k).getEstadoPagamento() == true) {
-                parcelasPagas++;
-            }
-            k++;
-        }
-
-        if (parcelasPagas == pagamento.getFornecedor().getParcelas()) {
-            pagamento.getFornecedor().setEstado(true);
-            return true;
-        }
-        return false;
-    }*/
-
-    public boolean verificaEstadoFornecedor() {
-        int parcelasPagas = 0;
-        int j = 0;
-
-        while (j < pagamentos.length) {
-            if (pagamentos[j] != null && pagamentos[j].getFornecedor() != null /*|| pagamentos[j] == null*/) {
-                int k = 0;
-                while (k < pagamentos[j].getTamanhoVetorParcelas()) {
-                    if (pagamentos[j].getParcelaVetor(k) != null && pagamentos[j].getParcelaVetor(k).getEstadoPagamento() == true) {
-                        parcelasPagas++;
-                    }
-                    k++;
-                } 
-                if (parcelasPagas == pagamentos[j].getFornecedor().getParcelas()) {
-                    pagamentos[j].getFornecedor().setEstado(true);
-                    return true;
-                }
-            }
-            j++;
-        }
-        return false;
-    }
-
-    public String verPagamentos() {
-        String m = "";
-        for (int i = 0; i < pagamentos.length; i++) {
-            if (pagamentos[i] != null) {
-                m += pagamentos[i].toString() + "\n";
-            }
-        }
-        return m;
-    }
-
-    public double calculaTotalPagamentos() {
-        double totalPagamentos = 0;
-        int i = 0;
-
-        while (i < pagamentos.length) {
-            if (pagamentos[i] != null) {
-                int k = 0;
-                while (k < pagamentos[i].getTamanhoVetorParcelas()) {
-                    if (pagamentos[i].getParcelaVetor(k) != null && pagamentos[i].getParcelaVetor(k).getEstadoPagamento() == true) {
-                        totalPagamentos = totalPagamentos + pagamentos[i].getParcelaVetor(k).getValorDaParcela();
-                    }
-                    k++;
-                }
-            }
-            i++;
-        }
-        return totalPagamentos;
-    }
-
-    /*
-    public String verPagamentosComParcelas() {
-        String m = "";
-        for (int i = 0; i < pagamentos.length; i++) {
-            if (pagamentos[i] != null) {
-                m += pagamentos[i] + "\n";
-            }
-        }
-        return m;
-    } */
-    public Pagamento retornaPagamentoByID(int id) {
-        int i = 0;
-        while (pagamentos[i] != null && pagamentos[i].getId() != id || pagamentos[i] == null) {
-            i++;
-        }
-
-        if (pagamentos[i] != null && pagamentos[i].getId() == id) {
-            return pagamentos[i];
-        }
-        return null;
-    }
-
-    public Pagamento retornaPagamentoByPagamento(Pagamento pagamento) {
-        int i = 0;
-        while (pagamentos[i] != null && pagamentos[i] != pagamento || pagamentos[i] == null) {
-            i++;
-        }
-
-        if (pagamentos[i] != null && pagamentos[i] == pagamento) {
-            return pagamentos[i];
-        }
-        return null;
-    }
-
-    public Pagamento retornaPagamentoVetor(int i) {
-        return pagamentos[i];
     }
 }

@@ -1,6 +1,5 @@
 package model;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
@@ -9,14 +8,14 @@ public class Pessoa {
 
     private long id;
     private String nome;
-    private LocalDate nascimento;
+    private String nascimento;
     private String telefone;
     private String dataCriacao;
     private String dataModificacao;
-    private static long incrementaId = 0;
+    //private static long incrementaId = 0;
 
     public String getTelefone() {
-        return telefone;
+        return this.telefone;
     }
 
     public void setTelefone(String telefone) {
@@ -24,7 +23,7 @@ public class Pessoa {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -32,7 +31,7 @@ public class Pessoa {
     }
 
     public String getNome() {
-        return nome;
+        return this.nome;
     }
 
     public void setNome(String nome) {
@@ -40,26 +39,14 @@ public class Pessoa {
     }
 
     public String getNascimento() {
-        String alteraDia = "";
-        if (this.nascimento.getDayOfMonth() < 10) {
-            alteraDia += "0";
-        }
-        alteraDia += this.nascimento.getDayOfMonth() + "/";
-        if (this.nascimento.getMonthValue() < 10) {
-            alteraDia += "0";
-        }
-        alteraDia += this.nascimento.getMonthValue() + "/" + this.nascimento.getYear();
-        return alteraDia;
+        return this.nascimento;
     }
 
     public void setNascimento(String nascimento) {
-        if (nascimento != null) {
-            DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-            if ("".equals(nascimento)) {
-                this.nascimento = LocalDate.now();
-            } else {
-                this.nascimento = LocalDate.parse(nascimento, dtf);
-            }
+        if (nascimento == null) {
+            this.nascimento = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+        } else {
+            this.nascimento = nascimento;
         }
     }
 
@@ -101,7 +88,7 @@ public class Pessoa {
             concatenaDataHorario += horarioAtualizado.getSecond();
         }
         this.dataCriacao = concatenaDataHorario;
-        this.id = ++Pessoa.incrementaId;
+        //this.id = ++Pessoa.incrementaId;
     }
 
     public String getDataModificacao() {
@@ -145,16 +132,35 @@ public class Pessoa {
         this.dataModificacao = concatenaDataHorario;
     }
 
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
     @Override
     public String toString() {
         String m = "";
         m += "ID: " + this.id + "\n";
         m += "Nome: " + this.nome + "\n";
-        m += "Nascimento: " + getNascimento() + "\n";
+        m += "Nascimento:" + this.nascimento + "\n";
+        /*
+        if (this.getNascimento() != null) {
+            try {
+                LocalDate nascimento = LocalDate.parse(this.getNascimento(), DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                m += "\n\nData e Horário: " + nascimento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+            } catch (Exception e) {
+                m += "\n\nProblemas com a exibição da data encontrados. Contate um administrador.";
+            }
+        } else {
+            m += "\n\nNão informado.";
+        } */      
         m += "Telefone: " + this.telefone + "\n";
-        m += "Criado no dia: " + getDataCriacao() + "\n";
-        if (!"".equals(getDataModificacao())) {
-            m += "Modificado no dia: " + getDataModificacao() + "\n";
+        m += "Criado no dia: " + this.getDataCriacao() + "\n";
+        if (!"".equals(getDataModificacao()) || this.nascimento != null) {
+            m += "Modificado no dia: " + this.getDataModificacao() + "\n";
         }
         return m;
     }

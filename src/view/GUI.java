@@ -5,6 +5,7 @@ import javax.swing.JOptionPane;
 import model.ConvidadoFamilia;
 import model.ConvidadoFamiliaDAO;
 import model.Evento;
+import model.PessoaDAO;
 import model.PresentesDAO;
 import model.Usuario;
 import model.UsuarioDAO;
@@ -30,7 +31,7 @@ public class GUI {
     }
 
     //LOGINS
-    public Usuario login(UsuarioDAO usuariodao) {
+    public Usuario login(UsuarioDAO usuariodao, PessoaDAO pessoadao) {
         Usuario usuario = null;
         String loginAtt, senhaAtt;
 
@@ -38,7 +39,7 @@ public class GUI {
             loginAtt = JOptionPane.showInputDialog("Informe seu login: ");
             senhaAtt = JOptionPane.showInputDialog("Informe sua senha: ");
 
-            usuario = usuariodao.retornaUsuario(loginAtt, senhaAtt);
+            usuario = usuariodao.retornaUsuarioByLoginESenha(loginAtt, senhaAtt, pessoadao);
 
             if (usuario == null) {
                 JOptionPane.showMessageDialog(null, "Login ou senha inválidos. Tente novamente.");
@@ -160,7 +161,7 @@ public class GUI {
         m.append("\n2- Gerar novos codigos de acesso para Convites Família.");
         m.append("\n3- Adicionar pessoas em Convites Família ou Convites Fornecedor.");
         m.append("\n4- Excluir pessoas em Convites Família ou Convites Fornecedor.");
-        m.append("\n5- Editar Convites Família.");
+        m.append("\n5- Editar Convites Família ou Convites Fornecedor.");
         m.append("\n6- Exibir Convites Família e Convites Fornecedor.");
         m.append("\n7- Desfazer Convites Famlília ou Convites Fornecedor.");
         m.append("\n\n0 - Voltar.");
@@ -420,18 +421,13 @@ public class GUI {
         StringBuilder m = new StringBuilder("----------------------------------------------------------------------");
         m.append("\nUsuário: ").append(usuarioLogado.getPessoa().getNome());
         m.append("\nTipo: ").append(usuarioLogado.getTipo());
-        m.append(String.format("%60s",calendarioFormatado(calendario)));
-        //%60s = garante que a string formatada terá no mínimo 60 caracteres de largura,
-        //se a string fornecida tiver menos de 60 caracteres, espaços em branco serão adicionados à esquerda para preencher o restante,
-        //se a string tiver mais de 60 caracteres, ela será impressa sem espaços em branco.
-        //%s = especificador de formato usado para representar uma string.
+        m.append(String.format("%60s", calendarioFormatado(calendario)));
         m.append("\n----------------------------------------------------------------------\n\n");
 
         return m;
     }
 
     public StringBuilder headerConvidado(ConvidadoFamilia convitefamilia) {
-        //Aqui aparecerá o dia do calendário.
         StringBuilder m = new StringBuilder("-------------------------------------------------------------------");
         m.append("\nConvite Família dos: ").append(convitefamilia.getNomeDaFamilia());
         m.append("\n-------------------------------------------------------------------\n\n");

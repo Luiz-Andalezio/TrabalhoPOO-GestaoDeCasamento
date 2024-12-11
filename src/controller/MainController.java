@@ -1,5 +1,6 @@
 package controller;
 
+import data_base_connector.ConnectionFactory;
 import java.time.LocalDateTime;
 import model.CalendarioDAO;
 import model.CartorioDAO;
@@ -29,7 +30,7 @@ import view.GUI;
 public class MainController {
 
     //Calendário
-    LocalDateTime calendario = LocalDateTime.of(2024, 10, 20, 04, 20, 07);
+    LocalDateTime calendario = LocalDateTime.of(2024, 12, 11, 04, 20, 07); //12/11/2024 04:20:07
     CalendarioDAO calendarioDAO = new CalendarioDAO();
 
     //controller
@@ -53,7 +54,7 @@ public class MainController {
     IgrejaDAO igrejadao = new IgrejaDAO();
     CartorioDAO cartoriodao = new CartorioDAO();
     EventoDAO eventodao = new EventoDAO(pessoadao, igrejadao, cartoriodao, calendario);
-    Evento evento = eventodao.retornaEvento();
+    Evento evento = eventodao.retornaEvento(igrejadao, cartoriodao, pessoadao);
     Fornecedor fornecedor = new Fornecedor();
     FornecedorDAO fornecedordao = new FornecedorDAO(calendario);
     ParcelaDAO parceladao = new ParcelaDAO(pessoadao, fornecedordao, calendario);
@@ -73,6 +74,15 @@ public class MainController {
 
     //Main
     public MainController() {
+
+        //Connection
+        ConnectionFactory connectionFactory = new ConnectionFactory();
+        connectionFactory.getConnection();
+
+        /*Long id = (long) 1;
+        JOptionPane.showMessageDialog(null, cartoriodao.retornaCartorio().toString());
+        JOptionPane.showMessageDialog(null, usuariodao.verUsuarios(pessoadao));*/
+
         int mainOpc = 0;
 
         while (mainOpc != -1) {
@@ -82,17 +92,17 @@ public class MainController {
             switch (mainOpc) {
                 //Entrar como Administrador
                 case 1:
-                    usuarioLogado = gui.login(usuariodao);
+                    usuarioLogado = gui.login(usuariodao, pessoadao);
 
                     int opc = 0;
                     while (opc != -1) {
                         //Login Noiva
-                        if (usuarioLogado.getTipo().equals("Noivo") || usuarioLogado.getTipo().equals("Noiva")) {
+                        if (usuarioLogado.getTipo().equals("noivo") || usuarioLogado.getTipo().equals("noiva")) {
                             opc = gui.menuNoivos(usuarioLogado, calendario);
                             switch (opc) {
                                 case 1:
                                     //ce = Controller Evento
-                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, cerimonialdao, igrejadao, cartoriodao, calendario);
+                                    ce.controllerCrudEvento(gui, pessoadao, usuarioLogado, eventodao, cerimonialdao, igrejadao, cartoriodao, calendario);
                                     break;
 
                                 case 2:
@@ -117,12 +127,12 @@ public class MainController {
 
                                 case 6:
                                     //cpm = Controller Pagamentos
-                                    cpm.controllerCrudPagamentos(gui, usuarioLogado, eventodao, fornecedordao, pagamento, pagamentodao, parceladao, calendario);
+                                    cpm.controllerCrudPagamentos(gui, usuarioLogado, eventodao, igrejadao, cartoriodao, pessoadao, fornecedordao, pagamento, pagamentodao, parceladao, calendario);
                                     break;
 
                                 case 7:
                                     //cc = Controller Calendario
-                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, fornecedordao, pagamentodao, calendarioDAO, parceladao, calendario);
+                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, pessoadao, fornecedordao, pagamentodao, calendarioDAO, parceladao, calendario);
                                     break;
 
                                 case 8:
@@ -141,12 +151,12 @@ public class MainController {
                             }
                         }
                         //Login Administrador
-                        if (usuarioLogado.getTipo().equals("Admin")) {
+                        if (usuarioLogado.getTipo().equals("admin")) {
                             opc = gui.menuAdmin(usuarioLogado, calendario);
                             switch (opc) {
                                 case 1:
                                     //ce = Controller Evento
-                                    ce.controllerCrudEvento(gui, usuarioLogado, eventodao, cerimonialdao, igrejadao, cartoriodao, calendario);
+                                    ce.controllerCrudEvento(gui, pessoadao, usuarioLogado, eventodao, cerimonialdao, igrejadao, cartoriodao, calendario);
                                     break;
 
                                 case 2:
@@ -181,12 +191,12 @@ public class MainController {
 
                                 case 8:
                                     //cpm = Controller Pagamentos
-                                    cpm.controllerCrudPagamentos(gui, usuarioLogado, eventodao, fornecedordao, pagamento, pagamentodao, parceladao, calendario);
+                                    cpm.controllerCrudPagamentos(gui, usuarioLogado, eventodao, igrejadao, cartoriodao, pessoadao, fornecedordao, pagamento, pagamentodao, parceladao, calendario);
                                     break;
 
                                 case 9:
                                     //cc = Controller Calendario
-                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, fornecedordao, pagamentodao, calendarioDAO, parceladao, calendario);
+                                    this.calendario = cc.controllerCrudIncrementaData(gui, usuarioLogado, pessoadao, fornecedordao, pagamentodao, calendarioDAO, parceladao, calendario);
                                     break;
 
                                 case 10:
@@ -205,7 +215,7 @@ public class MainController {
                             }
                         }
                         //Login Cerimonial
-                        if (usuarioLogado.getTipo().equals("Cerimonial")) {
+                        if (usuarioLogado.getTipo().equals("cerimonial")) {
                             opc = gui.menuCerimonial(usuarioLogado, calendario);
                             switch (opc) {
                                 case 1:
@@ -273,11 +283,11 @@ public class MainController {
                         }
                     }
                     break;
-                
+
                 //Informações do Evento
                 case 3:
                     //ce = Controller Evento
-                    ce.controllerInfoEvento(eventodao);
+                    ce.controllerInfoEvento(eventodao, igrejadao, cartoriodao, pessoadao, cerimonialdao);
                     break;
 
                 //Sair

@@ -8,12 +8,13 @@ import model.CartorioDAO;
 import model.CerimonialDAO;
 import model.EventoDAO;
 import model.IgrejaDAO;
+import model.PessoaDAO;
 import model.Usuario;
 import view.GUI;
 
 public class ControllerEvento {
 
-    public void controllerCrudEvento(GUI gui, Usuario usuarioLogado, EventoDAO eventodao, CerimonialDAO cerimonialdao, IgrejaDAO igrejadao, CartorioDAO cartoriodao, LocalDateTime calendario) {
+    public void controllerCrudEvento(GUI gui, PessoaDAO pessoadao, Usuario usuarioLogado, EventoDAO eventodao, CerimonialDAO cerimonialdao, IgrejaDAO igrejadao, CartorioDAO cartoriodao, LocalDateTime calendario) {
         StringBuilder m;
         int menuEventoOpc = 0;
 
@@ -28,13 +29,13 @@ public class ControllerEvento {
                         if (!"".equals(novoNomeNoivo) && !"".equals(novoNomeNoiva)) {
                             JOptionPane.showMessageDialog(null, "Nomes atualizados com sucesso!\n\nNovo nome do noivo: " + novoNomeNoivo + "\nNovo nome da noiva: " + novoNomeNoiva);
                         } else if (!"".equals(novoNomeNoivo)) {
-                            eventodao.atualizaNomeNoivo(novoNomeNoivo, calendario);
+                            eventodao.atualizaNomeNoivo(novoNomeNoivo, igrejadao, cartoriodao, pessoadao, calendario);
                             JOptionPane.showMessageDialog(null, "Nome do noivo atualizado com sucesso!");
                         } else if (!"".equals(novoNomeNoiva)) {
-                            eventodao.atualizaNomeNoiva(novoNomeNoiva, calendario);
+                            eventodao.atualizaNomeNoiva(novoNomeNoiva, igrejadao, cartoriodao, pessoadao, calendario);
                             JOptionPane.showMessageDialog(null, "Nome da noiva atualizado com sucesso!");
                         } else {
-                            JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                            JOptionPane.showMessageDialog(null, "Nenhum dado enviado: nomes dos noivos não alterados...");
                         }
                     }
                     break;
@@ -48,7 +49,7 @@ public class ControllerEvento {
                     LocalDate.parse(dataAtt, formatador);
 
                     if (!"".equals(dataAtt)) {
-                        eventodao.atualizaDataEvento(dataAtt, calendario);
+                        eventodao.atualizaDataEvento(dataAtt, igrejadao, cartoriodao, pessoadao, calendario);
                         JOptionPane.showMessageDialog(null, "Data atualizada com sucesso!");
                     } else if ("".equals(dataAtt)) {
                         JOptionPane.showMessageDialog(null,
@@ -67,19 +68,14 @@ public class ControllerEvento {
                         switch (menuCerimonialOpc) {
                             case 1:
                                 //Registrar Cerimonial
-                                novoNomeNoivo = JOptionPane.showInputDialog("Informe o novo nome do noivo: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
-                                novoNomeNoiva = JOptionPane.showInputDialog("Informe o novo nome da noiva: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
-                                if (!"".equals(novoNomeNoivo) || !"".equals(novoNomeNoiva)) {
-                                    if (!"".equals(novoNomeNoivo) && !"".equals(novoNomeNoiva)) {
-                                        JOptionPane.showMessageDialog(null, "Nomes atualizados com sucesso!\n\nNovo nome do noivo: " + novoNomeNoivo + "\nNovo nome da noiva: " + novoNomeNoiva);
-                                    } else if (!"".equals(novoNomeNoivo)) {
-                                        eventodao.atualizaNomeNoivo(novoNomeNoivo, calendario);
-                                        JOptionPane.showMessageDialog(null, "Nome do noivo atualizado com sucesso!");
-                                    } else if (!"".equals(novoNomeNoiva)) {
-                                        eventodao.atualizaNomeNoiva(novoNomeNoiva, calendario);
-                                        JOptionPane.showMessageDialog(null, "Nome da noiva atualizado com sucesso!");
+                                String novoNome = JOptionPane.showInputDialog("Informe o novo nome do cerimonial: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                String novaFuncao = JOptionPane.showInputDialog("Informe o funcao nome da cerimonial: \n\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                if (!"".equals(novoNome) || !"".equals(novaFuncao)) {
+                                    if (!"".equals(novoNome) && !"".equals(novaFuncao)) {
+                                        cerimonialdao.criarCerimonial(novoNome, novaFuncao, calendario);
+                                        JOptionPane.showMessageDialog(null, cerimonialdao.verCerimoniaisAdmin());
                                     } else {
-                                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: cerimonial não criado...");
                                     }
                                 }
                                 break;
@@ -95,13 +91,13 @@ public class ControllerEvento {
                                         int veredito = JOptionPane.showConfirmDialog(null, "Deseja mesmo editar o cerimonial abaixo?\n\n" + cerimonialdao.retornaCerimonialByID(id), "Confirmar Edição", JOptionPane.YES_NO_OPTION);
                                         if (veredito == JOptionPane.YES_OPTION) {
                                             JOptionPane.showMessageDialog(null, "Caso queira pular uma edição, deixe a caixa vazia e pressione ENTER.");
-                                            String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome do cerimonial abaixo:\n\n)" + cerimonialdao.retornaCerimonialByID(id) + "\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
-                                            String funcaoAtt = JOptionPane.showInputDialog("Informe a nova função do cerimonial abaixo:\n\n)" + cerimonialdao.retornaCerimonialByID(id) + "\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                            String nomeAtt = JOptionPane.showInputDialog("Informe o novo nome do cerimonial abaixo:\n\n" + cerimonialdao.retornaCerimonialByID(id) + "\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
+                                            String funcaoAtt = JOptionPane.showInputDialog("Informe a nova função do cerimonial abaixo:\n\n" + cerimonialdao.retornaCerimonialByID(id) + "\n(OBS: deixe a caixa vazia e pressione ENTER para pular)");
                                             if (!"".equals(nomeAtt) || !"".equals(funcaoAtt)) {
                                                 cerimonialdao.atualizaCerimonial(id, nomeAtt, funcaoAtt, calendario);
-                                                JOptionPane.showMessageDialog(null, "Igreja atualizada com sucesso!");
+                                                JOptionPane.showMessageDialog(null, "Cerimonial atualizada com sucesso!");
                                             } else {
-                                                JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                                                JOptionPane.showMessageDialog(null, "Nenhum dado enviado: cerimonial não criado...");
                                             }
                                         } else {
                                             JOptionPane.showMessageDialog(null, "Edição não sucedida...");
@@ -148,6 +144,7 @@ public class ControllerEvento {
                                 break;
                         }
                     }
+                    break;
 
                 case 4:
                     //Alterar Igreja
@@ -159,7 +156,7 @@ public class ControllerEvento {
                         igrejadao.atualizaIgreja(nomeAtt, enderecoAtt, cepAtt);
                         JOptionPane.showMessageDialog(null, "Igreja atualizada com sucesso!");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: igreja não editada...");
                     }
                     break;
 
@@ -174,7 +171,7 @@ public class ControllerEvento {
                         cartoriodao.atualizaCartorio(nomeAtt, enderecoAtt, telefoneAtt, cepAtt);
                         JOptionPane.showMessageDialog(null, "Cartório atualizado com sucesso!");
                     } else {
-                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: fornecedor não criado...");
+                        JOptionPane.showMessageDialog(null, "Nenhum dado enviado: cartório não editado...");
                     }
                     break;
 
@@ -190,7 +187,7 @@ public class ControllerEvento {
         }
     }
 
-    public void controllerInfoEvento(EventoDAO eventodao) {
-        JOptionPane.showMessageDialog(null, eventodao.retornaEvento().eventoInfos());
+    public void controllerInfoEvento(EventoDAO eventodao, IgrejaDAO igrejadao, CartorioDAO cartoriodao, PessoaDAO pessoadao, CerimonialDAO cerimonialdao) {
+        JOptionPane.showMessageDialog(null, eventodao.retornaEvento(igrejadao, cartoriodao, pessoadao).eventoInfos(cerimonialdao));
     }
 }

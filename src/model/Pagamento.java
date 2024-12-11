@@ -3,23 +3,16 @@ package model;
 import java.text.NumberFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Locale;
 
 public class Pagamento {
-
     private long id;
-    //private String data;
-    //private Pessoa pessoa;
     private String descricao;
     private Fornecedor fornecedor;
-    //private double valor;
-    private Parcela[] parcelas = new Parcela[100];
-    //private int parcela;
-    //private boolean estadoPagamento;    
     private String dataCriacao;
     private String dataModificacao;
     private static long incrementaId = 0;
-    //final assegura que essa referência não será alterada durante a execução do programa
     private static final Locale localeBR = new Locale("pt", "BR");
     private static final NumberFormat formatador = NumberFormat.getCurrencyInstance(localeBR);
 
@@ -32,26 +25,6 @@ public class Pagamento {
         this.id = id;
     }
 
-    /* 
-    public String getData() {
-        return this.data;
-    }
-
-    public void setData(String data) {        
-        if(data == null){
-        this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
-        } else {
-            this.data = data;
-        }
-    }
-
-    public Pessoa getPessoa() {
-        return pessoa;
-    }
-
-    public void setPessoa(Pessoa pessoa) {
-        this.pessoa = pessoa;
-    }*/
     public String getDescricao() {
         return descricao;
     }
@@ -66,126 +39,6 @@ public class Pagamento {
 
     public void setFornecedor(Fornecedor fornecedor) {
         this.fornecedor = fornecedor;
-    }
-
-    /* 
-    public double getValor() {
-        return valor;
-    }
-
-    public void setValor(double valor) {
-        this.valor = valor;
-    }
-
-    public int getParcela() {
-        return parcela;
-    }
-
-    public void setParcela(int parcela) {
-        this.parcela = parcela;
-    }
-
-    public boolean getEstadoPagamento() {
-        return this.estadoPagamento;
-    }
-
-    public void setEstadoPagamento(boolean estadoPagamento) {
-        this.estadoPagamento = estadoPagamento;
-    }*/
-    public Parcela getParcelaVetor(int i) {
-        return parcelas[i];
-    }
-
-    public Parcela getParcelaByID(int id) {
-        int i = 0;
-        while (parcelas[i] != null && parcelas[i].getId() != id || parcelas[i] == null) {
-            i++;
-        }
-
-        if (parcelas[i] != null && parcelas[i].getId() == id) {
-            return parcelas[i];
-        }
-        return null;
-    }
-
-    public Parcela getParcelaByNmr(int parcela) {
-        int i = 0;
-        while (parcelas[i] != null && parcelas[i].getParcela() != parcela || parcelas[i] == null) {
-            i++;
-        }
-
-        if (parcelas[i] != null && parcelas[i].getParcela() == parcela) {
-            return parcelas[i];
-        }
-        return null;
-    }
-
-    public String getParcelas() {
-        String m = "";
-        for (int i = 0; i < parcelas.length; i++) {
-            if (parcelas[i] != null) {
-                m += parcelas[i].toString() + "\n";
-            }
-        }
-        return m;
-    }
-
-    public int getQtdParcelas() {
-        int existe = 0;
-        for (int i = 0; i < parcelas.length; ++i) {
-            if (parcelas[i] != null) {
-                ++existe;
-            }
-        }
-        return existe;
-    }
-
-    public int getTamanhoVetorParcelas() {
-        int i;
-        for (i = 0; i < parcelas.length; ++i) {
-        }
-        return i;
-    }
-
-    public boolean getVetorParcelas() {
-        int existe = 0;
-        for (int i = 0; i < parcelas.length; ++i) {
-            if (parcelas[i] != null) {
-                ++existe;
-            }
-        }
-        if (existe != 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public boolean setParcela(Parcela parcela) {
-        for (int i = 0; i < parcelas.length; i++) {
-            if (parcelas[i] == null) {
-                this.parcelas[i] = parcela;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean setParcelaByID(int id, Parcela parcela) {
-        int i = 0;
-        while (parcelas[i] != null && parcelas[i].getId() != id || parcelas[i] == null) {
-            i++;
-        }
-
-        if (parcelas[i] != null && parcelas[i].getId() == id) {
-            this.parcelas[i] = parcela;
-            return true;
-        }
-        return false;
-    }
-
-    public void setParcelasVetor(int i, Parcela parcela) {
-        this.parcelas[i] = parcela;
     }
 
     public String getDataCriacao() {
@@ -270,30 +123,15 @@ public class Pagamento {
         this.dataModificacao = concatenaDataHorario;
     }
 
-    /* 
-    @Override
-    public String toString() {
-        String m = "";
-        m += "--------------- Fornecedor de Código: " + this.id + " ---------------";
-        m += "\nFornecedor: " + this.nome;
-        m += "\nCnpj: " + this.cnpj;
-        m += "\nTelefone: " + this.telefone;
-        m += "\nValor: " + formatador.format(this.valorAPagar);
-        m += "\nParcelas: " + this.parcelas;
-        if (this.estado == false) {
-            m += "\nNão pago!\n";
-        } else {
-            m += "\nPago!\n";
-        }
-            m += "\nRegistrado no dia: " + this.getDataCriacao();
-            if (this.getDataModificacao() != null) {
-                m += " e modificado no dia: " + this.getDataModificacao();
-            }            
-        m += "\n------------------------------------------------------------------\n";
-        return m;
-    }*/
-    @Override
-    public String toString() {
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
+    public String toStringParameter(Pagamento pagamento, PagamentoDAO pagamentodao, FornecedorDAO fornecedordao, ParcelaDAO parceladao, PessoaDAO pessoadao) {
         String m = "";
         m += "--------------- Pagamento de ID: " + this.id + " ---------------";
 
@@ -307,69 +145,14 @@ public class Pagamento {
             m += "\nValor total: " + formatador.format(this.fornecedor.getValorAPagar());
             m += "\nEstado: ";
             if (this.fornecedor.getEstado() == true) {
-                m += "Todas as parcelas pagas!";
+                m += "Todas as parcelas pagas!\n\n";
             } else {
-                m += "Faltam parcelas à pagar.";
+                m += "Faltam parcelas à pagar.\n\n";
             }
-
-            int existe = 0;
-            for (int i = 0; i < parcelas.length; ++i) {
-                if (parcelas[i] != null) {
-                    ++existe;
-                }
-            }
-            if (existe == 0) {
-                m += "\n\nAinda não há parcelas.\n\n";
-            }
-            if (existe == 1) {
-                for (int i = 0; i < parcelas.length; ++i) {
-                    if (parcelas[i] != null) {
-                        m += parcelas[i].toStringParcelaUnica();
-                        m += "\n";
-                    }
-                }
-            }
-            if (existe > 1) {
-                m += "\n\nParcelas:\n";
-                for (int i = 0; i < parcelas.length; ++i) {
-                    if (parcelas[i] != null) {
-                        m += parcelas[i].toString();
-                        m += "\n";
-                    }
-                }
-            }
-        } else {
-            double valorTotal = 0;
-            for (int i = 0; i < parcelas.length; ++i) {
-                if (parcelas[i] != null) {
-                    valorTotal = valorTotal + parcelas[i].getValorDaParcela();
-                }
-            }
-            m += "\nValor total: " + formatador.format(valorTotal) + "\n";
-            int existe = 0;
-            for (int i = 0; i < parcelas.length; ++i) {
-                if (parcelas[i] != null) {
-                    ++existe;
-                }
-            }
-            if (existe == 0) {
-                m += "\nAinda não há parcelas.\n\n";
-            }
-            if (existe == 1) {
-                for (int i = 0; i < parcelas.length; ++i) {
-                    if (parcelas[i] != null) {
-                        m += parcelas[i].toStringParcelaUnica();
-                        m += "\n";
-                    }
-                }
-            }
-            if (existe > 1) {
-                m += "\nParcelas:\n";
-                for (int i = 0; i < parcelas.length; ++i) {
-                    if (parcelas[i] != null) {
-                        m += parcelas[i].toString();
-                        m += "\n";
-                    }
+            List<Parcela> parcelas = parceladao.buscarParcelasPorPagamentoToList(this.id, pagamentodao, fornecedordao, pessoadao);
+            for (Parcela parcela : parcelas) {
+                if (parcela.getPagamento().getId() == this.id) {
+                    m += parcela.toString() + "\n";
                 }
             }
         }
@@ -377,7 +160,7 @@ public class Pagamento {
         if (this.getDataModificacao() != null) {
             m += " e modificado no dia: " + this.getDataModificacao();
         }
-        m += "\n------------------------------------------------------------------\n";
+        m += "\n------------------------------------------------------------------\n\n";
         return m;
     }
 }

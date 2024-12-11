@@ -1,0 +1,238 @@
+-- Create database
+CREATE DATABASE gestaoCasamento;
+
+-- Use the database
+USE gestaoCasamento;
+
+-- Drop the database if it exists
+DROP DATABASE IF EXISTS gestaoCasamento;
+-- Tabela pessoa
+CREATE TABLE pessoa (
+    id_pessoa BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    nascimento VARCHAR(100) NOT NULL,
+    telefone VARCHAR(100) NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL
+);
+
+-- População da tabela pessoa
+INSERT INTO pessoa (nome, nascimento, telefone, dataCriacao) 
+VALUES 
+    ('João', '1990-05-15', '(11) 99999-1111', '2024-11-19 10:30:00'),
+    ('Maria', '2004-11-12', '(34) 98889-2555', '2024-11-19 10:49:00'),
+    ('Luiz', '2004-04-19', '(34) 99713-6908', '2024-11-19 10:49:00'),
+    ('Gabriel', '2004-10-11', '(34) 99999-9999', '2024-11-19 10:49:00'),
+    ('Ana', '2008-08-10', '(34) 99999-9999', '2024-11-19 10:49:00'),
+    ('Eustáquio', '1967-03-12', '(34) 99999-9999', '2024-11-19 10:49:00');
+    
+
+-- Tabela usuario
+CREATE TABLE usuario (
+    id_usuario BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_pessoa_fk BIGINT NOT NULL,
+    tipo VARCHAR(100) NOT NULL,
+    login VARCHAR(100) NOT NULL,
+    senha VARCHAR(100) NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL,
+    CONSTRAINT fk_usuario_pessoa FOREIGN KEY (id_pessoa_fk) REFERENCES pessoa(id_pessoa)
+);
+
+-- População da tabela usuario
+INSERT INTO usuario (id_pessoa_fk, tipo, login, senha, dataCriacao)
+VALUES 
+    (1, 'noivo', 'coxinho', '123', '2024-11-20 11:00:00'),
+    (2, 'noiva', 'coxinha', '123', '2024-11-19 11:00:00'),
+    (3, 'admin', 'luiz', '123', '2024-11-19 11:00:00'),
+    (4, 'admin', 'gabriel', '123', '2024-11-19 11:00:00');
+
+-- Tabela fornecedor
+CREATE TABLE fornecedor (
+    id_fornecedor BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(50) NOT NULL,
+    cnpj VARCHAR(50) NOT NULL UNIQUE,
+    telefone VARCHAR(50) NOT NULL,
+    valorAPagar DECIMAL(10,2) NOT NULL,
+    parcelas INTEGER NOT NULL,
+    estado_fornecedor BOOLEAN NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL
+);
+
+-- População da tabela fornecedor
+INSERT INTO fornecedor (nome, cnpj, telefone, valorAPagar, parcelas, estado_fornecedor, dataCriacao) 
+VALUES 
+    ('Fotografo', '12.345.678/0001-90', '(11) 98765-4321', 5000.00, 5, FALSE, '2024-11-29 10:30:45'),
+    ('DJ Alok', '98.765.432/0001-12', '(21) 99876-5432', 680000.00, 3, FALSE, '2024-11-28 14:20:30');
+
+-- Tabela pagamento
+CREATE TABLE pagamento (
+    id_pagamento BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    descricao VARCHAR(100) NOT NULL,
+    id_fornecedor_fk BIGINT NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL,
+    CONSTRAINT fk_pagamento_fornecedor FOREIGN KEY (id_fornecedor_fk) REFERENCES fornecedor(id_fornecedor)
+);
+
+-- População da tabela pagamento
+INSERT INTO pagamento (descricao, id_fornecedor_fk, dataCriacao)
+VALUES 
+    ('Fotografo', 1, '2024-11-29 10:30:00'),
+    ('Padre', 2, '2024-11-29 10:35:00');
+
+-- Tabela parcela
+CREATE TABLE parcela (
+    id_parcela BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    id_pagamento_fk BIGINT NOT NULL,
+    id_pessoa_pagante_fk BIGINT NOT NULL,
+    parcela INTEGER NOT NULL,
+    parcela_data DATETIME NOT NULL,
+    valor_parcela DECIMAL(10,2) NOT NULL,
+    estado_pagamento BOOLEAN NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL,
+    CONSTRAINT fk_parcela_pagamento FOREIGN KEY (id_pagamento_fk) REFERENCES pagamento(id_pagamento),
+    CONSTRAINT fk_parcela_pessoa FOREIGN KEY (id_pessoa_pagante_fk) REFERENCES pessoa(id_pessoa)
+);
+
+-- População da tabela parcela
+INSERT INTO parcela (id_pagamento_fk, id_pessoa_pagante_fk, parcela, parcela_data, valor_parcela, estado_pagamento, dataCriacao)
+VALUES 
+    (1, 1, 1, '2024-11-29 10:30:45', 1000.00, FALSE, NOW()),
+    (1, 1, 2, '2024-12-29 10:30:45', 1000.00, FALSE, NOW()),
+    (1, 1, 3, '2025-01-29 10:30:45', 1000.00, FALSE,  NOW()),
+    (1, 1, 4, '2025-02-28 10:30:45', 1000.00, FALSE,  NOW()),
+    (1, 1, 5, '2025-03-29 10:30:45', 1000.00, FALSE,  NOW());
+    
+-- Tabela cartorio
+CREATE TABLE cartorio (
+    id_cartorio BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome_cartorio VARCHAR(100) NOT NULL,
+    endereco_cartorio VARCHAR(100) NOT NULL,
+    telefone_cartorio VARCHAR(100) NOT NULL,
+    cep_cartorio VARCHAR(100) NOT NULL
+);
+
+-- População da tabela cartorio
+INSERT INTO cartorio (nome_cartorio, endereco_cartorio, telefone_cartorio, cep_cartorio)
+VALUES 
+    ('Cartório do Norte', 'Avenida Brasil, 456', '(21) 91234-5678', '87654-321');
+
+-- Tabela igreja
+CREATE TABLE igreja (
+    id_igreja BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    endereco VARCHAR(100) NOT NULL,
+    CEP VARCHAR(100) NOT NULL
+);
+
+-- População da tabela igreja
+INSERT INTO igreja (nome, endereco, CEP)
+VALUES 
+    ('Igreja Nossa Senhora da Paz', 'Rua Central, 789', '65432-100');
+
+-- Tabela convidado_familia
+CREATE TABLE convidado_familia (
+    id_convidado_familia BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome_familia VARCHAR(100) NOT NULL,
+    acesso VARCHAR(100) NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL
+);
+
+-- População da tabela convidado_familia
+INSERT INTO convidado_familia (nome_familia, dataCriacao)
+VALUES 
+    ('Fornecedores', NOW()),
+    ('Família Dantas', NOW()),
+    ('Família Silva', NOW());
+
+-- Tabela convidado_individual
+CREATE TABLE convidado_individual (
+    id_convidado_individual BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY, 
+    id_pessoa_fk BIGINT NOT NULL,         
+    id_convidado_familia_fk BIGINT NOT NULL,  
+    parentesco VARCHAR(500) NOT NULL,            
+    confirmacao BOOLEAN NOT NULL,                 
+    dataCriacao DATETIME NOT NULL,               
+    dataModificacao DATETIME NULL,           
+    CONSTRAINT fk_convidado_pessoa FOREIGN KEY (id_pessoa_fk) REFERENCES pessoa(id_pessoa),
+    CONSTRAINT fk_convidado_familia FOREIGN KEY (id_convidado_familia_fk) REFERENCES convidado_familia(id_convidado_familia)
+);
+
+-- População da tabela convidado_individual
+INSERT INTO convidado_individual (id_pessoa_fk, id_convidado_familia_fk, parentesco, confirmacao, dataCriacao)
+VALUES 
+    (5, 2, 'Primo', TRUE, NOW()),
+    (6, 1, 'Amigo da familia Silva', TRUE, NOW());
+
+-- Tabela presentes
+CREATE TABLE presentes (
+    id_presente BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome_presente VARCHAR(100) NOT NULL,
+    tipo_presente VARCHAR(100) NOT NULL,
+    valor_presente DECIMAL(10,2) NOT NULL,
+    comprador_presente VARCHAR(100) NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL
+);
+
+-- População da tabela presentes
+INSERT INTO presentes (nome_presente, valor_presente, dataCriacao)
+VALUES 
+    ('Relógio de pulso', 250.00, NOW()),
+    ('Jogo de chá', 120.00, NOW());
+
+-- Tabela mensagens
+CREATE TABLE mensagens (
+    id_mensagem BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    mensagem VARCHAR(100) NOT NULL,
+    nome_mensageiro VARCHAR(100) NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL
+);
+
+-- População da tabela mensagens
+INSERT INTO mensagens (mensagem, nome_mensageiro, dataCriacao)
+VALUES 
+    ('Feliz casamento, que seja um dia inesquecível!', 'Ana Banana', NOW()),
+    ('Parabéns aos noivos, que a felicidade acompanhe vocês sempre!', 'Clebin Legal', NOW());
+
+drop table cerimonial;
+-- Tabela cerimonial
+CREATE TABLE cerimonial (
+    id_cerimonial BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    nome VARCHAR(100) NOT NULL,
+    funcao VARCHAR(100) NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL
+);
+
+-- População da tabela cerimonial
+INSERT INTO cerimonial (nome, funcao, dataCriacao)
+VALUES 
+    ('Carlos Silva', 'Mestre de Cerimônias', NOW()),
+    ('Maria Oliveira', 'Coordenadora de Logística', NOW());
+
+-- Tabela evento
+CREATE TABLE evento (
+    id_evento BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    data_evento VARCHAR(100) NOT NULL,
+    igreja_evento_fk BIGINT NOT NULL,
+    cartorio_evento_fk BIGINT NOT NULL,
+    pessoa_noivo_fk BIGINT NOT NULL,
+    pessoa_noiva_fk BIGINT NOT NULL,
+    dataCriacao DATETIME NOT NULL,
+    dataModificacao DATETIME NULL,
+    CONSTRAINT fk_igreja_evento FOREIGN KEY (igreja_evento_fk) REFERENCES igreja(id_igreja),
+    CONSTRAINT fk_cartorio_evento FOREIGN KEY (cartorio_evento_fk) REFERENCES Cartorio(id_cartorio),
+    CONSTRAINT fk_pessoa_noivo FOREIGN KEY (pessoa_noivo_fk) REFERENCES pessoa(id_pessoa),
+    CONSTRAINT fk_pessoa_noiva FOREIGN KEY (pessoa_noiva_fk) REFERENCES pessoa(id_pessoa)
+);
+
+-- População da tabela evento
+INSERT INTO evento (data_evento, igreja_evento_fk, cartorio_evento_fk, pessoa_noivo_fk, pessoa_noiva_fk, dataCriacao)
+VALUES 
+    ('2024-12-15', 1, 1, 1, 2, NOW());

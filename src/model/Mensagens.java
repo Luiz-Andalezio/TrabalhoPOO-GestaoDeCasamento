@@ -10,7 +10,7 @@ public class Mensagens {
     private String nomeDoMensageiro;
     private String dataCriacao;
     private String dataModificacao;
-    private static long incrementaId = 0;
+    //private static long incrementaId = 0;
 
     public long getId() {
         return id;
@@ -74,7 +74,7 @@ public class Mensagens {
             concatenaDataHorario += horarioAtualizado.getSecond();
         }        
         this.dataCriacao = concatenaDataHorario;
-        this.id = ++Mensagens.incrementaId;
+        //this.id = ++Mensagens.incrementaId;
     }
 
     public String getDataModificacao() {
@@ -118,6 +118,14 @@ public class Mensagens {
         this.dataModificacao = concatenaDataHorario;
     }
 
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
     @Override
     public String toString() {
         String m = "";
@@ -126,7 +134,7 @@ public class Mensagens {
         m += "\n\nMensagem: " + this.getMensagem();
         m += "\n\nMensagem enviada no dia: " + getDataCriacao();
         if (this.getDataModificacao() != null) {
-            m += " e modificada no dia: " + this.getDataModificacao();
+            m += " e modificada na data e horário: " + this.getDataModificacao();
         }
         m += "\n\n";
         return m;

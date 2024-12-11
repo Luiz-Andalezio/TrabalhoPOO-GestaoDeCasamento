@@ -7,7 +7,6 @@ public class ConvidadoFamilia {
 
     private long id;
     private String nomeDaFamilia;
-    private ConvidadoIndividual[] convitesIndividuais = new ConvidadoIndividual[100];
     private String acesso;
     private String dataCriacao;
     private String dataModificacao;
@@ -28,58 +27,6 @@ public class ConvidadoFamilia {
 
     public void setNomeDaFamilia(String nomeDaFamilia) {
         this.nomeDaFamilia = nomeDaFamilia;
-    }
-
-    public int getTamanhoVetorConvidadoIndividual() {
-        int i;
-        for (i = 0; i < convitesIndividuais.length; ++i) {
-        }
-        return i;
-    }
-
-    public ConvidadoIndividual getConvidadoIndividualVetor(int i) {
-        return convitesIndividuais[i];
-    }
-
-    public ConvidadoIndividual getConviteIndividualByID(int id) {
-        int i = 0;
-        while (convitesIndividuais[i] != null && convitesIndividuais[i].getId() != id || convitesIndividuais[i] == null) {
-            i++;
-        }
-
-        if (convitesIndividuais[i] != null && convitesIndividuais[i].getId() == id) {
-            return convitesIndividuais[i];
-        }
-        return null;
-    }
-
-    public boolean getVetorConvidadosIndividuais() {
-        int existe = 0;
-        for (int i = 0; i < convitesIndividuais.length; ++i) {
-            if (convitesIndividuais[i] != null) {
-                ++existe;
-            }
-        }
-        if (existe != 0) {
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-    public void setConvidadoIndividualByID(int id, ConvidadoIndividual conviteIndividual) {
-        int i = 0;
-        while (convitesIndividuais[i] != null && convitesIndividuais[i].getId() != id || convitesIndividuais[i] == null) {
-            i++;
-        }
-
-        if (convitesIndividuais[i] != null && convitesIndividuais[i].getId() == id) {
-            this.convitesIndividuais[i] = conviteIndividual;
-        }
-    }
-
-    public void setConvidadoIndividualVetor(int i, ConvidadoIndividual conviteIndividual) {
-        this.convitesIndividuais[i] = conviteIndividual;
     }
 
     public String getAcesso() {
@@ -170,6 +117,14 @@ public class ConvidadoFamilia {
         }
 
         this.dataModificacao = concatenaDataHorario;
+    }    
+
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
     }
 
     @Override
@@ -182,40 +137,6 @@ public class ConvidadoFamilia {
         } else {
             m += "---------------- Convite Fornecedor de ID: " + this.id + " ----------------\n";
         }
-        int existe = 0;
-        for (int i = 0; i < convitesIndividuais.length; ++i) {
-            if (convitesIndividuais[i] != null) {
-                ++existe;
-            }
-        }
-        if (existe == 0) {
-            if (!"Fornecedores".equals(this.nomeDaFamilia)) {
-                m += "Ainda não há convidados nesta família.";
-            } else {
-                m += "\nAinda não há fornecedores neste convite.";
-            }
-        } else {
-            m += "Convidados:";
-            for (ConvidadoIndividual convites : convitesIndividuais) {
-                if (convites != null) {
-                    m += "\nID do convite individual: " + convites.getId();
-                    if (!"Fornecedores".equals(nomeDaFamilia)) {
-                        m += "\nNome: " + convites.getPessoa().getNome() + " " + this.nomeDaFamilia;
-                    } else {
-                        m += "\nNome: " + convites.getPessoa().getNome();
-                    }
-                    m += "\nTelefone: " + convites.getPessoa().getTelefone();
-                    if (!"Fornecedores".equals(nomeDaFamilia)) {
-                        m += "\nPresença: ";
-                        if (convites.getConfirmacao() == true) {
-                            m += "Confirmada\n";
-                        } else {
-                            m += "Não confirmada\n";
-                        }
-                    }
-                }
-            }
-        }
         if (!"Fornecedores".equals(nomeDaFamilia)) {
             m += "\nConvite Família feito no dia: " + this.getDataCriacao();
         } else {
@@ -225,9 +146,9 @@ public class ConvidadoFamilia {
             m += " e modificado no dia: " + this.getDataModificacao();
         }
         if (!"Fornecedores".equals(this.nomeDaFamilia)) {
-            m += "\n------------------------------------------------------------------------\n";
+            m += "\n------------------------------------------------------------------------\n\n";
         } else {
-            m += "\n------------------------------------------------------------------------\n";
+            m += "\n------------------------------------------------------------------------\n\n";
         }
         return m;
     }

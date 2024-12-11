@@ -1,6 +1,7 @@
 package model;
 
 public class Cartorio {
+
     private String nome;
     private String endereco;
     private String telefone;

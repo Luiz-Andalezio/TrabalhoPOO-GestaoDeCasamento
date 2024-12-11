@@ -1,36 +1,135 @@
 package model;
 
+import data_base_connector.ConnectionFactory;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CerimonialDAO {
 
-    Cerimonial[] cerimoniais = new Cerimonial[100];
-
     public CerimonialDAO(LocalDateTime calendario) {
-        Cerimonial c1 = new Cerimonial();
-        c1.setNome("Rodrigo Carvalho");
-        c1.setFuncao("Mestre de Cerimônia");
-        c1.setDataCriacao(calendario);
+    }
 
-        Cerimonial c2 = new Cerimonial();
-        c2.setNome("Kenedy Tavares");
-        c2.setFuncao("Animador de Festas");
-        c2.setDataCriacao(calendario);
+    public Cerimonial adicionaCerimonialBanco(Cerimonial cerimonial) {
 
-        Cerimonial c3 = new Cerimonial();
-        c3.setNome("Ana Silva");
-        c3.setFuncao("Recepcionista");
-        c3.setDataCriacao(calendario);
+        String sql = "insert into cerimonial "
+                + "(nome, funcao, dataCriacao)"
+                + " values (?, ?, ?)";
 
-        Cerimonial c4 = new Cerimonial();
-        c4.setNome("Leonardo Nihara");
-        c4.setFuncao("Fotógrafo Profissional");
-        c4.setDataCriacao(calendario);
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
 
-        cerimoniais[0] = c1;
-        cerimoniais[1] = c2;
-        cerimoniais[2] = c3;
-        cerimoniais[3] = c4;
+            stmt.setString(1, cerimonial.getNome());
+            stmt.setString(2, cerimonial.getFuncao());
+            stmt.setTimestamp(3, java.sql.Timestamp.valueOf(cerimonial.getDataCriacao()));
+
+            stmt.execute();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return cerimonial;
+    }
+
+    public Cerimonial atualizaCerimonialBanco(Cerimonial cerimonial) {
+
+        String sql = "update mensagens set cerimonial = ?, nome_mensageiro = ?, dataModificacao = ? where id_cerimonial = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setString(1, cerimonial.getNome());
+            stmt.setString(2, cerimonial.getFuncao());
+            stmt.setTimestamp(3, java.sql.Timestamp.valueOf(cerimonial.getDataModificacao()));
+            stmt.setLong(4, cerimonial.getId());
+
+            stmt.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return cerimonial;
+    }
+
+    public boolean excluindoCerimonialBanco(Long id) {
+
+        String sql = "delete from cerimonial where id_cerimonial = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+
+            stmt.setLong(1, id);
+            stmt.execute();
+            return true;
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+    }
+
+    public List<Cerimonial> buscarTodosOsCerimoniais() {
+
+        List<Cerimonial> listaCerimoniais = new ArrayList<>();
+        String sql = "select * from Cerimonial";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Cerimonial elemento = new Cerimonial();
+                elemento.setId(rs.getLong("id_cerimonial"));
+                elemento.setNome(rs.getString("nome"));
+                elemento.setFuncao(rs.getString("funcao"));
+
+                java.sql.Timestamp dataCriacao = rs.getTimestamp("dataCriacao");
+                if (dataCriacao != null) {
+                    elemento.setDataCriacao(dataCriacao.toLocalDateTime());
+                }
+
+                java.sql.Timestamp dataModificacao = rs.getTimestamp("dataModificacao");
+                if (dataModificacao != null) {
+                    elemento.setDataModificacao(dataModificacao.toLocalDateTime());
+                }
+
+                listaCerimoniais.add(elemento);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar pessoas: " + e.getMessage(), e);
+        }
+
+        return listaCerimoniais;
+    }
+
+    public Cerimonial buscarCerimonialByIdBanco(Long id) {
+
+        String sql = "select * from Cerimonial where id_cerimonial = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Cerimonial elemento = new Cerimonial();
+                    elemento.setId(rs.getLong("id_cerimonial"));
+                    elemento.setNome(rs.getString("nome"));
+                    elemento.setFuncao(rs.getString("funcao"));
+
+                    java.sql.Timestamp dataCriacao = rs.getTimestamp("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacao(dataCriacao.toLocalDateTime());
+                    }
+
+                    java.sql.Timestamp dataModificacao = rs.getTimestamp("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacao(dataModificacao.toLocalDateTime());
+                    }
+
+                    return elemento;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException();
+        }
+
+        return null;
     }
 
     public Cerimonial criarCerimonial(String nome, String funcao, LocalDateTime calendario) {
@@ -39,73 +138,58 @@ public class CerimonialDAO {
         c.setFuncao(funcao);
         c.setDataCriacao(calendario);
 
-        for (int v = 0; v < cerimoniais.length; v++) {
-            if (cerimoniais[v] == null) {
-                cerimoniais[v] = c;
-                return c;
-            }
-        }
-        return null;
+        adicionaCerimonialBanco(c);
+        return c;
     }
 
     public boolean atualizaCerimonial(int id, String nomeAtt, String funcaoAtt, LocalDateTime calendario) {
-        int i = 0;
-        while (cerimoniais[i] != null && cerimoniais[i].getId() != id || cerimoniais[i] == null) {
-            i++;
-        }
-        if (cerimoniais[i] != null && cerimoniais[i].getId() == id) {
+        Long idLong = Long.valueOf(id);
+        Cerimonial cerimonial = buscarCerimonialByIdBanco(idLong);
+
+        if (cerimonial != null && cerimonial.getId() == id) {
             if (!nomeAtt.equals("")) {
-                cerimoniais[i].setNome(nomeAtt);
+                cerimonial.setNome(nomeAtt);
             }
             if (!funcaoAtt.equals("")) {
-                cerimoniais[i].setFuncao(funcaoAtt);
+                cerimonial.setFuncao(funcaoAtt);
             }
-            cerimoniais[i].setDataModificacao(calendario);
+            cerimonial.setDataModificacao(calendario);
             return true;
         }
         return false;
     }
 
     public void excluirCerimonial(int id) {
-        int i = 0;
-        while (cerimoniais[i] != null && cerimoniais[i].getId() != id || cerimoniais[i] == null) {
-            i++;
-        }
-
-        if (cerimoniais[i] != null && cerimoniais[i].getId() == id) {
-            cerimoniais[i] = null;
-        }
+        Long idLong = Long.valueOf(id);
+        excluindoCerimonialBanco(idLong);
     }
-    
+
     public String verCerimoniaisAdmin() {
-        String m = "";
+        StringBuilder m = new StringBuilder();
+        List<Cerimonial> cerimoniais = buscarTodosOsCerimoniais();
+
         for (Cerimonial cerimonial : cerimoniais) {
             if (cerimonial != null) {
-                m = cerimonial.toStringAdmin() + "\n";
+                m.append(cerimonial.toStringAdmin()).append("\n");
             }
         }
-        return m;
+        return m.toString();
     }
 
     public String verCerimoniais() {
-        String m = "";
+        StringBuilder m = new StringBuilder();
+        List<Cerimonial> cerimoniais = buscarTodosOsCerimoniais();
+
         for (Cerimonial cerimonial : cerimoniais) {
             if (cerimonial != null) {
-                m = cerimonial.toString() + "\n";
+                m.append(cerimonial.toString());
             }
         }
-        return m;
+        return m.toString();
     }
 
     public Cerimonial retornaCerimonialByID(int id) {
-        int i = 0;
-        while (cerimoniais[i] != null && cerimoniais[i].getId() != id || cerimoniais[i] == null) {
-            i++;
-        }
-
-        if (cerimoniais[i] != null && cerimoniais[i].getId() == id) {
-            return cerimoniais[i];
-        }
-        return null;
+        Long idLong = Long.valueOf(id);
+        return buscarCerimonialByIdBanco(idLong);
     }
 }

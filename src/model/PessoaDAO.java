@@ -1,89 +1,148 @@
 package model;
 
+import data_base_connector.ConnectionFactory;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PessoaDAO {
 
-    Pessoa[] pessoas = new Pessoa[100];
-
     public PessoaDAO(LocalDateTime calendario) {
-        Pessoa p1 = new Pessoa();
-        p1.setNome("João");
-        p1.setTelefone("+55 (71) ####-####");
-        p1.setNascimento("23/02/2000");
-        p1.setDataCriacao(calendario);
-        pessoas[0] = p1;
-
-        Pessoa p2 = new Pessoa();
-        p2.setNome("Maria");
-        p2.setTelefone("+55 (68) ####-####");
-        p2.setNascimento("01/12/2003");
-        p2.setDataCriacao(calendario);
-        pessoas[1] = p2;
-
-        Pessoa p3 = new Pessoa();
-        p3.setNome("Rodolfo");
-        p3.setTelefone("+55 (34) ####-####");
-        p3.setNascimento("02/12/1993");
-        p3.setDataCriacao(calendario);
-        pessoas[2] = p3;
-
-        Pessoa p4 = new Pessoa();
-        p4.setNome("Luiz");
-        p4.setTelefone("+55 (34) 99713-6908");
-        p4.setNascimento("19/04/2004");
-        p4.setDataCriacao(calendario);
-        pessoas[3] = p4;
-
-        Pessoa p5 = new Pessoa();
-        p5.setNome("Gabriel");
-        p5.setTelefone("+55 (34) ####-####");
-        p5.setNascimento("10/11/2004");
-        p5.setDataCriacao(calendario);
-        pessoas[4] = p5;
-
-        Pessoa p6 = new Pessoa();
-        p6.setNome("Ana");
-        p6.setTelefone("+55 (71) ####-####");
-        p6.setNascimento("22/09/2013");
-        p6.setDataCriacao(calendario);
-        pessoas[5] = p6;
-
-        Pessoa p7 = new Pessoa();
-        p7.setNome("Dario");
-        p7.setTelefone("+55 (21) ####-####");
-        p7.setNascimento("13/06/1992");
-        p7.setDataCriacao(calendario);
-        pessoas[6] = p7;
-
-        Pessoa p8 = new Pessoa();
-        p8.setNome("Eustáquio");
-        p8.setTelefone("+55 (71) ####-####");
-        p8.setNascimento("07/01/1949");
-        p8.setDataCriacao(calendario);
-        pessoas[7] = p8;
-        /*
-        p1.setId(1);
-        p1.setNome("Luiz");
-        p1.setIdade(20);
-        p1.setTelefone("+55 34 99713-6908");
-        p1.setNascimento("19/04/2004");
-        p1.setDataCriacao(calendario);
-        pessoa[0] = p1;*/
     }
 
-    public PessoaDAO(String n, String m, String t, LocalDateTime calendario) {
-        Pessoa p = new Pessoa();
-        p.setNome(n);
-        p.setTelefone(m);
-        p.setNascimento(t);
-        p.setDataCriacao(calendario);
-        p.setDataModificacao(calendario);
-        for (int v = 0; v < pessoas.length; v++) {
-            if (pessoas[v] == null) {
-                pessoas[v] = p;
+    public Pessoa adicionaPessoaBanco(Pessoa elemento) {
+
+        String sql = "insert into pessoa "
+                + "(nome,nascimento,telefone,dataCriacao)"
+                + " values (?,?,?,?)";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, elemento.getNome());
+            stmt.setString(2, elemento.getNascimento());
+            stmt.setString(3, elemento.getTelefone());
+            stmt.setString(4, elemento.getDataCriacao());
+
+            stmt.executeUpdate();
+
+            // Recupera o ID gerado automaticamente
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    elemento.setId(rs.getLong(1));
+                }
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
         }
+        return elemento;
+    }
+
+    public Pessoa atualizaPessoaBanco(Pessoa elemento) {
+
+        String sql = "update pessoa set nome = ?, nascimento = ?, telefone = ?, dataModificacao = ? where id_pessoa = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, elemento.getNome());
+            stmt.setString(2, elemento.getNascimento());
+            stmt.setString(3, elemento.getTelefone());
+            stmt.setString(4, elemento.getDataModificacao());
+            stmt.setLong(5, elemento.getId());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
+    }
+
+    public boolean excluindoPessoaBanco(Pessoa elemento) {
+
+        String sql = "delete from pessoa where id_pessoa = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setLong(1, elemento.getId());
+            stmt.execute();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return false;
+    }
+
+    public List<Pessoa> buscarTodasAsPessoas(LocalDateTime calendario) {
+
+        List<Pessoa> listaPessoas = new ArrayList<>();
+        String sql = "select * from pessoa";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Pessoa elemento = new Pessoa();
+                elemento.setId(rs.getLong("id_pessoa"));
+                elemento.setNome(rs.getString("nome"));
+                elemento.setNascimento(rs.getString("nascimento"));
+                elemento.setTelefone(rs.getString("telefone"));
+
+                String dataCriacao = rs.getString("dataCriacao");
+                if (dataCriacao != null) {
+                    elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                } else {
+                    elemento.setDataCriacao(calendario);
+                }
+
+                String dataModificacao = rs.getString("dataModificacao");
+                if (dataModificacao != null) {
+                    elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                }
+
+                listaPessoas.add(elemento);
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar pessoas: " + e.getMessage(), e);
+        }
+
+        return listaPessoas;
+    }
+
+    public Pessoa buscarPessoaByIdBanco(Long id) {
+
+        String sql = "select * from pessoa where id_pessoa = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement ps = connection.prepareStatement(sql)) {
+
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    Pessoa elemento = new Pessoa();
+                    elemento.setId(rs.getLong("id_pessoa"));
+                    elemento.setNome(rs.getString("nome"));
+                    elemento.setNascimento(rs.getString("nascimento"));
+                    elemento.setTelefone(rs.getString("telefone"));
+
+                    String dataCriacao = rs.getString("dataCriacao");
+                    if (dataCriacao != null) {
+                        elemento.setDataCriacaoByString(rs.getString("dataCriacao"));
+                    }
+
+                    String dataModificacao = rs.getString("dataModificacao");
+                    if (dataModificacao != null) {
+                        elemento.setDataModificacaoByString(rs.getString("dataModificacao"));
+                    }
+
+                    return elemento;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+
+        return null;
     }
 
     public Pessoa criarPessoa(String nome, String telefone, String nascimento, LocalDateTime calendario) {
@@ -93,93 +152,50 @@ public class PessoaDAO {
         p.setNascimento(nascimento);
         p.setDataCriacao(calendario);
 
-        for (int v = 0; v < pessoas.length; v++) {
-            if (pessoas[v] == null) {
-                pessoas[v] = p;
-                return p;
-            }
-        }
-        return null;
+        return adicionaPessoaBanco(p);
     }
 
-    public boolean atualizaPessoa(String nomeAtt, String telefone, String nascimento, int id, LocalDateTime calendario) {
-        int i = 0;
-        while (pessoas[i] != null && pessoas[i].getId() != id || pessoas[i] == null) {
-            i++;
-        }
-        //equals() with null check (temary) - Same shit of: (pessoas[i].getNome() != nome)
-        if (pessoas[i] != null && pessoas[i].getId() == id) {
+    public boolean atualizaPessoa(String nomeAtt, String telefoneAtt, String nascimentoAtt, int id, LocalDateTime calendario) {
+        Long idLong = Long.valueOf(id);
+        Pessoa pessoa = buscarPessoaByIdBanco(idLong);
+
+        if (pessoa != null && pessoa.getId() == id) {
             if (!nomeAtt.equals("")) {
-                pessoas[i].setNome(nomeAtt);
+                pessoa.setNome(nomeAtt);
             }
-            if (!telefone.equals("")) {
-                pessoas[i].setTelefone(telefone);
+            if (!telefoneAtt.equals("")) {
+                pessoa.setTelefone(telefoneAtt);
             }
-            if (!nascimento.equals("")) {
-                pessoas[i].setNascimento(nascimento);
+            if (!nascimentoAtt.equals("")) {
+                pessoa.setNascimento(nascimentoAtt);
             }
-            pessoas[i].setDataModificacao(calendario);
+            pessoa.setDataModificacao(calendario);
+
+            atualizaPessoaBanco(pessoa);
             return true;
         }
         return false;
     }
 
-    public void excluirPessoa(Pessoa pessoa) {
-        int i = 0;
-        while (pessoas[i] != null && pessoas[i] != pessoa || pessoas[i] == null) {
-            i++;
-        }
-
-        if (pessoas[i] != null && pessoas[i] == pessoa) {
-            pessoas[i] = null;
-        }
-    }
-
-    /* 
-    public String verConvidados() {
-        String m = "";
-        
-        //for (int i = 0; i < pessoas.length; i++) {
-        //if (pessoas[i] != null) {
-        //m += pessoas[i].toString() + "\n";
-        //}
-        //} 
-
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa != null) {
-                m += pessoa.toString() + "\n";
-            }
-        }
-        return m;
-    }*/
-    
-    public String verPessoa() {
-        String m = "";
-        /*
-        for (int i = 0; i < pessoas.length; i++) {
-        if (pessoas[i] != null) {
-        m = pessoas[i].toString() + "\n";
-        }
-        }
-         */
-        for (Pessoa pessoa : pessoas) {
-            if (pessoa != null) {
-                m = pessoa.toString() + "\n";
-            }
-        }
-        return m;
-    }
-
-    public Pessoa retornaPessoa(int i) {
-        return pessoas[i];
+    public void excluirPessoaUsuarioBanco(Long idUsuario, Pessoa pessoa, UsuarioDAO usuariodao) {
+        usuariodao.excluindoUsuarioBanco(idUsuario);
+        excluindoPessoaBanco(pessoa);
     }
 
     /*
-    public Pessoa retornaPessoa1() {
-        return pessoas[0];
-    }
-
-    public Pessoa retornaPessoa2() {
-        return pessoas[1];
+    public void excluirPessoaConviteIndividualBanco(Long idConvite, Pessoa pessoa, ConviteIndividualDAO conviteindividualdao) {
+        conviteindividualdao.excluindoConviteIndividualBanco(idConvite);
+        excluindoPessoaBanco(pessoa);
     }*/
+    public String verPessoas(LocalDateTime calendario) {
+        StringBuilder m = new StringBuilder();
+        List<Pessoa> pessoas = buscarTodasAsPessoas(calendario);
+
+        for (Pessoa pessoa : pessoas) {
+            if (pessoa != null) {
+                m.append(pessoa.toString()).append("\n");
+            }
+        }
+        return m.toString();
+    }
 }

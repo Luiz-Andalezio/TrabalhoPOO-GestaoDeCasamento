@@ -14,7 +14,6 @@ public class Fornecedor {
     private double valorAPagar;
     private int parcelas;
     private boolean estado;
-    //private Pagamento[] pagamentos = new Pagamento[100];
     private String dataCriacao;
     private String dataModificacao;     
     private static long incrementaId = 0;   
@@ -214,6 +213,14 @@ public class Fornecedor {
         this.dataModificacao = concatenaDataHorario;
     }
 
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
     @Override
     public String toString() {
         String m = "";
@@ -232,7 +239,7 @@ public class Fornecedor {
             if (this.getDataModificacao() != null) {
                 m += " e modificado no dia: " + this.getDataModificacao();
             }            
-        m += "\n------------------------------------------------------------------\n";
+        m += "\n------------------------------------------------------------------\n\n";
         return m;
     }
 }

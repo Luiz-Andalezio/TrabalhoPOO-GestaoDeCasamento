@@ -119,7 +119,7 @@ public class Cerimonial {
 
     public String toStringAdmin() {
         String m = "";
-        m += "--- Cerimonial ID " + this.id + " ---";
+        m += "--- Cerimonial ID " + this.id + " ---\n";
         m += "Nome: " + this.nome + "\n";
         m += "Função: " + this.funcao + "\n";
         m += "Cerimonial criado no dia: " + this.dataCriacao;

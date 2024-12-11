@@ -1,27 +1,63 @@
 package model;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
+import data_base_connector.ConnectionFactory;
+
 public class ConvidadoFamiliaDAO {
 
-    ConvidadoFamilia[] convitesFamilia = new ConvidadoFamilia[100];
-
     public ConvidadoFamiliaDAO(ConvidadoIndividualDAO conviteindividualdao, Evento evento, LocalDateTime calendario) {
-        ConvidadoFamilia cf1 = new ConvidadoFamilia();     
-        cf1.setNomeDaFamilia("Fornecedores");           
-        cf1.setDataCriacao(calendario);
-        convitesFamilia[0] = cf1;
+    }
 
-        ConvidadoFamilia cf2 = new ConvidadoFamilia();
-        cf2.setNomeDaFamilia("Dantas");
-        cf2.setAcesso(/*gerarAcesso(evento, calendario)*/"123");
-        cf2.setConvidadoIndividualVetor(0, conviteindividualdao.retornaConviteIndividualVetor(0));
-        cf2.setConvidadoIndividualVetor(1, conviteindividualdao.retornaConviteIndividualVetor(1));
-        cf2.setDataCriacao(calendario);
-        convitesFamilia[1] = cf2;
+    public ConvidadoFamilia adicionaParcelaBanco(ConvidadoFamilia elemento) {
+
+        String sql = "insert into convidado_familia "
+                + "(nome_familia,acesso,dataCriacao)"
+                + " values (?,?,?)";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setString(1, elemento.getNomeDaFamilia());
+            stmt.setString(2, elemento.getNomeDaFamilia());
+            stmt.setString(3, elemento.getDataCriacao());
+
+            stmt.executeUpdate();
+
+            // Recupera o ID gerado automaticamente
+            try (ResultSet rs = stmt.getGeneratedKeys()) {
+                if (rs.next()) {
+                    elemento.setId(rs.getLong(1));
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
+    }
+
+    public Parcela atualizaParcelaBanco(Parcela elemento) {
+
+        String sql = "update parcela set id_pagamento_fk = ?, id_pessoa_pagante_fk = ?, parcela = ?, parcela_data = ?, valor_parcela = ?, estado_pagamento = ?, dataModificacao = ? where id_parcela = ?";
+
+        try (Connection connection = new ConnectionFactory().getConnection(); PreparedStatement stmt = connection.prepareStatement(sql)) {
+            stmt.setString(1, elemento.getNomeDaFamilia());
+            stmt.setString(2, elemento.getNomeDaFamilia());
+            stmt.setString(3, elemento.getDataCriacao());
+
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e.getMessage());
+        }
+        return elemento;
     }
 
     public ConvidadoFamilia convidaFamilia(String novoNomeDaFamilia, Evento evento, LocalDateTime calendario) {
@@ -105,14 +141,14 @@ public class ConvidadoFamiliaDAO {
         return conviteFamilia.getAcesso();
     }
 
-    public boolean recebeConviteIndividual(int id, int id2, ConvidadoIndividual novoConviteIndividual) {
+    public boolean recebeConviteIndividual(int id, ConvidadoIndividual novoConviteIndividual) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
         }
 
         if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
-                convitesFamilia[i].setConvidadoIndividualByID(id2, novoConviteIndividual);
+                convitesFamilia[i].setConvidadoIndividualByID(novoConviteIndividual);
                 return true;
         }
         return false;
@@ -178,15 +214,35 @@ public class ConvidadoFamiliaDAO {
         return false;
     }
 
-    public boolean excluirConviteIndividualConviteFamilia(int id, int id2, LocalDateTime calendario) {
+    public boolean atualizaFornecedorConviteFamilia(int id, int id2, String nome, String telefone, LocalDateTime calendario) {
         int i = 0;
         while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
             i++;
         }
 
         if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
-            convitesFamilia[i].setConvidadoIndividualByID(id2, null);
+            if (!nome.equals("")) {
+                convitesFamilia[i].getConviteIndividualByID(id2).getPessoa().setNome(nome);
+            }
+            if (!telefone.equals("")) {
+                convitesFamilia[i].getConviteIndividualByID(id2).getPessoa().setTelefone(telefone);
+            }
+            convitesFamilia[i].getConviteIndividualByID(id2).getPessoa().setDataModificacao(calendario);
+            convitesFamilia[i].getConviteIndividualByID(id2).setDataModificacao(calendario);
             convitesFamilia[i].setDataModificacao(calendario);
+            return true;
+        }
+        return false;
+    }
+
+    public boolean excluirPessoaConviteFamilia(int id, int id2) {
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i].getId() != id || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i].getId() == id) {
+            convitesFamilia[i].excluiConvidadoIndividualByID(id2);
             return true;
         }
         return false;
@@ -241,7 +297,7 @@ public class ConvidadoFamiliaDAO {
         String m = "";
         for (int i = 0; i < convitesFamilia.length; i++) {
             if (convitesFamilia[i] != null) {
-                m += convitesFamilia[i] + "\n";
+                m += convitesFamilia[i];
             }
         }
         return m;
@@ -252,7 +308,7 @@ public class ConvidadoFamiliaDAO {
         for (int i = 0; i < convitesFamilia.length; i++) {
             if (convitesFamilia[i] != null) {
                 if (!"Fornecedores".equals(convitesFamilia[i].getNomeDaFamilia())) {
-                    m += convitesFamilia[i] + "\n";
+                    m += convitesFamilia[i];
                 }
             }
         }
@@ -260,10 +316,13 @@ public class ConvidadoFamiliaDAO {
     }
 
     public ConvidadoFamilia retornaAcessoConviteFamilia(String acesso) {
-        for (ConvidadoFamilia convitefamilia : convitesFamilia) {
-            if (convitefamilia != null && convitefamilia.getAcesso().equals(acesso)) {
-                return convitefamilia;
-            }
+        int i = 0;
+        while (convitesFamilia[i] != null && convitesFamilia[i].getAcesso() == null || convitesFamilia[i] != null && !convitesFamilia[i].getAcesso().equals(acesso) || convitesFamilia[i] == null) {
+            i++;
+        }
+
+        if (convitesFamilia[i] != null && convitesFamilia[i].getAcesso().equals(acesso)) {
+            return convitesFamilia[i];
         }
         return null;
     }

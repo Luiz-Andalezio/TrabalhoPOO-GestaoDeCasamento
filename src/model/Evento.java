@@ -5,9 +5,9 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 
 public class Evento {
+
     private long id;
     private String data;
-    private Cerimonial cerimonial;
     private Igreja igreja;
     private Cartorio cartorio;
     private Pessoa pessoaNoivo;
@@ -29,20 +29,12 @@ public class Evento {
         return this.data;
     }
 
-    public void setData(String data) {        
-        if(data == null){
-        this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
+    public void setData(String data) {
+        if (data == null) {
+            this.data = LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"));
         } else {
             this.data = data;
         }
-    }
-
-    public Cerimonial getCerimonial() {
-        return cerimonial;
-    }
-
-    public void setCerimonial(Cerimonial cerimonial) {
-        this.cerimonial = cerimonial;
     }
 
     public Igreja getIgreja() {
@@ -76,7 +68,7 @@ public class Evento {
     public void setPessoaNoiva(Pessoa pessoaNoiva) {
         this.pessoaNoiva = pessoaNoiva;
     }
-      
+
     public String getDataCriacao() {
         return this.dataCriacao;
     }
@@ -113,7 +105,7 @@ public class Evento {
                 concatenaDataHorario += "0";
             }
             concatenaDataHorario += horarioAtualizado.getSecond();
-        }        
+        }
         this.dataCriacao = concatenaDataHorario;
         this.id = ++Evento.incrementaId;
     }
@@ -159,14 +151,18 @@ public class Evento {
         this.dataModificacao = concatenaDataHorario;
     }
 
-    public String eventoInfos() {
+    public String eventoInfos(CerimonialDAO cerimonialDAO) {
         String m = "";
 
-        m += "-------------------------- Informações do Casamento --------------------------";
-        m += "\nNoivo: " + this.pessoaNoivo.getNome();
-        m += "\nNoiva: " + this.pessoaNoiva.getNome();
-        m += "\n\nData e Horário: " + this.getData();
-        m += "\n\n--- Informações da igreja do evento ---";
+        m += "-------------------------- Informações do Casamento de " + this.pessoaNoivo.getNome() + " e " + this.pessoaNoiva.getNome() + " --------------------------";
+        if (this.getData() != null) {
+            m += "\n\nData e Horário: " + this.getData();
+        } else {
+            m += "\n\nEm breve será definida.";
+        }
+        m += "\n\n--- Cerimoniais ---\n";
+        m += cerimonialDAO.verCerimoniais();
+        m += "--- Informações da igreja do evento ---";
         m += "\nNome: " + this.igreja.getNome();
         m += "\nEndereço: " + this.igreja.getEndereco();
         m += "\nCEP: " + this.igreja.getCEP();
@@ -174,14 +170,14 @@ public class Evento {
         m += "\nNome: " + this.cartorio.getNome();
         m += "\nEndereço: " + this.cartorio.getEndereco();
         m += "\nCEP: " + this.cartorio.getCEP();
-        m += "\nTelefone: " + this.cartorio.getTelefone();        
-        m += "\n---------------------------------------------------------------------------------------------";
+        m += "\nTelefone: " + this.cartorio.getTelefone();
+        m += "\n--------------------------------------------------------------------------------------------------------------------";
 
         return m;
     }
-    
+
     @Override
-    public String toString(){
+    public String toString() {
         String m = "";
 
         m += "---------- Boas Vindas ao Casamento de " + this.pessoaNoivo.getNome() + " e " + this.pessoaNoiva.getNome() + " ----------";

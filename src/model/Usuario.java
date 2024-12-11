@@ -12,7 +12,7 @@ public class Usuario {
     private String senha;
     private String dataCriacao;
     private String dataModificacao;
-    private static long incrementaId = 0;
+    //private static long incrementaId = 0;
 
     //GETTERS E SETTERS
     public long getId() {
@@ -93,7 +93,7 @@ public class Usuario {
             concatenaDataHorario += horarioAtualizado.getSecond();
         }        
         this.dataCriacao = concatenaDataHorario;
-        this.id = ++Usuario.incrementaId;
+        //this.id = ++Usuario.incrementaId;
     }
 
     public String getDataModificacao() {
@@ -137,6 +137,22 @@ public class Usuario {
         this.dataModificacao = concatenaDataHorario;
     }
 
+    public void setDataCriacaoByString(String data) {
+        this.dataCriacao = data;
+    }
+
+    public String getDataCriacaoString() {
+        return this.dataCriacao;
+    }
+
+    public void setDataModificacaoByString(String data) {
+        this.dataModificacao = data;
+    }
+
+    public String getDataModificacaoString() {
+        return this.dataModificacao;
+    }
+
     @Override
     public String toString() {
         String m = "";
@@ -146,9 +162,9 @@ public class Usuario {
         m += "\nTipo: " + this.tipo;
         m += "\nLogin: " + this.login;
         m += "\nSenha: " + this.senha;
-        m += "\nUsuario criado no dia: " + this.getDataCriacao();
-        if (this.getDataModificacao() != null) {
-            m += " e modificado no dia: " + this.getDataModificacao();
+        m += "\nUsuario criado no dia: " + this.getDataCriacaoString();
+        if (this.getDataModificacaoString() != null) {
+            m += " e modificado no dia: " + this.getDataModificacaoString();
         }
         m += "\n\n";
         return m;
